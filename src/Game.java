@@ -94,6 +94,7 @@ public class Game extends Application {
         stage.setScene(scene);
         stage.show();
         System.out.println("this is just a git test");
+        System.out.println("this is another a git test");
     }
 
     public static void main(final String[] args) {
