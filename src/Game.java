@@ -74,7 +74,7 @@ public class Game extends Application {
         //elements.get(1).getChildren().remove(icon);
 
         white.setOnMouseClicked((MouseEvent e) -> {
-            System.out.println("Clicked!"); //change functionality
+            System.out.println("click"); //change functionality
         });
 
         Scene scene = new Scene(grid, sizeWindow, sizeWindow);
