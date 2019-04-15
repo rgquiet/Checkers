@@ -1,17 +1,12 @@
 
-import java.util.ArrayList;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.ColumnConstraints;
-import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
+
 
 public class StartScreen extends Application {
 
@@ -45,16 +40,51 @@ public class StartScreen extends Application {
         gridPane.add(twoPlayerButton, 1, 0);
         gridPane.add(exitButton, 1, 2);
 
+        onePlayerButton.setOnAction((event) -> {
+
+            // Button was Clicked, Starts Game
+
+            Game singlePlayerGame = new Game();
+            Scene newScene = singlePlayerGame.buildScene();
+            showWindow(stage, newScene);
+        });
+
+        twoPlayerButton.setOnAction((event) -> {
+
+            // Button was Clicked, Starts Game
+
+            Game singlePlayerGame = new Game();
+            Scene newScene = singlePlayerGame.buildScene();
+            showWindow(stage, newScene);
+        });
+
+        exitButton.setOnAction((event) -> {
+
+            // Closes Window on Click
+
+            Platform.exit();
+        });
+
         Scene scene = new Scene(gridPane, sizeWindow, sizeWindow);
-        stage.setTitle("Checkers");
-        stage.setScene(scene);
-        stage.show();
+        showWindow(stage, scene);
 
     }
 
     public static void buildWindow() {
         launch();
     }
+
+    public static void showWindow(Stage stage, Scene scene) {
+
+        // Shows Scene on Stage
+
+        stage.setTitle("Checkers");
+        stage.setScene(scene);
+        stage.show();
+
+    }
+
+
 }
 
 
