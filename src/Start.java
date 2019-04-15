@@ -14,6 +14,6 @@ public abstract class Start extends Application {
 
 
     public static void main(final String[] args) {
-        StartScreen.launch();
+        StartScreen.buildWindow();
     }
 }

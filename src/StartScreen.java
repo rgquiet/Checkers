@@ -51,6 +51,10 @@ public class StartScreen extends Application {
         stage.show();
 
     }
+
+    public static void buildWindow() {
+        launch();
+    }
 }
 
 
