@@ -26,3 +26,7 @@
 .game-grid-cell.first-row.first-column {
 	-fx-background-insets: 0, 1;
 }
+
+.game-grid-cell.highlighted {
+	-fx-border-color: red;
+}

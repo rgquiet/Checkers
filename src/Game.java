@@ -102,10 +102,13 @@ public class Game {
     }
     */
 
+
+    ArrayList<Pane> elements = new ArrayList<Pane>();
+
     public Scene buildScene() {
         int dimension = 10;
         int sizeWindow = 300;
-        ArrayList<Pane> elements = new ArrayList<Pane>();
+
 
         GridPane grid = new GridPane();
         grid.getStyleClass().add("game-grid");
@@ -176,9 +179,31 @@ public class Game {
 
         white.setOnMouseClicked((MouseEvent e) -> {
             System.out.println("Clicked!"); //change functionality
+            showPossibleMoves();
         });
 
+        black.setOnMouseClicked((MouseEvent e) -> {
+            System.out.println("Clicked!"); //change functionality
+            removePossibleMoves();
+        });
+
+
+
         return scene;
+    }
+
+    public void showPossibleMoves(){
+        for (int i = 0; i < elements.size(); i++) {
+            elements.get(i).getStyleClass().add("highlighted");
+
+        }
+    }
+
+    public void removePossibleMoves(){
+        for (int i = 0; i < elements.size(); i++) {
+            elements.get(i).getStyleClass().remove("highlighted");
+
+        }
     }
 
 }
