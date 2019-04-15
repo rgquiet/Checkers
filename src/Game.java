@@ -6,18 +6,19 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.RowConstraints;
-import javafx.scene.input.MouseEvent;
 
 public class Game {
 
-    private ArrayList<Pane> playground;
+    private boolean turn;
     private final int dimension, sizeWindow;
     private final Player blackPlayer, whitePlayer;
+    private ArrayList<Pane> playground;
 
     public Game(Stage stage) {
-        playground = new ArrayList<>();
+        turn = true;
         dimension = 10;
         sizeWindow = 500;
+        playground = new ArrayList<>();
 
         GridPane grid = new GridPane();
         grid.getStyleClass().add("game-grid");
@@ -67,32 +68,38 @@ public class Game {
         //wip: King Images
 
         //Create Players
-        blackPlayer = new Player(playground, black, dimension, sizeWindow, 0);
-        whitePlayer = new Player(playground, white, dimension, sizeWindow, 60);
+        blackPlayer = new Player(this, black, 0, 1);
+        whitePlayer = new Player(this, white, 60, -1);
 
         //Change Image-Size if Window changed
         scene.widthProperty().addListener((obs, oldVal, newVal) -> {
-            whitePlayer.getPieces().forEach(n -> n.setFitWidth((int)(double)newVal/dimension-2));
             blackPlayer.getPieces().forEach(n -> n.setFitWidth((int)(double)newVal/dimension-2));
+            whitePlayer.getPieces().forEach(n -> n.setFitWidth((int)(double)newVal/dimension-2));
         });
         scene.heightProperty().addListener((obs, oldVal, newVal) -> {
-            whitePlayer.getPieces().forEach(n -> n.setFitHeight((int)(double)newVal/dimension-2));
             blackPlayer.getPieces().forEach(n -> n.setFitHeight((int)(double)newVal/dimension-2));
-        });
-
-        //wip: Just add MouseEvent if its possible to use this piece in the current turn
-        whitePlayer.getPieces().forEach(n -> {
-           n.setOnMouseClicked((MouseEvent e) -> {
-               n.setImage(null);
-               whitePlayer.getPieces().remove(n);
-               System.out.println(whitePlayer.getPieces().size());
-           });
+            whitePlayer.getPieces().forEach(n -> n.setFitHeight((int)(double)newVal/dimension-2));
         });
 
         stage.setScene(scene);
     }
 
     //Getter-Methods
-    //wip...
+    public ArrayList<Pane> getPlayground() { return playground; }
+    public int getDimension() { return dimension; }
+    public int getSizeWindow() { return sizeWindow; }
+
+    //wip..
+    public void nextTurn() {
+        //True: Turn Black / False: Turn White
+        if (turn) {
+            blackPlayer.pull();
+            turn = false;
+        } else {
+            whitePlayer.pull();
+            turn = true;
+        }
+
+    }
 
 }

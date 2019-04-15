@@ -17,6 +17,7 @@ public class GUI extends Application {
 
         //wip: Create Start Menu --> Insert Code from Class StartScreen here
         Game game = new Game(stage);
+        game.nextTurn();
     }
 
     public static void main(final String[] args) {
