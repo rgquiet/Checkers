@@ -10,16 +10,14 @@ import javafx.scene.layout.GridPane;
 
 public class StartScreen extends Application {
 
-    private int sizeWindow;
-
 
     public StartScreen(){
-        int sizeWindow = 300;
+
 
     }
 
     @Override
-    public void start(Stage stage) throws Exception{
+    public void start(Stage stage) throws Exception {
 
         // Stellt ein GridPane bereit, auf dem die Elemente verteilt werden können
 
@@ -65,7 +63,7 @@ public class StartScreen extends Application {
             Platform.exit();
         });
 
-        Scene scene = new Scene(gridPane, sizeWindow, sizeWindow);
+        Scene scene = new Scene(gridPane, 240, 100);
         showWindow(stage, scene);
 
     }

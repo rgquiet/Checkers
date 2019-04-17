@@ -107,7 +107,7 @@ public class Game {
 
     public Scene buildScene() {
         int dimension = 10;
-        int sizeWindow = 300;
+        int sizeWindow = 500;
 
 
         GridPane grid = new GridPane();
