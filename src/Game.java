@@ -63,13 +63,14 @@ public class Game {
         scene.getStylesheets().add(getClass().getResource("playground.css").toExternalForm());
 
         //Define all Images for the Game-Pieces
-        Image white = new Image(getClass().getResourceAsStream("white.png"));
         Image black = new Image(getClass().getResourceAsStream("black.png"));
-        //wip: King Images
+        Image blackKing = new Image(getClass().getResourceAsStream("blackKing.png"));
+        Image white = new Image(getClass().getResourceAsStream("white.png"));
+        Image whiteKing = new Image(getClass().getResourceAsStream("whiteKing.png"));
 
         //Create Players
-        blackPlayer = new Player(this, black, 0, 1);
-        whitePlayer = new Player(this, white, 60, -1);
+        blackPlayer = new Player(black, blackKing, this, 1, 0);
+        whitePlayer = new Player(white, whiteKing, this, -1, 60);
 
         //Change Image-Size if Window changed
         scene.widthProperty().addListener((obs, oldVal, newVal) -> {
@@ -93,10 +94,10 @@ public class Game {
     public void nextTurn() {
         //True: Turn Black / False: Turn White
         if (turn) {
-            blackPlayer.pull();
+            blackPlayer.checkOptions();
             turn = false;
         } else {
-            whitePlayer.pull();
+            whitePlayer.checkOptions();
             turn = true;
         }
 

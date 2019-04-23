@@ -1,0 +1,33 @@
+ArrayList pieces <Piece>
+Piece extends ImageView
+Checker extends Piece
+King extends Piece
+
+- Gelaufene Felder
+- Anzahl geschlagener Steine
+- Bereits geschlagene Steine
+
+Algo:
+pieces.forEach(e -> {
+1. Bin ich Checker oder King?
+	1.1. (Checker):
+	2. Ist Diagonale besetzt (alle vier)?
+	2.1. (Ja):
+	3. Gegnerischer Spielstein?
+	3.1. (Ja):
+	4. Spielstein bereits übersprungen?
+	4.1. (Nein)
+	5. Dahinter liegendes Feld frei?
+	5.1. (Ja):
+	6. Springen möglich - Weiterer Sprung möglich (neue Position)?
+	6.1. Zähle Anzahl möglicher Sprünge...
+
+	1.2. (King):
+	2. Auf welcher Diagonalen ist ein gegnerische Spielstein?		
+
+});
+
+Mögliche Kills:
+Pull => 0
+Jump => ???
+King => ???
