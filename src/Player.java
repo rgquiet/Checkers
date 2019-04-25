@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.Iterator;
 import javafx.scene.image.Image;
 
 public class Player {
@@ -32,6 +31,22 @@ public class Player {
         }
     }
 
+    public Player(Image img, Image king, Game game, int direction, ArrayList<Integer> testing) {
+        kingImg = king;
+        this.game = game;
+
+        //Create pieces for current Player (just for testing)
+        pieces = new ArrayList<>();
+        testing.forEach(n -> {
+            Checker checker = new Checker(img, direction, game.getDimension());
+            checker.setFitHeight(game.getSizeWindow()/game.getDimension()-2);
+            checker.setFitWidth(game.getSizeWindow()/game.getDimension()-2);
+
+            game.getPlayground().get(n).getChildren().add(checker);
+            pieces.add(checker);
+        });
+    }
+
     //Getter-Methods
     public ArrayList<Checker> getPieces() { return pieces; }
 
@@ -55,12 +70,14 @@ public class Player {
                 boolean repeat = true;
                 while (repeat) {
                     repeat = false;
-                    for (Iterator<ArrayList> it = n.getOptions().iterator(); it.hasNext();) {
-                        if (n.jump(it.next(), kingImg, game)) { repeat = true; }
+                    ArrayList<ArrayList> pos = new ArrayList<>(n.getOptions());
+                    for (ArrayList p: pos) {
+                        if(n.jump(p, kingImg, game)) { repeat = true; }
                     }
                 }
             }
         });
+        //wip: Clear all options instead of the biggest
     }
 
 }
