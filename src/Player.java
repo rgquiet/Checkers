@@ -1,13 +1,16 @@
 import java.util.ArrayList;
+import java.util.HashMap;
 import javafx.scene.image.Image;
 
 public class Player {
 
+    private int biggest;
     private Game game;
     private ArrayList<Checker> pieces;
     private final Image kingImg;
 
     public Player(Image img, Image king, Game game, int direction, int start) {
+        biggest = 0;
         kingImg = king;
         this.game = game;
 
@@ -63,9 +66,12 @@ public class Player {
     }
 
     public void checkOptions() {
-        pieces.forEach(n -> {
+        HashMap<Checker, Integer> possiblePieces = new HashMap<>();
+        for (Checker n: pieces) {
             ArrayList<Integer> start = new ArrayList<>();
             start.add(game.getPlayground().indexOf(n.getParent()));
+
+            //Fills the ArrayList options for each piece
             if (n.jump(start, kingImg, game)) {
                 boolean repeat = true;
                 while (repeat) {
@@ -75,9 +81,22 @@ public class Player {
                         if(n.jump(p, kingImg, game)) { repeat = true; }
                     }
                 }
+                if (n.getOptions().get(0).size() > biggest) { biggest = n.getOptions().get(0).size(); }
+                possiblePieces.put(n, n.getOptions().get(0).size());
             }
+        }
+
+        //Holds only the pieces, which do the most kills in this turn
+        possiblePieces.entrySet().removeIf(e -> {
+            if (e.getValue() < biggest) {
+                e.getKey().getOptions().clear();
+                return true;
+            } else { return false; }
         });
-        //wip: Clear all options instead of the biggest
+        biggest = 0;
+
+        //wip...
+        possiblePieces.forEach((k,v) -> System.out.println(k.getOptions()));
     }
 
 }
