@@ -91,12 +91,13 @@ public class Player {
             if (e.getValue() < biggest) {
                 e.getKey().getOptions().clear();
                 return true;
-            } else { return false; }
+            } else {
+                e.getKey().setOnMouseClick();
+                e.getKey().getParent().getStyleClass().add("highlight");
+                return false;
+            }
         });
         biggest = 0;
-
-        //wip...
-        possiblePieces.forEach((k,v) -> System.out.println(k.getOptions()));
     }
 
 }

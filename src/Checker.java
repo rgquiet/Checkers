@@ -14,17 +14,24 @@ public class Checker extends ImageView {
         this.direction = direction;
         this.dimension = dimension;
         options = new ArrayList<>();
-
-        //wip: Just add MouseEvent if its possible to use this piece in the current turn
-        setOnMouseClicked((MouseEvent e) -> {
-            System.out.println(this);
-        });
     }
 
     //Getter-Methods
     public int getDirection() { return direction; }
     public int getDimension() { return dimension; }
     public ArrayList<ArrayList> getOptions () { return options; }
+
+    //Setter-Methods
+    public void setOnMouseClick() {
+        setOnMouseClicked((MouseEvent e) -> {
+            //wip: Insert Code for Animations here
+            System.out.println(this);
+        });
+    }
+
+    public void removeOnMouseClick() {
+        setOnMouseClicked(null);
+    }
 
     //wip...
     public void pull() {

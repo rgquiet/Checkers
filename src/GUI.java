@@ -2,8 +2,6 @@ import java.util.ArrayList;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
-//Merged Rob Branch to Master
-
 public class GUI extends Application {
 
     @Override

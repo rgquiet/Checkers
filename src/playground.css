@@ -7,14 +7,6 @@
 	-fx-background-insets: 0, 0 1 1 0;
 }
 
-.game-grid-cell.black {
-	-fx-background-color: black, #994E15;
-}
-
-.game-grid-cell.white {
-	-fx-background-color: black, #CDA37B;
-}
-
 .game-grid-cell.first-row {
 	-fx-background-insets: 0, 1 1 1 0;
 }
@@ -25,4 +17,16 @@
 
 .game-grid-cell.first-row.first-column {
 	-fx-background-insets: 0, 1;
+}
+
+.black {
+	-fx-background-color: black, #994E15;
+}
+
+.white {
+	-fx-background-color: black, #CDA37B;
+}
+
+.highlight {
+	-fx-background-color: black, #e1b200;
 }
