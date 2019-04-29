@@ -4,8 +4,14 @@
  * https://stackoverflow.com/questions/32892646/adding-borders-to-gridpane-javafx
  */
 
+import java.awt.*;
 import java.util.ArrayList;
+
+import javafx.animation.PathTransition;
 import javafx.application.Application;
+import javafx.geometry.Bounds;
+import javafx.geometry.Point2D;
+import javafx.scene.input.PickResult;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -15,6 +21,8 @@ import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.shape.Line;
+import javafx.util.Duration;
 
 public class Game {
 
@@ -180,16 +188,33 @@ public class Game {
         white.setOnMouseClicked((MouseEvent e) -> {
             System.out.println("Clicked!"); //change functionality
             showPossibleMoves();
+            animateMove(white, scene, elements.get(56));
         });
 
         black.setOnMouseClicked((MouseEvent e) -> {
             System.out.println("Clicked!"); //change functionality
             removePossibleMoves();
+            animateMove(black, scene, elements.get(8));
         });
 
 
-
         return scene;
+    }
+
+    synchronized public void animateMove(ImageView white, Scene scene, Pane pane){
+        Bounds boundsInScene = white.getParent().localToParent(white.getBoundsInLocal());
+        Bounds targetInScene = pane.getBoundsInParent();
+        Line line = new Line(
+                (boundsInScene.getMaxX() - boundsInScene.getMinX()) / 2,
+                (targetInScene.getMaxY() - targetInScene.getMinY())/ 2,
+                (targetInScene.getMaxX() - ((targetInScene.getMaxX() - targetInScene.getMinX()) / 2)) - (boundsInScene.getMaxX() - ((boundsInScene.getMaxX() - boundsInScene.getMinX()) / 2)) + ((targetInScene.getMaxX() - targetInScene.getMinX()) / 2),
+                (targetInScene.getMaxY() - ((targetInScene.getMaxY() - targetInScene.getMinY()) / 2)) - (boundsInScene.getMaxY() - ((boundsInScene.getMaxY() - boundsInScene.getMinY()) / 2)) + ((targetInScene.getMaxY() - targetInScene.getMinY()) / 2));
+        PathTransition transition = new PathTransition();
+        white.getParent().toFront();
+        transition.setNode(white);
+        transition.setDuration(Duration.seconds(1));
+        transition.setPath(line);
+        transition.play();
     }
 
     public void showPossibleMoves(){
