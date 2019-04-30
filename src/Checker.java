@@ -26,6 +26,7 @@ public class Checker extends ImageView {
     //Setter-Methods
     public void setOnMouseClick() {
         setOnMouseClicked((MouseEvent e) -> {
+            game.setSelected(this);
             game.clearStyleH2();
             options.forEach(n -> game.setStyleH2((int)n.get(n.size()-1)));
         });

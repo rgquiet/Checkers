@@ -13,6 +13,7 @@ public class Game {
 
     private final int dimension, sizeWindow;
     private Player blackPlayer, whitePlayer;
+    private Checker selected;
     private ArrayList<Integer> h1, h2;
     private ArrayList<Pane> playground;
     private Scene scene;
@@ -21,6 +22,7 @@ public class Game {
     public Game(Stage stage) {
         dimension = 10;
         sizeWindow = 500;
+        selected = null;
         h1 = new ArrayList<>();
         h2 = new ArrayList<>();
         playground = new ArrayList<>();
@@ -73,9 +75,25 @@ public class Game {
             @Override
             public void changed(ObservableValue ov, Object oldValue, Object newValue) {
                 //wip...
-                String fieldName = ov.toString().split("bean: ")[1].split("style")[0];
-                fieldName = fieldName.substring(0, fieldName.length()-1);
-                System.out.println(fieldName);
+                String fieldName = null;
+                String selectedName = ov.toString().split("bean: ")[1].split("style")[0];
+                selectedName = selectedName.substring(0, selectedName.length()-1);
+                for (ArrayList<Integer> n: selected.getOptions()) {
+                    fieldName = playground.get((int)n.get(n.size()-1)).toString().split("style")[0];
+                    fieldName = fieldName.substring(0, fieldName.length()-1);
+                    if(fieldName.equals(selectedName)) {
+                        for(int i = 0; i < n.size(); i++) {
+                            if(i != 0) {
+                                System.out.println("von: " + n.get(i-1) + " nach: " + n.get(i));
+                                if ((boolean)ov.getValue()) {
+                                    System.out.println("show");
+                                } else {
+                                    System.out.println("clear");
+                                }
+                            }
+                        }
+                    }
+                }
             }
         };
     }
@@ -88,11 +106,11 @@ public class Game {
     public int getSizeWindow() { return sizeWindow; }
 
     //Setter-Methods
+    public void setSelected(Checker piece) { selected = piece; }
     public void setStyleH1(Integer field) {
         playground.get(field).getStyleClass().add("h1");
         h1.add(field);
     }
-
     public void setStyleH2(Integer field) {
         playground.get(field).getStyleClass().add("h2");
         playground.get(field).hoverProperty().addListener(onHover);
