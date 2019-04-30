@@ -23,10 +23,12 @@ public class GameTest extends Application {
         //Execute all Tests
         //System.out.println("testJumpChecker1");
         //testJumpChecker1();
-        System.out.println("testJumpChecker2");
-        testJumpChecker2();
+        //System.out.println("testJumpChecker2");
+        //testJumpChecker2();
         //System.out.println("testJumpChecker3");
         //testJumpChecker3();
+        testJumpChecker4();
+        System.out.println("testJumpChecker4");
     }
 
     public void testJumpChecker1() {
@@ -96,6 +98,27 @@ public class GameTest extends Application {
         //Testing black Player
         testGame.getWhitePlayer().checkOptions();
         System.out.println(testGame.getWhitePlayer().getPieces().get(0).getOptions());
+    }
+
+    public void testJumpChecker4() {
+        //Set pieces in special order to test checkers jump-logic
+        ArrayList<Integer> black = new ArrayList<>();
+        black.add(0);
+        black.add(9);
+
+        ArrayList<Integer> white = new ArrayList<>();
+        white.add(11);
+        white.add(13);
+        white.add(16);
+        white.add(18);
+        white.add(31);
+        white.add(38);
+
+        Game testGame = new Game(stage);
+        testGame.createPlayers(black, white);
+
+        //Testing black Player
+        testGame.getBlackPlayer().checkOptions();
     }
 
 }

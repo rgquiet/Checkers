@@ -24,7 +24,7 @@ public class Player {
                 //Odd
                 else { start -= 1; }
             }
-            Checker checker = new Checker(img, direction, game.getDimension());
+            Checker checker = new Checker(img, direction, game.getDimension(), game);
             checker.setFitHeight(game.getSizeWindow()/game.getDimension()-2);
             checker.setFitWidth(game.getSizeWindow()/game.getDimension()-2);
 
@@ -41,7 +41,7 @@ public class Player {
         //Create pieces for current Player (just for testing)
         pieces = new ArrayList<>();
         testing.forEach(n -> {
-            Checker checker = new Checker(img, direction, game.getDimension());
+            Checker checker = new Checker(img, direction, game.getDimension(), game);
             checker.setFitHeight(game.getSizeWindow()/game.getDimension()-2);
             checker.setFitWidth(game.getSizeWindow()/game.getDimension()-2);
 
@@ -55,7 +55,7 @@ public class Player {
 
     //Setter-Methods
     public void setKing(int i) {
-        King king = new King(kingImg, pieces.get(i).getDirection(), pieces.get(i).getDimension());
+        King king = new King(kingImg, pieces.get(i).getDirection(), pieces.get(i).getDimension(), game);
         king.setFitHeight(game.getSizeWindow()/game.getDimension()-2);
         king.setFitWidth(game.getSizeWindow()/game.getDimension()-2);
 
@@ -93,7 +93,7 @@ public class Player {
                 return true;
             } else {
                 e.getKey().setOnMouseClick();
-                e.getKey().getParent().getStyleClass().add("highlight");
+                game.setStyleH1((int)e.getKey().getOptions().get(0).get(0));
                 return false;
             }
         });

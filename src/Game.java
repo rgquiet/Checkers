@@ -1,5 +1,7 @@
 import java.util.ArrayList;
 import javafx.stage.Stage;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
@@ -11,12 +13,16 @@ public class Game {
 
     private final int dimension, sizeWindow;
     private Player blackPlayer, whitePlayer;
+    private ArrayList<Integer> h1, h2;
     private ArrayList<Pane> playground;
     private Scene scene;
+    private ChangeListener onHover;
 
     public Game(Stage stage) {
         dimension = 10;
         sizeWindow = 500;
+        h1 = new ArrayList<>();
+        h2 = new ArrayList<>();
         playground = new ArrayList<>();
 
         GridPane grid = new GridPane();
@@ -61,6 +67,49 @@ public class Game {
         scene = new Scene(grid, sizeWindow, sizeWindow);
         scene.getStylesheets().add(getClass().getResource("playground.css").toExternalForm());
         stage.setScene(scene);
+
+        //Initialize Change Listener
+        onHover = new ChangeListener() {
+            @Override
+            public void changed(ObservableValue ov, Object oldValue, Object newValue) {
+                //wip...
+                String fieldName = ov.toString().split("bean: ")[1].split("style")[0];
+                fieldName = fieldName.substring(0, fieldName.length()-1);
+                System.out.println(fieldName);
+            }
+        };
+    }
+
+    //Getter-Methods
+    public Player getBlackPlayer() { return blackPlayer; }
+    public Player getWhitePlayer() { return whitePlayer; }
+    public ArrayList<Pane> getPlayground() { return playground; }
+    public int getDimension() { return dimension; }
+    public int getSizeWindow() { return sizeWindow; }
+
+    //Setter-Methods
+    public void setStyleH1(Integer field) {
+        playground.get(field).getStyleClass().add("h1");
+        h1.add(field);
+    }
+
+    public void setStyleH2(Integer field) {
+        playground.get(field).getStyleClass().add("h2");
+        playground.get(field).hoverProperty().addListener(onHover);
+        h2.add(field);
+    }
+
+    public void clearStyleH1() {
+        h1.forEach(n -> playground.get(n).getStyleClass().remove("h1"));
+        h1.clear();
+    }
+
+    public void clearStyleH2() {
+        h2.forEach(n -> {
+            playground.get(n).getStyleClass().remove("h2");
+            playground.get(n).hoverProperty().removeListener(onHover);
+        });
+        h2.clear();
     }
 
     public void createPlayers(ArrayList<Integer> blackPos, ArrayList<Integer> whitePos) {
@@ -90,12 +139,5 @@ public class Game {
             whitePlayer.getPieces().forEach(n -> n.setFitHeight((int)(double)newVal/dimension-2));
         });
     }
-
-    //Getter-Methods
-    public Player getBlackPlayer() { return blackPlayer; }
-    public Player getWhitePlayer() { return whitePlayer; }
-    public ArrayList<Pane> getPlayground() { return playground; }
-    public int getDimension() { return dimension; }
-    public int getSizeWindow() { return sizeWindow; }
 
 }

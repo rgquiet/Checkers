@@ -27,6 +27,10 @@
 	-fx-background-color: black, #CDA37B;
 }
 
-.highlight {
-	-fx-background-color: black, #e1b200;
+.h1 {
+	-fx-background-color: black, #102df6;
+}
+
+.h2 {
+	-fx-background-color: black, #5f22ae;
 }

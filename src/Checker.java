@@ -8,11 +8,13 @@ public class Checker extends ImageView {
 
     private final int direction, dimension;
     private ArrayList<ArrayList> options;
+    private Game game;
 
-    public Checker(Image img, int direction, int dimension) {
+    public Checker(Image img, int direction, int dimension, Game game) {
         super(img);
         this.direction = direction;
         this.dimension = dimension;
+        this.game = game;
         options = new ArrayList<>();
     }
 
@@ -24,8 +26,8 @@ public class Checker extends ImageView {
     //Setter-Methods
     public void setOnMouseClick() {
         setOnMouseClicked((MouseEvent e) -> {
-            //wip: Insert Code for Animations here
-            System.out.println(this);
+            game.clearStyleH2();
+            options.forEach(n -> game.setStyleH2((int)n.get(n.size()-1)));
         });
     }
 
