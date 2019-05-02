@@ -7,8 +7,8 @@ public class Player {
 
     private int biggest;
     private Game game;
-    private ArrayList<Checker> pieces;
-    private HashMap<Checker, Integer> possiblePieces;
+    private ArrayList<Piece> pieces;
+    private HashMap<Piece, Integer> possiblePieces;
     private final Image checkerImg, kingImg;
 
     public Player(Game game, Scene scene, Image checkerImg, Image kingImg, int direction, int start) {
@@ -64,8 +64,8 @@ public class Player {
 
     //Getter-Methods
     public Game getGame() { return game; }
-    public ArrayList<Checker> getPieces() { return pieces; }
-    public HashMap<Checker, Integer> getPossiblePieces() { return possiblePieces; }
+    public ArrayList<Piece> getPieces() { return pieces; }
+    public HashMap<Piece, Integer> getPossiblePieces() { return possiblePieces; }
 
     //Setter-Methods
     public void setKing(int i) {
@@ -81,7 +81,7 @@ public class Player {
 
     public void checkOptions() {
         possiblePieces = new HashMap<>();
-        for (Checker n: pieces) {
+        for (Piece n: pieces) {
             ArrayList<Integer> start = new ArrayList<>();
             start.add(game.getPlayground().indexOf(n.getParent()));
 

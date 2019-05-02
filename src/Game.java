@@ -15,7 +15,7 @@ public class Game {
     private final int dimension, sizeWindow;
     private Scene scene;
     private ChangeListener onHover;
-    private Checker selected;
+    private Piece selected;
     private Player blackPlayer, whitePlayer;
     private ArrayList<Integer> h1, h2, h3;
     private ArrayList<Pane> playground;
@@ -114,7 +114,7 @@ public class Game {
     public ArrayList<Pane> getPlayground() { return playground; }
 
     //Setter-Methods
-    public void setSelected(Checker piece) { selected = piece; }
+    public void setSelected(Piece piece) { selected = piece; }
     public void setStyleH1(Integer field) {
         //Set style tag h1
         playground.get(field).getStyleClass().add("h1");

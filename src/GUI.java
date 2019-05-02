@@ -12,6 +12,7 @@ public class GUI extends Application {
 
         //wip: Insert Code from Class StartScreen here
 
+        //Create new Game
         Game game = new Game(stage);
         ArrayList<Integer> black = new ArrayList<>();
         ArrayList<Integer> white = new ArrayList<>();

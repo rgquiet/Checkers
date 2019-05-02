@@ -21,14 +21,16 @@ public class GameTest extends Application {
         this.stage = stage;
 
         //Execute all Tests
-        //System.out.println("testJumpChecker1");
-        //testJumpChecker1();
-        //System.out.println("testJumpChecker2");
-        //testJumpChecker2();
-        //System.out.println("testJumpChecker3");
-        //testJumpChecker3();
-        testJumpChecker4();
+        System.out.println("testJumpChecker1");
+        testJumpChecker1();
+        /*
+        System.out.println("testJumpChecker2");
+        testJumpChecker2();
+        System.out.println("testJumpChecker3");
+        testJumpChecker3();
+        */
         System.out.println("testJumpChecker4");
+        testJumpChecker4();
     }
 
     public void testJumpChecker1() {
