@@ -90,6 +90,9 @@ public class Game {
                             }
                             playground.get(n.get(n.size()-1)).setOnMouseClicked((MouseEvent e) -> {
                                 //wip: Insert code for animation here
+                                System.out.println(playground.get(n.get(n.size()-1)));
+                                //to move = selected
+                                //target = playground.get(n.get(n.size()-1))
 
                                 //Reset all Style tags
                                 clearStyleH1();
