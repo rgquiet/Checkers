@@ -13,6 +13,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
+import javafx.scene.Parent;
 import javafx.scene.input.PickResult;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
@@ -115,9 +116,12 @@ public class Game {
 
     ArrayList<Pane> elements = new ArrayList<Pane>();
 
+    StartScreen s = new StartScreen();
+    int dimension = 10;
+    int sizeWindow = 500;
+
     public Scene buildScene() {
-        int dimension = 10;
-        int sizeWindow = 500;
+
 
 
         GridPane grid = new GridPane();
@@ -173,7 +177,7 @@ public class Game {
         black.setFitHeight(sizeWindow/dimension-2);
         black.setFitWidth(sizeWindow/dimension-2);
 
-        elements.get(5).getChildren().add(white);
+        elements.get(59).getChildren().add(white);
         elements.get(6).getChildren().add(black);
         //elements.get(1).getChildren().remove(icon);
 
@@ -190,20 +194,20 @@ public class Game {
         white.setOnMouseClicked((MouseEvent e) -> {
             System.out.println("Clicked!"); //change functionality
             showPossibleMoves();
-            animateMove(white, scene, elements.get(10));
+            animateMove(white, elements.get(60), scene);
         });
 
         black.setOnMouseClicked((MouseEvent e) -> {
             System.out.println("Clicked!"); //change functionality
             removePossibleMoves();
-            animateMove(black, scene, elements.get(8));
+            animateMove(black, elements.get(8), scene);
         });
 
 
         return scene;
     }
 
-    synchronized public void animateMove(ImageView white, Scene scene, Pane pane){
+    synchronized void animateMove(ImageView white, Pane pane, Scene scene){
         Bounds boundsInScene = white.getParent().localToParent(white.getBoundsInLocal());
         Bounds targetInScene = pane.getBoundsInParent();
         Line line = new Line(
@@ -222,11 +226,28 @@ public class Game {
         transition.setOnFinished(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                pane.getChildren().add(white);
-                white.getParent().toFront();
+                //white.relocate(targetInScene.getMaxX() - (targetInScene.getMaxX() - targetInScene.getMinX()), targetInScene.getMaxY() - (targetInScene.getMaxY() - targetInScene.getMinY()));
+                //pane.getChildren().add(white);
+                //System.out.println(scene.getRoot());
+                relocateChecker(white, pane);
+
             }
         });
 
+        s.setScene(scene);
+        s.showWindow();
+
+    }
+
+    public void relocateChecker(ImageView checker, Pane pane){
+        Image imgWhite = new Image(getClass().getResourceAsStream("/white.png"));
+        ImageView white = new ImageView(imgWhite);
+        white.setFitHeight(sizeWindow/dimension-2);
+        white.setFitWidth(sizeWindow/dimension-2);
+        System.out.println(checker.getParent());
+        ((Pane)checker.getParent()).getChildren().remove(checker);
+        pane.getChildren().add(white);
+        System.out.println(pane);
     }
 
     public void showPossibleMoves(){

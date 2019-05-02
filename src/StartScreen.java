@@ -16,14 +16,21 @@ import javafx.scene.layout.GridPane;
 
 public class StartScreen extends Application {
 
+    static Scene scene;
+    static Stage stage;
 
     public static void buildWindow() {
         launch();
     }
 
+    public void setScene(Scene scene){
+        this.scene = scene;
+    }
+
     @Override
     public void start(Stage stage) throws Exception {
 
+        this.stage = stage;
 
         // Stellt ein GridPane bereit, auf dem die Elemente verteilt werden können
 
@@ -48,13 +55,12 @@ public class StartScreen extends Application {
 
             // Button was Clicked, Starts Game
 
-            Scene newScene = null;
             try {
-                newScene = vsPcScene(stage);
+                this.scene = vsPcScene(stage);
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            showWindow(stage, newScene);
+            showWindow();
         });
 
         twoPlayerButton.setOnAction((event) -> {
@@ -62,8 +68,8 @@ public class StartScreen extends Application {
             // Button was Clicked, Starts Game
 
             Game singlePlayerGame = new Game();
-            Scene newScene = singlePlayerGame.buildScene();
-            showWindow(stage, newScene);
+            this.scene = singlePlayerGame.buildScene();
+            showWindow();
         });
 
         exitButton.setOnAction((event) -> {
@@ -74,12 +80,13 @@ public class StartScreen extends Application {
         });
 
         Scene scene = new Scene(gridPane, 240, 100);
-        showWindow(stage, scene);
+        this.scene = scene;
+        showWindow();
 
     }
 
 
-    public static void showWindow(Stage stage, Scene scene) {
+    public static void showWindow() {
 
         // Shows Scene on Stage
 
