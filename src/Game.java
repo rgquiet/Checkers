@@ -8,13 +8,14 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.RowConstraints;
+import javafx.scene.input.MouseEvent;
 
 public class Game {
 
     private final int dimension, sizeWindow;
     private Player blackPlayer, whitePlayer;
     private Checker selected;
-    private ArrayList<Integer> h1, h2;
+    private ArrayList<Integer> h1, h2, h3;
     private ArrayList<Pane> playground;
     private Scene scene;
     private ChangeListener onHover;
@@ -25,6 +26,7 @@ public class Game {
         selected = null;
         h1 = new ArrayList<>();
         h2 = new ArrayList<>();
+        h3 = new ArrayList<>();
         playground = new ArrayList<>();
 
         GridPane grid = new GridPane();
@@ -74,7 +76,7 @@ public class Game {
         onHover = new ChangeListener() {
             @Override
             public void changed(ObservableValue ov, Object oldValue, Object newValue) {
-                //wip...
+                //Check if mouse hover over the marked field
                 String fieldName = null;
                 String selectedName = ov.toString().split("bean: ")[1].split("style")[0];
                 selectedName = selectedName.substring(0, selectedName.length()-1);
@@ -82,15 +84,21 @@ public class Game {
                     fieldName = playground.get((int)n.get(n.size()-1)).toString().split("style")[0];
                     fieldName = fieldName.substring(0, fieldName.length()-1);
                     if(fieldName.equals(selectedName)) {
-                        for(int i = 0; i < n.size(); i++) {
-                            if(i != 0) {
-                                System.out.println("von: " + n.get(i-1) + " nach: " + n.get(i));
-                                if ((boolean)ov.getValue()) {
-                                    System.out.println("show");
-                                } else {
-                                    System.out.println("clear");
-                                }
+                        if ((boolean)ov.getValue()) {
+                            //Hover over
+                            for(int i = 0; i < n.size(); i++) {
+                                if(i != 0) { setStyleH3(n.get(i-1), n.get(i)); }
                             }
+                            playground.get(n.get(n.size()-1)).setOnMouseClicked((MouseEvent e) -> {
+                                //wip: Insert code for animation here
+
+                                //wip: Reset everything Routine
+                                clearStyleH1();
+                            });
+                        } else {
+                            //Hover away
+                            playground.get(n.get(n.size()-1)).setOnMouseClicked(null);
+                            clearStyleH3();
                         }
                     }
                 }
@@ -108,17 +116,42 @@ public class Game {
     //Setter-Methods
     public void setSelected(Checker piece) { selected = piece; }
     public void setStyleH1(Integer field) {
+        //Set style tag h1
         playground.get(field).getStyleClass().add("h1");
         h1.add(field);
     }
     public void setStyleH2(Integer field) {
+        //Set style tag h2
         playground.get(field).getStyleClass().add("h2");
         playground.get(field).hoverProperty().addListener(onHover);
         h2.add(field);
     }
+    public void setStyleH3(Integer from, Integer to) {
+        //Save direction between int "from" -> "to"
+        Integer i = 0;
+        if(from < to) {
+            if ((to - from) % (dimension - 1) == 0) { i = dimension - 1; }
+            else if ((to - from) % (dimension + 1) == 0) { i = dimension + 1; }
+        } else {
+            if ((from - to) % (dimension - 1) == 0) { i = -dimension + 1; }
+            else if ((from - to) % (dimension + 1) == 0) { i = -dimension - 1; }
+        }
+
+        //Set style tag h3
+        while (from != to && i != 0) {
+            from = from + i;
+            playground.get(from).getStyleClass().add("h3");
+            h3.add(from);
+        }
+    }
 
     public void clearStyleH1() {
-        h1.forEach(n -> playground.get(n).getStyleClass().remove("h1"));
+        h1.forEach(n -> {
+            playground.get(n).getStyleClass().remove("h1");
+            //wip...
+            Checker piece = (Checker)playground.get(n).getChildren();
+            piece.removeOnMouseClick();
+        });
         h1.clear();
     }
 
@@ -128,6 +161,11 @@ public class Game {
             playground.get(n).hoverProperty().removeListener(onHover);
         });
         h2.clear();
+    }
+
+    public void clearStyleH3() {
+        h3.forEach(n -> playground.get(n).getStyleClass().remove("h3"));
+        h3.clear();
     }
 
     public void createPlayers(ArrayList<Integer> blackPos, ArrayList<Integer> whitePos) {
