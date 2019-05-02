@@ -13,12 +13,12 @@ import javafx.scene.input.MouseEvent;
 public class Game {
 
     private final int dimension, sizeWindow;
-    private Player blackPlayer, whitePlayer;
-    private Checker selected;
-    private ArrayList<Integer> h1, h2, h3;
-    private ArrayList<Pane> playground;
     private Scene scene;
     private ChangeListener onHover;
+    private Checker selected;
+    private Player blackPlayer, whitePlayer;
+    private ArrayList<Integer> h1, h2, h3;
+    private ArrayList<Pane> playground;
 
     public Game(Stage stage) {
         dimension = 10;
@@ -77,11 +77,10 @@ public class Game {
             @Override
             public void changed(ObservableValue ov, Object oldValue, Object newValue) {
                 //Check if mouse hover over the marked field
-                String fieldName = null;
                 String selectedName = ov.toString().split("bean: ")[1].split("style")[0];
                 selectedName = selectedName.substring(0, selectedName.length()-1);
                 for (ArrayList<Integer> n: selected.getOptions()) {
-                    fieldName = playground.get((int)n.get(n.size()-1)).toString().split("style")[0];
+                    String fieldName = playground.get(n.get(n.size()-1)).toString().split("style")[0];
                     fieldName = fieldName.substring(0, fieldName.length()-1);
                     if(fieldName.equals(selectedName)) {
                         if ((boolean)ov.getValue()) {
@@ -92,12 +91,13 @@ public class Game {
                             playground.get(n.get(n.size()-1)).setOnMouseClicked((MouseEvent e) -> {
                                 //wip: Insert code for animation here
 
-                                //wip: Reset everything Routine
+                                //Reset all Style tags
                                 clearStyleH1();
+                                clearStyleH2();
+                                clearStyleH3();
                             });
                         } else {
                             //Hover away
-                            playground.get(n.get(n.size()-1)).setOnMouseClicked(null);
                             clearStyleH3();
                         }
                     }
@@ -107,11 +107,11 @@ public class Game {
     }
 
     //Getter-Methods
+    public int getDimension() { return dimension; }
+    public int getSizeWindow() { return sizeWindow; }
     public Player getBlackPlayer() { return blackPlayer; }
     public Player getWhitePlayer() { return whitePlayer; }
     public ArrayList<Pane> getPlayground() { return playground; }
-    public int getDimension() { return dimension; }
-    public int getSizeWindow() { return sizeWindow; }
 
     //Setter-Methods
     public void setSelected(Checker piece) { selected = piece; }
@@ -146,12 +146,11 @@ public class Game {
     }
 
     public void clearStyleH1() {
-        h1.forEach(n -> {
-            playground.get(n).getStyleClass().remove("h1");
-            //wip...
-            Checker piece = (Checker)playground.get(n).getChildren();
-            piece.removeOnMouseClick();
+        selected.getPlayer().getPossiblePieces().forEach((k, v) -> {
+            k.removeOnMouseClick();
+            k.getOptions().clear();
         });
+        h1.forEach(n -> playground.get(n).getStyleClass().remove("h1"));
         h1.clear();
     }
 
@@ -164,36 +163,27 @@ public class Game {
     }
 
     public void clearStyleH3() {
+        playground.get(h3.get(h3.size()-1)).setOnMouseClicked(null);
         h3.forEach(n -> playground.get(n).getStyleClass().remove("h3"));
         h3.clear();
     }
 
     public void createPlayers(ArrayList<Integer> blackPos, ArrayList<Integer> whitePos) {
         //Define all Images for the Game-Pieces
-        Image black = new Image(getClass().getResourceAsStream("black.png"));
+        Image blackChecker = new Image(getClass().getResourceAsStream("blackChecker.png"));
         Image blackKing = new Image(getClass().getResourceAsStream("blackKing.png"));
-        Image white = new Image(getClass().getResourceAsStream("white.png"));
+        Image whiteChecker = new Image(getClass().getResourceAsStream("whiteChecker.png"));
         Image whiteKing = new Image(getClass().getResourceAsStream("whiteKing.png"));
 
         //Create Players
         if (blackPos.size() == 0 && whitePos.size() == 0) {
-            blackPlayer = new Player(black, blackKing, this, 1, 0);
-            whitePlayer = new Player(white, whiteKing, this, -1, 60);
+            blackPlayer = new Player(this, scene, blackChecker, blackKing, 1, 0);
+            whitePlayer = new Player(this, scene, whiteChecker, whiteKing, -1, 60);
         } else {
             //For JUnit Tests
-            blackPlayer = new Player(black, blackKing, this, 1, blackPos);
-            whitePlayer = new Player(white, whiteKing, this, -1, whitePos);
+            blackPlayer = new Player(this, scene, blackChecker, blackKing, 1, blackPos);
+            whitePlayer = new Player(this, scene, whiteChecker, whiteKing, -1, whitePos);
         }
-
-        //Change Image-Size if Window changed
-        scene.widthProperty().addListener((obs, oldVal, newVal) -> {
-            blackPlayer.getPieces().forEach(n -> n.setFitWidth((int)(double)newVal/dimension-2));
-            whitePlayer.getPieces().forEach(n -> n.setFitWidth((int)(double)newVal/dimension-2));
-        });
-        scene.heightProperty().addListener((obs, oldVal, newVal) -> {
-            blackPlayer.getPieces().forEach(n -> n.setFitHeight((int)(double)newVal/dimension-2));
-            whitePlayer.getPieces().forEach(n -> n.setFitHeight((int)(double)newVal/dimension-2));
-        });
     }
 
 }

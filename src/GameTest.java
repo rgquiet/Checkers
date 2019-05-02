@@ -95,7 +95,7 @@ public class GameTest extends Application {
         Game testGame = new Game(stage);
         testGame.createPlayers(black, white);
 
-        //Testing black Player
+        //Testing white Player
         testGame.getWhitePlayer().checkOptions();
         System.out.println(testGame.getWhitePlayer().getPieces().get(0).getOptions());
     }

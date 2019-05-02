@@ -1,34 +1,34 @@
 import java.util.ArrayList;
 import java.util.Iterator;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Pane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 
 public class Checker extends ImageView {
 
-    private final int direction, dimension;
+    private final int direction;
+    private Player player;
     private ArrayList<ArrayList> options;
-    private Game game;
 
-    public Checker(Image img, int direction, int dimension, Game game) {
+    public Checker(Image img, int direction, Player player) {
         super(img);
         this.direction = direction;
-        this.dimension = dimension;
-        this.game = game;
+        this.player = player;
         options = new ArrayList<>();
     }
 
     //Getter-Methods
     public int getDirection() { return direction; }
-    public int getDimension() { return dimension; }
+    public Player getPlayer() { return player; }
     public ArrayList<ArrayList> getOptions () { return options; }
 
     //Setter-Methods
     public void setOnMouseClick() {
         setOnMouseClicked((MouseEvent e) -> {
-            game.setSelected(this);
-            game.clearStyleH2();
-            options.forEach(n -> game.setStyleH2((int)n.get(n.size()-1)));
+            player.getGame().setSelected(this);
+            player.getGame().clearStyleH2();
+            options.forEach(n -> player.getGame().setStyleH2((int)n.get(n.size()-1)));
         });
     }
 
@@ -41,7 +41,10 @@ public class Checker extends ImageView {
 
     }
 
-    public boolean jump(ArrayList<Integer> start, Image king, Game game) {
+    public boolean jump(ArrayList<Integer> start, Image king) {
+        int dimension = player.getGame().getDimension();
+        ArrayList<Pane> playground = player.getGame().getPlayground();
+
         //Stop if checker lands in the last row (convert to King)
         int startPos = start.get(start.size()-1);
         if (direction == -1) {
@@ -66,13 +69,13 @@ public class Checker extends ImageView {
 
             int jumpPos = startPos + y * dimension + x;
             //Field not free
-            if (!game.getPlayground().get(jumpPos).getChildren().isEmpty()) {
-                Image img = ((ImageView)game.getPlayground().get(jumpPos).getChildren().get(0)).getImage();
+            if (!playground.get(jumpPos).getChildren().isEmpty()) {
+                Image img = ((ImageView)playground.get(jumpPos).getChildren().get(0)).getImage();
                 //Enemy
                 if (!(img == this.getImage() || img == king)) {
                     int newPos = jumpPos + y * dimension + x;
                     //Field free (double jump not allowed)
-                    if (game.getPlayground().get(newPos).getChildren().isEmpty()) {
+                    if (playground.get(newPos).getChildren().isEmpty()) {
                         //Already jumped over current Enemy
                         boolean already = false;
                         if (start.size() > 1) {
