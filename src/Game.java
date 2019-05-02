@@ -1,4 +1,11 @@
 import java.util.ArrayList;
+
+import javafx.animation.PathTransition;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.geometry.Bounds;
+import javafx.scene.image.ImageView;
+import javafx.scene.shape.Line;
 import javafx.stage.Stage;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -9,6 +16,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.input.MouseEvent;
+import javafx.util.Duration;
 
 public class Game {
 
@@ -115,6 +123,34 @@ public class Game {
     public Player getBlackPlayer() { return blackPlayer; }
     public Player getWhitePlayer() { return whitePlayer; }
     public ArrayList<Pane> getPlayground() { return playground; }
+
+    synchronized void animateMove(ImageView checker, Pane pane, Scene scene){
+        Bounds boundsInScene = checker.getParent().localToParent(checker.getBoundsInLocal());
+        Bounds targetInScene = pane.getBoundsInParent();
+        Line line = new Line(
+                (boundsInScene.getMaxX() - boundsInScene.getMinX()) / 2,
+                (targetInScene.getMaxY() - targetInScene.getMinY())/ 2,
+                (targetInScene.getMaxX() - ((targetInScene.getMaxX() - targetInScene.getMinX()) / 2)) - (boundsInScene.getMaxX() - ((boundsInScene.getMaxX() - boundsInScene.getMinX()) / 2)) + ((targetInScene.getMaxX() - targetInScene.getMinX()) / 2),
+                (targetInScene.getMaxY() - ((targetInScene.getMaxY() - targetInScene.getMinY()) / 2)) - (boundsInScene.getMaxY() - ((boundsInScene.getMaxY() - boundsInScene.getMinY()) / 2)) + ((targetInScene.getMaxY() - targetInScene.getMinY()) / 2));
+        PathTransition transition = new PathTransition();
+        checker.getParent().toFront();
+        transition.setNode(checker);
+        transition.setDuration(Duration.seconds(1));
+        transition.setPath(line);
+        transition.play();
+
+
+        transition.setOnFinished(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                //white.relocate(targetInScene.getMaxX() - (targetInScene.getMaxX() - targetInScene.getMinX()), targetInScene.getMaxY() - (targetInScene.getMaxY() - targetInScene.getMinY()));
+                //pane.getChildren().add(white);
+                //System.out.println(scene.getRoot());
+                relocateChecker(checker, pane);
+
+            }
+        });
+    }
 
     //Setter-Methods
     public void setSelected(Piece piece) { selected = piece; }
