@@ -13,6 +13,7 @@ public class Player {
 
     public Player(Game game, Scene scene, Image checkerImg, Image kingImg, int direction, int start) {
         biggest = 0;
+        possiblePieces = new HashMap<>();
         this.checkerImg = checkerImg;
         this.kingImg = kingImg;
         this.game = game;
@@ -42,7 +43,9 @@ public class Player {
     }
 
     public Player(Game game, Scene scene, Image checkerImg, Image kingImg, int direction, ArrayList<Integer> testing) {
-        this.checkerImg  = checkerImg;
+        biggest = 0;
+        possiblePieces = new HashMap<>();
+        this.checkerImg = checkerImg;
         this.kingImg = kingImg;
         this.game = game;
 
@@ -80,7 +83,6 @@ public class Player {
     }
 
     public void checkOptions() {
-        possiblePieces = new HashMap<>();
         for (Piece n: pieces) {
             ArrayList<Integer> start = new ArrayList<>();
             start.add(game.getPlayground().indexOf(n.getParent()));

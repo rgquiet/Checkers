@@ -150,6 +150,7 @@ public class Game {
             k.removeOnMouseClick();
             k.getOptions().clear();
         });
+        selected.getPlayer().getPossiblePieces().clear();
         h1.forEach(n -> playground.get(n).getStyleClass().remove("h1"));
         h1.clear();
     }
