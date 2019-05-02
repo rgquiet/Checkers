@@ -21,9 +21,9 @@ public class StartScreen extends Application {
         launch();
     }
 
-
     @Override
     public void start(Stage stage) throws Exception {
+
 
         // Stellt ein GridPane bereit, auf dem die Elemente verteilt werden können
 

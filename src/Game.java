@@ -9,6 +9,8 @@ import java.util.ArrayList;
 
 import javafx.animation.PathTransition;
 import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.input.PickResult;
@@ -171,8 +173,8 @@ public class Game {
         black.setFitHeight(sizeWindow/dimension-2);
         black.setFitWidth(sizeWindow/dimension-2);
 
-        elements.get(1).getChildren().add(white);
-        elements.get(2).getChildren().add(black);
+        elements.get(5).getChildren().add(white);
+        elements.get(6).getChildren().add(black);
         //elements.get(1).getChildren().remove(icon);
 
         scene.widthProperty().addListener((obs, oldVal, newVal) -> {
@@ -188,7 +190,7 @@ public class Game {
         white.setOnMouseClicked((MouseEvent e) -> {
             System.out.println("Clicked!"); //change functionality
             showPossibleMoves();
-            animateMove(white, scene, elements.get(56));
+            animateMove(white, scene, elements.get(10));
         });
 
         black.setOnMouseClicked((MouseEvent e) -> {
@@ -215,6 +217,16 @@ public class Game {
         transition.setDuration(Duration.seconds(1));
         transition.setPath(line);
         transition.play();
+
+
+        transition.setOnFinished(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                pane.getChildren().add(white);
+                white.getParent().toFront();
+            }
+        });
+
     }
 
     public void showPossibleMoves(){
