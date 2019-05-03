@@ -260,7 +260,15 @@ public class Game {
                         removeChecker = playground.indexOf(pane) + 9;
                     }
                 }
+
+                if(selected.getPlayer() == blackPlayer){
+                    whitePlayer.removePiece((ImageView)playground.get(removeChecker).getChildren().get(0));
+                }
+                else{
+                    blackPlayer.removePiece((ImageView)playground.get(removeChecker).getChildren().get(0));
+                }
                 playground.get(removeChecker).getChildren().removeAll(playground.get(removeChecker).getChildren());
+
 
                 //Fügt neuen Stein ein
 
