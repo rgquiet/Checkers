@@ -238,13 +238,22 @@ public class Game {
             @Override
             public void handle(ActionEvent event) {
                 if(selected instanceof Checker){
+                    Image blackChecker = new Image(getClass().getResourceAsStream("blackChecker.png"));
+                    Checker checker = new Checker(blackChecker, 1, blackPlayer);
+                    checker.setFitHeight(getSizeWindow()/getDimension()-2);
+                    checker.setFitWidth(getSizeWindow()/getDimension()-2);
+                    ((Pane)selected.getParent()).getChildren().remove(selected);
+                    pane.getChildren().add(checker);
+                    blackPlayer.removePiece(selected);
+                    blackPlayer.addPiece(checker);
+                    selected = checker;
 
                 }
                 else if(selected instanceof King){
 
                 }
 
-                checkForNextStep(checker, steps, i);
+                checkForNextStep(selected, steps, i);
                 //WIP Remove Checker from old Pane and add it to new one
             /*
             Image imgWhite = new Image(getClass().getResourceAsStream("/white.png"));
