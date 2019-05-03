@@ -2,6 +2,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 public class Player {
 
@@ -69,6 +70,9 @@ public class Player {
     public Game getGame() { return game; }
     public ArrayList<Piece> getPieces() { return pieces; }
     public HashMap<Piece, Integer> getPossiblePieces() { return possiblePieces; }
+    public Image getCheckerImg() {
+        return checkerImg;
+    }
 
     //Setter-Methods
     public void setKing(int i) {
@@ -114,6 +118,13 @@ public class Player {
             }
         });
         biggest = 0;
+    }
+
+    public void removePiece(ImageView checker){
+        pieces.remove(checker);
+    }
+    public void addPiece(ImageView checker){
+        pieces.add((Piece) checker);
     }
 
 }

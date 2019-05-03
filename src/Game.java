@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-
 import javafx.animation.PathTransition;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -98,9 +97,23 @@ public class Game {
                             }
                             playground.get(n.get(n.size()-1)).setOnMouseClicked((MouseEvent e) -> {
                                 //wip: Insert code for animation here
-                                System.out.println(playground.get(n.get(n.size()-1)));
                                 //to move = selected
                                 //target = playground.get(n.get(n.size()-1))
+                                ArrayList steps = new ArrayList<>();
+
+                                //Überprüft welche Liste das Ziel enthaltet
+                                for(int i = 0 ; i < selected.getOptions().size(); i++){
+                                    if(playground.get(n.get(n.size()-1)) == playground.get((int)selected.getOptions().get(i).get(selected.getOptions().get(i).size() - 1))){
+                                        for(int j = 1; j < selected.getOptions().get(i).size(); j++){
+                                            steps.add(selected.getOptions().get(i).get(j));
+                                        }
+                                    }
+                                }
+
+
+                                animateMove(selected, playground.get((int)steps.get(0)), steps, 0);
+
+                                //animateMove(selected, playground.get(n.get(n.size()-1)));
 
                                 //Reset all Style tags
                                 clearStyleH1();
@@ -123,34 +136,6 @@ public class Game {
     public Player getBlackPlayer() { return blackPlayer; }
     public Player getWhitePlayer() { return whitePlayer; }
     public ArrayList<Pane> getPlayground() { return playground; }
-
-    synchronized void animateMove(ImageView checker, Pane pane, Scene scene){
-        Bounds boundsInScene = checker.getParent().localToParent(checker.getBoundsInLocal());
-        Bounds targetInScene = pane.getBoundsInParent();
-        Line line = new Line(
-                (boundsInScene.getMaxX() - boundsInScene.getMinX()) / 2,
-                (targetInScene.getMaxY() - targetInScene.getMinY())/ 2,
-                (targetInScene.getMaxX() - ((targetInScene.getMaxX() - targetInScene.getMinX()) / 2)) - (boundsInScene.getMaxX() - ((boundsInScene.getMaxX() - boundsInScene.getMinX()) / 2)) + ((targetInScene.getMaxX() - targetInScene.getMinX()) / 2),
-                (targetInScene.getMaxY() - ((targetInScene.getMaxY() - targetInScene.getMinY()) / 2)) - (boundsInScene.getMaxY() - ((boundsInScene.getMaxY() - boundsInScene.getMinY()) / 2)) + ((targetInScene.getMaxY() - targetInScene.getMinY()) / 2));
-        PathTransition transition = new PathTransition();
-        checker.getParent().toFront();
-        transition.setNode(checker);
-        transition.setDuration(Duration.seconds(1));
-        transition.setPath(line);
-        transition.play();
-
-
-        transition.setOnFinished(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                //white.relocate(targetInScene.getMaxX() - (targetInScene.getMaxX() - targetInScene.getMinX()), targetInScene.getMaxY() - (targetInScene.getMaxY() - targetInScene.getMinY()));
-                //pane.getChildren().add(white);
-                //System.out.println(scene.getRoot());
-                relocateChecker(checker, pane);
-
-            }
-        });
-    }
 
     //Setter-Methods
     public void setSelected(Piece piece) { selected = piece; }
@@ -226,4 +211,60 @@ public class Game {
         }
     }
 
+
+    void animateMove (ImageView checker, Pane pane, ArrayList steps, int i){
+
+        //Gets X and Y Values of the pane and Checker
+
+        Bounds boundsInScene = checker.getParent().localToParent(checker.getBoundsInLocal());
+        Bounds targetInScene = pane.getBoundsInParent();
+
+
+        //Defines the Path for the Animation and Executes it
+
+        Line line = new Line(
+                (boundsInScene.getMaxX() - boundsInScene.getMinX()) / 2,
+                (targetInScene.getMaxY() - targetInScene.getMinY()) / 2,
+                (targetInScene.getMaxX() - ((targetInScene.getMaxX() - targetInScene.getMinX()) / 2)) - (boundsInScene.getMaxX() - ((boundsInScene.getMaxX() - boundsInScene.getMinX()) / 2)) + ((targetInScene.getMaxX() - targetInScene.getMinX()) / 2),
+                (targetInScene.getMaxY() - ((targetInScene.getMaxY() - targetInScene.getMinY()) / 2)) - (boundsInScene.getMaxY() - ((boundsInScene.getMaxY() - boundsInScene.getMinY()) / 2)) + ((targetInScene.getMaxY() - targetInScene.getMinY()) / 2));
+        PathTransition transition = new PathTransition();
+        checker.getParent().toFront();
+        transition.setNode(checker);
+        transition.setDuration(Duration.seconds(1));
+        transition.setPath(line);
+
+        // Starts once Animation is done
+        transition.setOnFinished(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                if(selected instanceof Checker){
+
+                }
+                else if(selected instanceof King){
+
+                }
+
+                checkForNextStep(checker, steps, i);
+                //WIP Remove Checker from old Pane and add it to new one
+            /*
+            Image imgWhite = new Image(getClass().getResourceAsStream("/white.png"));
+            ImageView white = new ImageView(imgWhite);
+            white.setFitHeight(sizeWindow/dimension-2);
+            white.setFitWidth(sizeWindow/dimension-2);
+            System.out.println(checker.getParent());
+            ((Pane)checker.getParent()).getChildren().remove(checker);
+            pane.getChildren().add(white);
+            */
+            }
+        });
+
+        transition.play();
+    }
+
+    public void checkForNextStep(ImageView checker, ArrayList steps, int i){
+        if(steps.get(i) != steps.get(steps.size() - 1)){
+            i++;
+            animateMove(checker, playground.get((int)steps.get(i)), steps, i);
+        }
+    }
 }
