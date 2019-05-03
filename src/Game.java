@@ -22,7 +22,7 @@ public class Game {
     private final int dimension, sizeWindow;
     private Scene scene;
     private ChangeListener onHover;
-    private Piece selected;
+    private Piece selected, newChecker;
     private Player blackPlayer, whitePlayer;
     private ArrayList<Integer> h1, h2, h3;
     private ArrayList<Pane> playground;
@@ -31,6 +31,7 @@ public class Game {
         dimension = 10;
         sizeWindow = 500;
         selected = null;
+        newChecker = null;
         h1 = new ArrayList<>();
         h2 = new ArrayList<>();
         h3 = new ArrayList<>();
@@ -235,46 +236,68 @@ public class Game {
         transition.setOnFinished(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
+                //Entfernt übersprunge Steine
+
+                int removeChecker = 999;
+                //Überprüft ob Start kleiner als Ziel ist
+                if(playground.indexOf(selected.getParent()) < playground.indexOf(pane)){
+                    for(int i = 1; i <= 9; i++) {
+                        if((playground.indexOf(selected.getParent()) + (11 * i) ==  playground.indexOf(pane))){
+                            removeChecker = playground.indexOf(pane) - 11;
+                        }
+                    }
+                    if(removeChecker == 999){
+                        removeChecker = playground.indexOf(pane) - 9;
+                    }
+                }
+                else {
+                    for(int i = 1; i <= 9; i++) {
+                        if((playground.indexOf(selected.getParent()) - (11 * i) ==  playground.indexOf(pane))){
+                            removeChecker = playground.indexOf(pane) + 11;
+                        }
+                    }
+                    if(removeChecker == 999){
+                        removeChecker = playground.indexOf(pane) + 9;
+                    }
+                }
+                playground.get(removeChecker).getChildren().removeAll(playground.get(removeChecker).getChildren());
+
+                //Fügt neuen Stein ein
+
                 if(selected instanceof Checker){
-                    int removeChecker = 999;
-                    //Überprüft ob Start kleiner als Ziel ist
-                    if(playground.indexOf(selected.getParent()) < playground.indexOf(pane)){
-                        for(int i = 1; i <= 9; i++) {
-                            if((playground.indexOf(selected.getParent()) + (11 * i) ==  playground.indexOf(pane))){
-                                removeChecker = playground.indexOf(pane) - 11;
-                            }
-                        }
-                        if(removeChecker == 999){
-                            removeChecker = playground.indexOf(pane) - 9;
-                        }
-                    }
-                    else {
-                        for(int i = 1; i <= 9; i++) {
-                            if((playground.indexOf(selected.getParent()) - (11 * i) ==  playground.indexOf(pane))){
-                                removeChecker = playground.indexOf(pane) + 11;
-                            }
-                        }
-                        if(removeChecker == 999){
-                            removeChecker = playground.indexOf(pane) + 9;
-                        }
-                    }
-                    playground.get(removeChecker).getChildren().removeAll(playground.get(removeChecker).getChildren());
+                    if(selected.getPlayer() == blackPlayer){
+                        Image blackChecker = new Image(getClass().getResourceAsStream("blackChecker.png"));
+                        Checker checker = new Checker(blackChecker, 1, blackPlayer);
+                        newChecker = checker;
 
-
-                    Image blackChecker = new Image(getClass().getResourceAsStream("blackChecker.png"));
-                    Checker checker = new Checker(blackChecker, 1, blackPlayer);
-                    checker.setFitHeight(getSizeWindow()/getDimension()-2);
-                    checker.setFitWidth(getSizeWindow()/getDimension()-2);
-                    ((Pane)selected.getParent()).getChildren().remove(selected);
-                    pane.getChildren().add(checker);
-                    blackPlayer.removePiece(selected);
-                    blackPlayer.addPiece(checker);
-                    selected = checker;
+                    }
+                    else{
+                        Image whiteChecker = new Image(getClass().getResourceAsStream("whiteChecker.png"));
+                        Checker checker = new Checker(whiteChecker, -1, whitePlayer);
+                        newChecker = checker;
+                    }
 
                 }
                 else if(selected instanceof King){
-
+                    if(selected.getPlayer() == blackPlayer){
+                        Image blackKing = new Image(getClass().getResourceAsStream("blackKing.png"));
+                        King checker = new King(blackKing, 1, blackPlayer);
+                        newChecker = checker;
+                    }
+                    else{
+                        Image whiteKing = new Image(getClass().getResourceAsStream("whiteKing.png"));
+                        King checker = new King(whiteKing, -1, whitePlayer);
+                        newChecker = checker;
+                    }
                 }
+
+                newChecker.setFitHeight(getSizeWindow()/getDimension()-2);
+                newChecker.setFitWidth(getSizeWindow()/getDimension()-2);
+                ((Pane)selected.getParent()).getChildren().remove(selected);
+                pane.getChildren().add(newChecker);
+                selected.getPlayer().removePiece(selected);
+                selected.getPlayer().addPiece(newChecker);
+                selected = (Piece)newChecker;
 
                 checkForNextStep(selected, steps, i);
             }
