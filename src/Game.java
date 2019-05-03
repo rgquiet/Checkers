@@ -110,10 +110,8 @@ public class Game {
                                     }
                                 }
 
-
                                 animateMove(selected, playground.get((int)steps.get(0)), steps, 0);
 
-                                //animateMove(selected, playground.get(n.get(n.size()-1)));
 
                                 //Reset all Style tags
                                 clearStyleH1();
@@ -238,6 +236,31 @@ public class Game {
             @Override
             public void handle(ActionEvent event) {
                 if(selected instanceof Checker){
+                    int removeChecker = 999;
+                    //Überprüft ob Start kleiner als Ziel ist
+                    if(playground.indexOf(selected.getParent()) < playground.indexOf(pane)){
+                        for(int i = 1; i <= 9; i++) {
+                            if((playground.indexOf(selected.getParent()) + (11 * i) ==  playground.indexOf(pane))){
+                                removeChecker = playground.indexOf(pane) - 11;
+                            }
+                        }
+                        if(removeChecker == 999){
+                            removeChecker = playground.indexOf(pane) - 9;
+                        }
+                    }
+                    else {
+                        for(int i = 1; i <= 9; i++) {
+                            if((playground.indexOf(selected.getParent()) - (11 * i) ==  playground.indexOf(pane))){
+                                removeChecker = playground.indexOf(pane) + 11;
+                            }
+                        }
+                        if(removeChecker == 999){
+                            removeChecker = playground.indexOf(pane) + 9;
+                        }
+                    }
+                    playground.get(removeChecker).getChildren().removeAll(playground.get(removeChecker).getChildren());
+
+
                     Image blackChecker = new Image(getClass().getResourceAsStream("blackChecker.png"));
                     Checker checker = new Checker(blackChecker, 1, blackPlayer);
                     checker.setFitHeight(getSizeWindow()/getDimension()-2);
@@ -254,16 +277,6 @@ public class Game {
                 }
 
                 checkForNextStep(selected, steps, i);
-                //WIP Remove Checker from old Pane and add it to new one
-            /*
-            Image imgWhite = new Image(getClass().getResourceAsStream("/white.png"));
-            ImageView white = new ImageView(imgWhite);
-            white.setFitHeight(sizeWindow/dimension-2);
-            white.setFitWidth(sizeWindow/dimension-2);
-            System.out.println(checker.getParent());
-            ((Pane)checker.getParent()).getChildren().remove(checker);
-            pane.getChildren().add(white);
-            */
             }
         });
 

@@ -115,13 +115,14 @@ public class GameTest extends Application {
         white.add(18);
         white.add(31);
         white.add(38);
-        white.add(58);
+        white.add(99);
 
         Game testGame = new Game(stage);
         testGame.createPlayers(black, white);
 
         //Testing black Player
         testGame.getBlackPlayer().checkOptions();
+
     }
 
 }
