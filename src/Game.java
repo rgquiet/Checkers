@@ -97,9 +97,7 @@ public class Game {
                                 if(i != 0) { setStyleH3(n.get(i-1), n.get(i)); }
                             }
                             playground.get(n.get(n.size()-1)).setOnMouseClicked((MouseEvent e) -> {
-                                //wip: Insert code for animation here
-                                //to move = selected
-                                //target = playground.get(n.get(n.size()-1))
+
                                 ArrayList steps = new ArrayList<>();
 
                                 //Überprüft welche Liste das Ziel enthaltet
@@ -239,7 +237,8 @@ public class Game {
                 //Entfernt übersprunge Steine
 
                 int removeChecker = 999;
-                //Überprüft ob Start kleiner als Ziel ist
+
+                //Überprüft ob Start kleiner als Ziel ist und entfernt ihn anschliessend
                 if(playground.indexOf(selected.getParent()) < playground.indexOf(pane)){
                     for(int i = 1; i <= 9; i++) {
                         if((playground.indexOf(selected.getParent()) + (11 * i) ==  playground.indexOf(pane))){
@@ -267,6 +266,7 @@ public class Game {
                 else{
                     blackPlayer.removePiece((ImageView)playground.get(removeChecker).getChildren().get(0));
                 }
+
                 playground.get(removeChecker).getChildren().removeAll(playground.get(removeChecker).getChildren());
 
 
@@ -299,6 +299,7 @@ public class Game {
                     }
                 }
 
+
                 newChecker.setFitHeight(getSizeWindow()/getDimension()-2);
                 newChecker.setFitWidth(getSizeWindow()/getDimension()-2);
                 ((Pane)selected.getParent()).getChildren().remove(selected);
@@ -306,6 +307,12 @@ public class Game {
                 selected.getPlayer().removePiece(selected);
                 selected.getPlayer().addPiece(newChecker);
                 selected = (Piece)newChecker;
+
+                //Check if Checker is on last field
+                if(selected instanceof Checker && (selected.getDirection() == -1 && playground.indexOf(selected.getParent()) <= 9) || (selected.getDirection() == 1 && playground.indexOf(selected.getParent()) >= 90)){
+                    selected.getPlayer().setKing(selected.getPlayer().getPieces().indexOf(selected));
+
+                }
 
                 checkForNextStep(selected, steps, i);
             }

@@ -85,8 +85,14 @@ public class Player {
         game.getPlayground().get(j).getChildren().add(king);
         pieces.set(i, king);
     }
+    public void removePiece(ImageView checker){
+        pieces.remove(checker);
+    }
+    public void addPiece(ImageView checker){
+        pieces.add((Piece) checker);
+    }
 
-    public void checkOptions() {
+    public int checkOptions() {
         for (Piece n: pieces) {
             ArrayList<Integer> start = new ArrayList<>();
             start.add(game.getPlayground().indexOf(n.getParent()));
@@ -118,13 +124,8 @@ public class Player {
             }
         });
         biggest = 0;
+        return biggest;
     }
 
-    public void removePiece(ImageView checker){
-        pieces.remove(checker);
-    }
-    public void addPiece(ImageView checker){
-        pieces.add((Piece) checker);
-    }
 
 }
