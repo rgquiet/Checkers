@@ -105,9 +105,10 @@ public class GameTest extends Application {
     public void testJumpChecker4() {
         //Set pieces in special order to test checkers jump-logic
         ArrayList<Integer> black = new ArrayList<>();
-        black.add(0);
-        black.add(19);
-        black.add(79);
+        //black.add(0);
+        black.add(15);
+        black.add(37);
+        //black.add(79);
 
         ArrayList<Integer> white = new ArrayList<>();
         white.add(11);
@@ -115,19 +116,22 @@ public class GameTest extends Application {
         white.add(24);
         white.add(44);
         white.add(64);
-        white.add(84);
+        //white.add(84);
         white.add(86);
-        white.add(26);
-        white.add(28);
+        white.add(25);
+        white.add(29);
 
         Game testGame = new Game(stage);
         testGame.createPlayers(black, white);
 
         //Testing black Player
+        //testGame.getBlackPlayer().checkOptions();
         int options = testGame.getBlackPlayer().checkOptions();
         if(options == 0){
-
+            testGame.getBlackPlayer().checkPulls();
         }
+            testGame.getBlackPlayer().checkPulls();
+
 
     }
 

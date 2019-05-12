@@ -30,7 +30,10 @@ abstract class Piece extends ImageView {
         setOnMouseClicked((MouseEvent e) -> {
             player.getGame().setSelected(this);
             player.getGame().clearStyleH2();
+
             options.forEach(n -> player.getGame().setStyleH2((int)n.get(n.size()-1)));
+
+
         });
     }
 

@@ -11,8 +11,51 @@ public class Checker extends Piece {
     }
 
     @Override
-    void pull() {
-        //wip...
+    public void pull() {
+        ArrayList playground = super.getPlayer().getGame().getPlayground();
+        int counter = 0;
+
+
+        if(playground.indexOf(this.getParent()) % 10 == 9){
+            if(super.getPlayer().getGame().getFieldContent((Pane)playground.get(playground.indexOf(this.getParent()) + super.getDirection() * 9))){
+                ArrayList<Integer> pos = new ArrayList();
+                pos.add(playground.indexOf(this.getParent()));
+                pos.add(playground.indexOf(this.getParent()) + super.getDirection() * 9);
+                super.getOptions().add(pos);
+                counter++;
+            }
+        }
+        else if(playground.indexOf(this.getParent()) % 10 == 0){
+            if(super.getPlayer().getGame().getFieldContent((Pane)playground.get(playground.indexOf(this.getParent()) + super.getDirection() * 9))){
+                ArrayList<Integer> pos = new ArrayList();
+                pos.add(playground.indexOf(this.getParent()));
+                pos.add(playground.indexOf(this.getParent()) + super.getDirection() * 11);
+                super.getOptions().add(pos);
+                counter++;
+            }
+        }
+
+        else {
+            if(super.getPlayer().getGame().getFieldContent((Pane)playground.get(playground.indexOf(this.getParent()) + super.getDirection() * 11))) {
+                ArrayList<Integer> pos = new ArrayList();
+                pos.add(playground.indexOf(this.getParent()));
+                pos.add(playground.indexOf(this.getParent()) + super.getDirection() * 11);
+                super.getOptions().add(pos);
+                counter++;
+            }
+            if(super.getPlayer().getGame().getFieldContent((Pane)playground.get(playground.indexOf(this.getParent()) + super.getDirection() * 9))) {
+                ArrayList<Integer> pos = new ArrayList();
+                pos.add(playground.indexOf(this.getParent()));
+                pos.add(playground.indexOf(this.getParent()) + super.getDirection() * 9);
+                super.getOptions().add(pos);
+                counter++;
+            }
+        }
+        if(counter != 0) {
+            int field = playground.indexOf(this.getParent());
+            super.getPlayer().getGame().setStyleH1(field);
+            super.setOnMouseClick();
+        }
     }
 
     @Override

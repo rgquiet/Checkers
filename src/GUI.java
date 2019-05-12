@@ -17,6 +17,7 @@ public class GUI extends Application {
         ArrayList<Integer> black = new ArrayList<>();
         ArrayList<Integer> white = new ArrayList<>();
         game.createPlayers(black, white);
+        game.getBlackPlayer().checkPulls();
     }
 
     public static void main(final String[] args) {

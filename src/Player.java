@@ -93,6 +93,7 @@ public class Player {
     }
 
     public int checkOptions() {
+        biggest = 0;
         for (Piece n: pieces) {
             ArrayList<Integer> start = new ArrayList<>();
             start.add(game.getPlayground().indexOf(n.getParent()));
@@ -123,9 +124,12 @@ public class Player {
                 return false;
             }
         });
-        biggest = 0;
         return biggest;
     }
-
+    public void checkPulls(){
+        for(Piece piece : pieces){
+            piece.pull();
+        }
+    }
 
 }
