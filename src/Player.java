@@ -84,6 +84,7 @@ public class Player {
         game.getPlayground().get(j).getChildren().remove(pieces.get(i));
         game.getPlayground().get(j).getChildren().add(king);
         pieces.set(i, king);
+        game.setSelected(king);
     }
     public void removePiece(ImageView checker){
         pieces.remove(checker);

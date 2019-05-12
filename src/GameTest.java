@@ -116,7 +116,7 @@ public class GameTest extends Application {
         white.add(24);
         white.add(44);
         white.add(64);
-        //white.add(84);
+        white.add(84);
         white.add(86);
         white.add(25);
         white.add(29);

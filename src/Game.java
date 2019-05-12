@@ -26,7 +26,7 @@ public class Game {
     private Player blackPlayer, whitePlayer;
     private ArrayList<Integer> h1, h2, h3;
     private ArrayList<Pane> playground;
-    private String targetName;
+
 
 
     public Game(Stage stage) {
@@ -102,7 +102,6 @@ public class Game {
                 for (ArrayList<Integer> n : selected.getOptions()) {
                     String fieldName = playground.get(n.get(n.size() - 1)).toString().split("style")[0];
                     fieldName = fieldName.substring(0, fieldName.length() - 1);
-                    targetName = selectedName;
                     if (fieldName.equals(selectedName)) {
                         if ((boolean) ov.getValue()) {
                             //Hover over
@@ -132,58 +131,6 @@ public class Game {
                                 clearStyleH2();
                                 clearStyleH3();
                             });
-/*
-                            for(int counter = 0; counter < n.size(); counter++){
-                                playground.get(n.get(counter)).setOnMouseClicked((MouseEvent event) -> {
-
-                                    ArrayList steps = new ArrayList<>();
-                                    //Überprüft welche Liste das Ziel enthaltet
-                                    for(int i = 0 ; i < n.size(); i++){
-                                        if(selected.getPlayer().checkOptions() == 0){
-                                            if(playground.get(n.get(i)).toString().contains(targetName)) {
-                                                steps.add(n.get(i));
-                                            }
-                                        }
-
-                                        else if(playground.get(n.get(n.size()-1)) == playground.get((int)n.get(n.size() - 1))){
-                                            for(int j = 1; j < n.size(); j++){
-                                                steps.add(n.get(j));
-
-                                            }
-                                        }
-                                    }
-                                    animateMove(selected, playground.get((int)steps.get(0)), steps, 0);
-
-
-                                    //Reset all Style tags
-                                    clearStyleH1();
-                                    clearStyleH2();
-                                    clearStyleH3();
-
-                                });
-                            }*/
-                            /*
-                            playground.get(n.get(n.size()-1)).setOnMouseClicked((MouseEvent e) -> {
-
-                                ArrayList steps = new ArrayList<>();
-
-                                //Überprüft welche Liste das Ziel enthaltet
-                                for(int i = 0 ; i < selected.getOptions().size(); i++){
-                                    if(playground.get(n.get(n.size()-1)) == playground.get((int)selected.getOptions().get(i).get(selected.getOptions().get(i).size() - 1))){
-                                        for(int j = 1; j < selected.getOptions().get(i).size(); j++){
-                                            steps.add(selected.getOptions().get(i).get(j));
-                                        }
-                                    }
-                                }
-
-                                animateMove(selected, playground.get((int)steps.get(0)), steps, 0);
-
-
-                                //Reset all Style tags
-                                clearStyleH1();
-                                clearStyleH2();
-                                clearStyleH3();
-                            }); */
                         } else {
                             //Hover away
 
@@ -401,14 +348,20 @@ public class Game {
                     }
                 }
 
-                newChecker.setFitHeight(getSizeWindow() / getDimension() - 2);
-                newChecker.setFitWidth(getSizeWindow() / getDimension() - 2);
-                playground.get((int) steps.get(i)).getChildren().remove(selected);
+                newChecker.setFitHeight(scene.getHeight() / getDimension() - 2);
+                newChecker.setFitWidth(scene.getWidth() / getDimension() - 2);
+                playground.get((int) steps.get(i)).getChildren().removeAll(selected);
+                selected.setVisible(false);
                 selected.getPlayer().removePiece(selected);
                 selected.getPlayer().addPiece(newChecker);
-                pane.getChildren().add(newChecker);
+                pane.getChildren().addAll(newChecker);
                 selected = newChecker;
 
+                if (selected instanceof Checker && (selected.getDirection() == -1 && playground.indexOf(playground.get((int) steps.get(i))) <= 9) || (selected.getDirection() == 1 && playground.indexOf(playground.get((int) steps.get(i))) >= 90)) {
+                    selected.getPlayer().setKing((selected.getPlayer().getPieces().indexOf(selected)));
+                    selected.setFitHeight(scene.getHeight() / getDimension() - 2);
+                    selected.setFitWidth(scene.getWidth() / getDimension() - 2);
+                }
 
                 checkForNextStep(selected, steps, i);
             }
@@ -421,11 +374,6 @@ public class Game {
         if (steps.get(i) != steps.get(steps.size() - 1)) {
             i++;
             animateMove(checker, playground.get((int) steps.get(i)), steps, i);
-        } else {
-            //Check if Checker is on last field
-            //if (selected instanceof Checker && (selected.getDirection() == -1 && playground.indexOf(playground.get((int) steps.get(i))) <= 9) || (selected.getDirection() == 1 && playground.indexOf(playground.get((int) steps.get(i))) >= 90)) {
-            selected.getPlayer().setKing(selected.getPlayer().getPieces().indexOf(selected));
-            //}
         }
     }
 }
