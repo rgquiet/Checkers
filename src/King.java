@@ -78,7 +78,7 @@ public class King extends Piece {
     }
 
 
-    //Returned einen List mit allen möglichen landungsfeldern
+    //Returned einen List mit allen möglichen Zielfeldern
 
     ArrayList getPossibleFields(int start, int direction){
         ArrayList<Integer> possible = new ArrayList<>();
@@ -92,8 +92,17 @@ public class King extends Piece {
     }
 
 
-    ArrayList generateList(ArrayList<Integer> possible, ArrayList<Integer> steps){
-
+    ArrayList<ArrayList> generateLists(ArrayList<Integer> steps, ArrayList<Integer> possible){
+        ArrayList<ArrayList> all = new ArrayList<>();
+        for(int step : possible) {
+            ArrayList<Integer> list = new ArrayList<>();
+            for(int i = 0; i < steps.size(); i++){
+                list.add(steps.get(i));
+            }
+            list.add(step);
+            all.add(list);
+        }
+        return all;
     }
 
     ArrayList getKilledCheckers(ArrayList<Integer> steps){
