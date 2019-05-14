@@ -7,10 +7,23 @@ import org.omg.PortableInterceptor.INACTIVE;
 public class King extends Piece {
 
     ArrayList<Pane> playground = getPlayer().getGame().getPlayground();
+    ArrayList<Path> paths = new ArrayList<>();
 
     public King(Image img, int direction, Player player) {
         super(img, direction, player);
     }
+
+    //Setter Methods
+
+    public void addPath(Path path){
+        paths.add(path);
+    }
+    public void removePath(Path path){
+        paths.remove(path);
+    }
+
+
+
 
     @Override
     void pull() {
@@ -20,37 +33,17 @@ public class King extends Piece {
     @Override
     boolean jump(ArrayList<Integer> start, Image king) {
 
-        int directions[] = {-9, 11, 9, -11};
-
-
-
-        for(int d : directions){
-            if(movePossible(start.get(0),d)){
-                ArrayList<Integer> pos = new ArrayList<>();
-                pos.add(start.get(0));
-                pos.add(start.get(0) + d * 2);
-                getOptions().add(pos);
-                for (int sd : directions){
-                    if(d == sd * -1){
-
-                    }
-                }
+        Path path = new Path(start, this);
+        boolean movesPossible = true;
+        while(movesPossible){
+            for(Path p : paths){
+                movesPossible = p.movePossible();
             }
         }
 
-        // start = int of field on Playground
-        ArrayList<Integer> steps = new ArrayList<Integer>();
-        steps.add(start.get(0));
-        getOptions().add(steps);
-
-        //Check Northeast
-
-        //Check Southeast
-
-        //Check Southwest
-
-        //Check Northwest
-
+        for(Path p : paths){
+            getOptions().add(p.getPath());
+        }
 
         return false;
     }
@@ -60,7 +53,7 @@ public class King extends Piece {
 
 
     //überprüft ob das springen in eine Richtung möglich ist
-
+/*
     boolean movePossible(int start, int direction){
 
         for(int i = 1; i < 10; i++){
@@ -92,6 +85,8 @@ public class King extends Piece {
     }
 
 
+    // Für getPossibleFields methode -- gibt ArrayList mit Arraylists zurück, die alle bisherigen Schritte mit einem jeweiligen möglichen Landungsfeld zurück
+
     ArrayList<ArrayList> generateLists(ArrayList<Integer> steps, ArrayList<Integer> possible){
         ArrayList<ArrayList> all = new ArrayList<>();
         for(int step : possible) {
@@ -104,6 +99,24 @@ public class King extends Piece {
         }
         return all;
     }
+
+
+    // Erstellt für jeden neuen möglichen Zug eine Arraylist mit bisherigen steps
+
+    ArrayList<ArrayList> splitPath(ArrayList<Integer> steps, int possiblePaths){
+        ArrayList<ArrayList> possible = new ArrayList<>();
+        for(int i = 0; i < possiblePaths; i++){
+            ArrayList<Integer> newSteps = new ArrayList<>();
+            for(int step : steps){
+                newSteps.add(step);
+            }
+            possible.add(newSteps);
+        }
+        return possible;
+    }
+
+
+    //Gibt die Werte aller Steine die in einem Zug übersprungen werden
 
     ArrayList getKilledCheckers(ArrayList<Integer> steps){
         ArrayList<Integer> killed = new ArrayList<>();
@@ -140,6 +153,6 @@ public class King extends Piece {
         return killed;
         }
 
-
+*/
 
 }
