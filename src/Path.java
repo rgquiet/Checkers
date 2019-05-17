@@ -32,12 +32,11 @@ public class Path {
     }
 
 
-    boolean movePossible(){
+    boolean jumpPossible(){
 
         int[] directions = {-9, 11, 9, -11};
         int start = path.get(path.size() - 1);
         boolean possible = false;
-
         for(int d : directions) {
             for (int i = 1; start + (i + 1) * d <= 100 && start + (i + 1) * d >= 0; i++) {
                 if (!playground.get(start + i * d).getChildren().isEmpty() && //Ist ein potenzielles Ziel in der Reihe vorhanden
@@ -87,7 +86,7 @@ public class Path {
 
             for (int i = 1; target + i  * direction <= 100 && target + i * direction >= 0; i++) {
 
-                if (playground.get(target + i * direction).getChildren().isEmpty()) {
+                if (playground.get(target + i * direction).getChildren().isEmpty() || getKilledCheckers().indexOf(start + i * direction) != -1) {
                     possible.add(target + i * direction);
                 }
                 if((target + i * direction) % 10 == 9 || (target + i * direction) % 10 == 0 ){

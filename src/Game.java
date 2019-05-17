@@ -414,6 +414,9 @@ public class Game {
     }
 
     public void nextTurn(){
-        blackPlayer.checkOptions();
+        int biggest = blackPlayer.checkOptions();
+        if(biggest == 0){
+            blackPlayer.checkPulls();
+        }
     }
 }

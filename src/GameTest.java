@@ -106,7 +106,7 @@ public class GameTest extends Application {
         //Set pieces in special order to test checkers jump-logic
         ArrayList<Integer> black = new ArrayList<>();
         //black.add(0);
-        black.add(15);
+        black.add(16);
         //black.add(37);
 
         ArrayList<Integer> white = new ArrayList<>();
@@ -117,7 +117,7 @@ public class GameTest extends Application {
         white.add(64);
         white.add(84);
         white.add(86);
-        //white.add(25);
+        //white.add(75);
         //white.add(29);
 
         Game testGame = new Game(stage);
@@ -127,7 +127,7 @@ public class GameTest extends Application {
         //testGame.getBlackPlayer().checkOptions();
         int options = testGame.getBlackPlayer().checkOptions();
         if(options == 0){
-            //testGame.getBlackPlayer().checkPulls();
+            testGame.getBlackPlayer().checkPulls();
         }
             //testGame.getBlackPlayer().checkPulls();
 
