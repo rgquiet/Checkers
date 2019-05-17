@@ -98,7 +98,7 @@ public class Player {
         for (Piece n: pieces) {
             ArrayList<Integer> start = new ArrayList<>();
             start.add(game.getPlayground().indexOf(n.getParent()));
-
+            n.getOptions().clear();
             if(n instanceof Checker) {
                 //Fills the ArrayList options for each piece
                 if (n.jump(start, kingImg)) {

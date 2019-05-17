@@ -40,7 +40,7 @@ public class Checker extends Piece {
 
         else {
             if(getDirection() == -1) {
-                if (playground.get(start - 9).getChildren().isEmpty()){
+                if (playground.get(start - 9).getChildren().isEmpty() && start - 9 > 0){
                     addToOptions(start, -9);
                     counter++;
                 }
