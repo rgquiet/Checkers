@@ -92,6 +92,7 @@ public class Game {
         scene.getStylesheets().add(getClass().getResource("playground.css").toExternalForm());
         stage.setScene(scene);
 
+
         //Initialize Change Listener
         onHover = new ChangeListener() {
             @Override
@@ -112,13 +113,13 @@ public class Game {
                             }
                             playground.get(n.get(n.size() - 1)).setOnMouseClicked((MouseEvent e) -> {
 
-                                ArrayList steps = new ArrayList<>();
+                                ArrayList<Integer> steps = new ArrayList<>();
 
                                 //Überprüft welche Liste das Ziel enthaltet
                                 for (int i = 0; i < selected.getOptions().size(); i++) {
                                     if (playground.get(n.get(n.size() - 1)) == playground.get((int) selected.getOptions().get(i).get(selected.getOptions().get(i).size() - 1))) {
                                         for (int j = 1; j < selected.getOptions().get(i).size(); j++) {
-                                            steps.add(selected.getOptions().get(i).get(j));
+                                            steps.add((Integer)selected.getOptions().get(i).get(j));
                                         }
                                     }
                                 }
@@ -288,7 +289,7 @@ public class Game {
         transition.setOnFinished(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                //Entfernt übersprunge Steine
+                //Entfernt übersprunge feindliche Steine
 
                 int removeChecker = 999;
 
@@ -322,6 +323,11 @@ public class Game {
                 playground.get(removeChecker).getChildren().removeAll(playground.get(removeChecker).getChildren());
 
 
+                //Entfernt Stein aus startfeld
+
+                playground.get(playground.indexOf(checker.getParent())).getChildren().clear();
+
+
                 //Fügt neuen Stein ein
 
                 if (selected instanceof Checker) {
@@ -350,7 +356,7 @@ public class Game {
 
                 newChecker.setFitHeight(scene.getHeight() / getDimension() - 2);
                 newChecker.setFitWidth(scene.getWidth() / getDimension() - 2);
-                playground.get((int) steps.get(i)).getChildren().removeAll(selected);
+                //playground.get((int) steps.get(i)).getChildren().removeAll(selected);
                 selected.setVisible(false);
                 selected.getPlayer().removePiece(selected);
                 selected.getPlayer().addPiece(newChecker);
@@ -375,5 +381,12 @@ public class Game {
             i++;
             animateMove(checker, playground.get((int) steps.get(i)), steps, i);
         }
+        else{
+            nextTurn();
+        }
+    }
+
+    public void nextTurn(){
+        blackPlayer.checkOptions();
     }
 }

@@ -127,6 +127,7 @@ public class Player {
         });
         return biggest;
     }
+
     public void checkPulls(){
         for(Piece piece : pieces){
             piece.pull();

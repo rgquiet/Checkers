@@ -6,23 +6,24 @@ import org.omg.PortableInterceptor.INACTIVE;
 
 public class King extends Piece {
 
-    ArrayList<Pane> playground = getPlayer().getGame().getPlayground();
-    ArrayList<Path> paths = new ArrayList<>();
+    private ArrayList<Path> paths, newPaths, toRemove = new ArrayList<>();
 
     public King(Image img, int direction, Player player) {
         super(img, direction, player);
+        paths = new ArrayList<Path>();
+        newPaths = new ArrayList<Path>();
+        toRemove = new ArrayList<Path>();
+
     }
 
     //Setter Methods
 
     public void addPath(Path path){
-        paths.add(path);
+        newPaths.add(path);
     }
     public void removePath(Path path){
-        paths.remove(path);
+        toRemove.remove(path);
     }
-
-
 
 
     @Override
@@ -34,18 +35,45 @@ public class King extends Piece {
     boolean jump(ArrayList<Integer> start, Image king) {
 
         Path path = new Path(start, this);
-        boolean movesPossible = true;
-        while(movesPossible){
-            for(Path p : paths){
-                movesPossible = p.movePossible();
-            }
+        paths.add(path);
+        boolean more = true;
+
+        while(more){
+            more = nextStep();
         }
 
-        for(Path p : paths){
+        getOptions().clear();
+
+        for (Path p : paths){
             getOptions().add(p.getPath());
         }
-
+        System.out.println(getOptions());
         return false;
+    }
+
+
+    public boolean nextStep(){
+        boolean more = false;
+        for(Path p : paths){
+            if(p.movePossible()){
+                more = true;
+
+            }
+        }
+        transferList(more);
+        return more;
+    }
+
+
+    public void transferList(boolean more){
+        if(more) {
+            paths.clear();
+            paths.addAll(newPaths);
+            newPaths.clear();
+        }
+        else{
+            newPaths.clear();
+        }
     }
 
 
