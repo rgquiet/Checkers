@@ -23,7 +23,7 @@ public class Game {
     private Scene scene;
     private ChangeListener onHover;
     private Piece selected, newChecker;
-    private Player blackPlayer, whitePlayer;
+    private Player blackPlayer, whitePlayer, turn;
     private ArrayList<Integer> h1, h2, h3;
     private ArrayList<Pane> playground;
 
@@ -34,6 +34,7 @@ public class Game {
         sizeWindow = 500;
         selected = null;
         newChecker = null;
+        turn = null;
         h1 = new ArrayList<>();
         h2 = new ArrayList<>();
         h3 = new ArrayList<>();
@@ -355,7 +356,7 @@ public class Game {
                     clearStyleH1();
                 }
 
-                playground.get(playground.indexOf(checker.getParent())).getChildren().clear();
+                playground.get(playground.indexOf(selected.getParent())).getChildren().clear();
 
                 //Fügt neuen Stein ein
 
@@ -416,9 +417,19 @@ public class Game {
     }
 
     public void nextTurn(){
-        int biggest = blackPlayer.checkOptions();
+        if (turn == null){
+            turn = whitePlayer;
+        }
+        else if(turn == blackPlayer){
+            turn = whitePlayer;
+        }
+        else{
+            turn = blackPlayer;
+        }
+
+        int biggest = turn.checkOptions();
         if(biggest == 0){
-            blackPlayer.checkPulls();
+            turn.checkPulls();
         }
     }
 }

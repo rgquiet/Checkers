@@ -12,43 +12,52 @@ public class Checker extends Piece {
 
     @Override
     public void pull() {
-        ArrayList playground = super.getPlayer().getGame().getPlayground();
+        ArrayList<Pane> playground = super.getPlayer().getGame().getPlayground();
         int counter = 0;
+        getOptions().clear();
+        int start = playground.indexOf(this.getParent());
 
-
-        if(playground.indexOf(this.getParent()) % 10 == 9){
-            if(super.getPlayer().getGame().getFieldContent((Pane)playground.get(playground.indexOf(this.getParent()) + super.getDirection() * 9))){
-                ArrayList<Integer> pos = new ArrayList();
-                pos.add(playground.indexOf(this.getParent()));
-                pos.add(playground.indexOf(this.getParent()) + super.getDirection() * 9);
-                super.getOptions().add(pos);
+        if(start % 10 == 9){
+            if(getDirection() == -1 && playground.get(start - 11).getChildren().isEmpty()){
+                addToOptions(start, -11);
+                counter++;
+            }
+            else if(getDirection() == 1 && playground.get(start + 9).getChildren().isEmpty()){
+                addToOptions(start, 9);
                 counter++;
             }
         }
-        else if(playground.indexOf(this.getParent()) % 10 == 0){
-            if(super.getPlayer().getGame().getFieldContent((Pane)playground.get(playground.indexOf(this.getParent()) + super.getDirection() * 9))){
-                ArrayList<Integer> pos = new ArrayList();
-                pos.add(playground.indexOf(this.getParent()));
-                pos.add(playground.indexOf(this.getParent()) + super.getDirection() * 11);
-                super.getOptions().add(pos);
+        else if(start % 10 == 0){
+            if(getDirection() == -1 && playground.get(start - 9).getChildren().isEmpty()){
+                addToOptions(start, -9);
+                counter++;
+            }
+            else if(getDirection() == 1 && playground.get(start + 11).getChildren().isEmpty()){
+                addToOptions(start, 11);
                 counter++;
             }
         }
 
         else {
-            if(super.getPlayer().getGame().getFieldContent((Pane)playground.get(playground.indexOf(this.getParent()) + super.getDirection() * 11))) {
-                ArrayList<Integer> pos = new ArrayList();
-                pos.add(playground.indexOf(this.getParent()));
-                pos.add(playground.indexOf(this.getParent()) + super.getDirection() * 11);
-                super.getOptions().add(pos);
-                counter++;
+            if(getDirection() == -1) {
+                if (playground.get(start - 9).getChildren().isEmpty()){
+                    addToOptions(start, -9);
+                    counter++;
+                }
+                if (playground.get(start - 11).getChildren().isEmpty()){
+                    addToOptions(start, -11);
+                    counter++;
+                }
             }
-            if(super.getPlayer().getGame().getFieldContent((Pane)playground.get(playground.indexOf(this.getParent()) + super.getDirection() * 9))) {
-                ArrayList<Integer> pos = new ArrayList();
-                pos.add(playground.indexOf(this.getParent()));
-                pos.add(playground.indexOf(this.getParent()) + super.getDirection() * 9);
-                super.getOptions().add(pos);
-                counter++;
+            else{
+                if (playground.get(start + 9).getChildren().isEmpty()){
+                    addToOptions(start, 9);
+                    counter++;
+                }
+                if (playground.get(start + 11).getChildren().isEmpty()){
+                    addToOptions(start, 11);
+                    counter++;
+                }
             }
         }
         if(counter != 0) {
@@ -128,6 +137,13 @@ public class Checker extends Piece {
         }
 
         return oneMore;
+    }
+
+    private void addToOptions(int start, int direction){
+        ArrayList<Integer> pos = new ArrayList();
+        pos.add(start);
+        pos.add(start + direction);
+        super.getOptions().add(pos);
     }
 
 }

@@ -31,6 +31,7 @@ public class King extends Piece {
         ArrayList<Pane> playground = getPlayer().getGame().getPlayground();
         int start = playground.indexOf(this.getParent());
         int[] directions = {-9, 11, 9, -11};
+        getOptions().clear();
 
         for(int d : directions){
             for (int i = 1; start + i * d < 100 && start + i * d >= 0; i++) {
@@ -63,12 +64,11 @@ public class King extends Piece {
         Path path = new Path(start, this);
         paths.add(path);
         boolean more = true;
+        getOptions().clear();
 
         while(more){
             more = nextStep();
         }
-
-        getOptions().clear();
 
         for (Path p : paths){
             if(p.getPath().size() > 1) {
