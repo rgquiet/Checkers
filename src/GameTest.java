@@ -106,7 +106,7 @@ public class GameTest extends Application {
         //Set pieces in special order to test checkers jump-logic
         ArrayList<Integer> black = new ArrayList<>();
         //black.add(0);
-        black.add(16);
+        black.add(15);
         //black.add(37);
 
         ArrayList<Integer> white = new ArrayList<>();

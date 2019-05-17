@@ -341,19 +341,21 @@ public class Game {
                     }
                 }
 
-                if (selected.getPlayer() == blackPlayer) {
-                    whitePlayer.removePiece((ImageView) playground.get(removeChecker).getChildren().get(0));
-                } else {
-                    blackPlayer.removePiece((ImageView) playground.get(removeChecker).getChildren().get(0));
+                if(removeChecker != 999){
+                    if (selected.getPlayer() == blackPlayer) {
+                        whitePlayer.removePiece((ImageView) playground.get(removeChecker).getChildren().get(0));
+                    } else {
+                        blackPlayer.removePiece((ImageView) playground.get(removeChecker).getChildren().get(0));
+                    }
                 }
 
-                playground.get(removeChecker).getChildren().removeAll(playground.get(removeChecker).getChildren());
 
-
-                //Entfernt Stein aus startfeld
+                if (selected.getPlayer().checkOptions() != 0){
+                    playground.get(removeChecker).getChildren().removeAll(playground.get(removeChecker).getChildren());
+                    clearStyleH1();
+                }
 
                 playground.get(playground.indexOf(checker.getParent())).getChildren().clear();
-
 
                 //Fügt neuen Stein ein
 

@@ -33,21 +33,27 @@ public class King extends Piece {
         int[] directions = {-9, 11, 9, -11};
 
         for(int d : directions){
-            for (int i = 1; start + (i + 1) * d <= 100 && start + (i + 1) * d >= 0; i++) {
+            for (int i = 1; start + i * d < 100 && start + i * d >= 0; i++) {
                 ArrayList<Integer> pos = new ArrayList<>();
+                int target = start + (i * d);
+
+                if ((start % 10 == 0 && (d == 9 || d == -11)) || (start % 10 == 9 && (d == -9 || d == 11))){
+                    break;
+                }
+                if(target % 10 == 0 || target % 10 == 9){
+                    pos.add(start);
+                    pos.add(target);
+                    getOptions().add(pos);
+                    break;
+                }
                 if(playground.get(start + i * d).getChildren().isEmpty()){
                     pos.add(start);
-                    pos.add(start + i * d);
+                    pos.add(target);
                     getOptions().add(pos);
-                }
-                if((start + i * d) % 10 == 9 || (start + i * d) % 10 == 0 ){
-                    break;
                 }
             }
         }
-
-        int field = playground.indexOf(this.getParent());
-        super.getPlayer().getGame().setStyleH1(field);
+        super.getPlayer().getGame().setStyleH1(start);
         super.setOnMouseClick();
     }
 
@@ -65,7 +71,9 @@ public class King extends Piece {
         getOptions().clear();
 
         for (Path p : paths){
-            getOptions().add(p.getPath());
+            if(p.getPath().size() > 1) {
+                getOptions().add(p.getPath());
+            }
         }
         return false;
     }
