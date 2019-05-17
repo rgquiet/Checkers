@@ -99,18 +99,36 @@ public class Player {
             ArrayList<Integer> start = new ArrayList<>();
             start.add(game.getPlayground().indexOf(n.getParent()));
 
-            //Fills the ArrayList options for each piece
-            if (n.jump(start, kingImg)) {
-                boolean repeat = true;
-                while (repeat) {
-                    repeat = false;
-                    ArrayList<ArrayList> pos = new ArrayList<>(n.getOptions());
-                    for (ArrayList p: pos) {
-                        if(n.jump(p, kingImg)) { repeat = true; }
+            if(n instanceof Checker) {
+                //Fills the ArrayList options for each piece
+                if (n.jump(start, kingImg)) {
+                    boolean repeat = true;
+                    while (repeat) {
+                        repeat = false;
+                        ArrayList<ArrayList> pos = new ArrayList<>(n.getOptions());
+                        for (ArrayList p : pos) {
+                            if (n.jump(p, kingImg)) {
+                                repeat = true;
+                            }
+                        }
+                    }
+                    if (n.getOptions().get(0).size() > biggest) {
+                        biggest = n.getOptions().get(0).size();
+                    }
+                    possiblePieces.put(n, n.getOptions().get(0).size());
+                }
+            }
+            else if(n instanceof King){
+                n.jump(start, kingImg);
+                if(n.getOptions().size() > biggest){
+                    for(ArrayList a : n.getOptions()){
+                        if (biggest < a.size()){
+                            biggest = a.size();
+                        }
+                        n.setOnMouseClick();
+                        game.setStyleH1((int)a.get(0));
                     }
                 }
-                if (n.getOptions().get(0).size() > biggest) { biggest = n.getOptions().get(0).size(); }
-                possiblePieces.put(n, n.getOptions().get(0).size());
             }
         }
 
