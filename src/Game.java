@@ -292,25 +292,52 @@ public class Game {
                 //Entfernt übersprunge feindliche Steine
 
                 int removeChecker = 999;
+                if (checker instanceof Checker) {
+                    //Überprüft ob Start kleiner als Ziel ist und entfernt ihn anschliessend
+                    if (playground.indexOf(selected.getParent()) < playground.indexOf(pane)) {
+                        for (int i = 1; i <= 9; i++) {
+                            if ((playground.indexOf(selected.getParent()) + (11 * i) == playground.indexOf(pane))) {
+                                removeChecker = playground.indexOf(pane) - 11;
+                            }
+                        }
+                        if (removeChecker == 999) {
+                            removeChecker = playground.indexOf(pane) - 9;
+                        }
+                    } else {
+                        for (int i = 1; i <= 9; i++) {
+                            if ((playground.indexOf(selected.getParent()) - (11 * i) == playground.indexOf(pane))) {
+                                removeChecker = playground.indexOf(pane) + 11;
+                            }
+                        }
+                        if (removeChecker == 999) {
+                            removeChecker = playground.indexOf(pane) + 9;
+                        }
+                    }
+                }
+                else if(checker instanceof King){
+                    int start = playground.indexOf(selected.getParent());
+                    int target = playground.indexOf(pane);
+                    int direction;
 
-                //Überprüft ob Start kleiner als Ziel ist und entfernt ihn anschliessend
-                if (playground.indexOf(selected.getParent()) < playground.indexOf(pane)) {
-                    for (int i = 1; i <= 9; i++) {
-                        if ((playground.indexOf(selected.getParent()) + (11 * i) == playground.indexOf(pane))) {
-                            removeChecker = playground.indexOf(pane) - 11;
+                    //Findet die Richtung des Sprungs
+                    if (start > target) {
+                        if (start % 11 == target % 11) {
+                            direction = -11;
+                        } else {
+                            direction = -9;
                         }
+                    } else {
+                        if (start % 11 == target % 11) {
+                            direction = 11;
+                        } else
+                            direction = 9;
                     }
-                    if (removeChecker == 999) {
-                        removeChecker = playground.indexOf(pane) - 9;
-                    }
-                } else {
-                    for (int i = 1; i <= 9; i++) {
-                        if ((playground.indexOf(selected.getParent()) - (11 * i) == playground.indexOf(pane))) {
-                            removeChecker = playground.indexOf(pane) + 11;
+                    //Searches for slain Checker and add it to list
+                    for (int j = 1; start + (j + 1) * direction <= 100 && start + (j + 1) * direction >= 0; j++) {
+                        if (!playground.get(start + j * direction).getChildren().isEmpty()) {
+                            removeChecker = start + j * direction;
+                            break;
                         }
-                    }
-                    if (removeChecker == 999) {
-                        removeChecker = playground.indexOf(pane) + 9;
                     }
                 }
 
