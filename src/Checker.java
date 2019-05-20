@@ -1,43 +1,31 @@
 import java.util.ArrayList;
 import java.util.Iterator;
+import javafx.scene.layout.Pane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 
-public class Checker extends ImageView {
+public class Checker extends Piece {
 
-    private final int direction, dimension;
-    private ArrayList<ArrayList> options;
-
-    public Checker(Image img, int direction, int dimension) {
-        super(img);
-        this.direction = direction;
-        this.dimension = dimension;
-        options = new ArrayList<>();
-
-        //wip: Just add MouseEvent if its possible to use this piece in the current turn
-        setOnMouseClicked((MouseEvent e) -> {
-            System.out.println(this);
-        });
+    public Checker(Image img, int direction, Player player) {
+        super(img, direction, player);
     }
 
-    //Getter-Methods
-    public int getDirection() { return direction; }
-    public int getDimension() { return dimension; }
-    public ArrayList<ArrayList> getOptions () { return options; }
-
-    //wip...
-    public void pull() {
-
+    @Override
+    void pull() {
+        //wip...
     }
 
-    public boolean jump(ArrayList<Integer> start, Image king, Game game) {
+    @Override
+    public boolean jump(ArrayList<Integer> start, Image king) {
+        int dimension = super.getPlayer().getGame().getDimension();
+        ArrayList<Pane> playground = super.getPlayer().getGame().getPlayground();
+
         //Stop if checker lands in the last row (convert to King)
         int startPos = start.get(start.size()-1);
-        if (direction == -1) {
-            if (startPos >= 0 && startPos <= dimension + direction) { return false; }
-        } else if (direction == 1) {
-            if (startPos >= dimension*dimension - dimension && startPos <= dimension*dimension - direction) { return false; }
+        if (super.getDirection() == -1) {
+            if (startPos >= 0 && startPos <= dimension + super.getDirection()) { return false; }
+        } else if (super.getDirection() == 1) {
+            if (startPos >= dimension*dimension - dimension && startPos <= dimension*dimension - super.getDirection()) { return false; }
         }
 
         //For each diagonal
@@ -56,13 +44,13 @@ public class Checker extends ImageView {
 
             int jumpPos = startPos + y * dimension + x;
             //Field not free
-            if (!game.getPlayground().get(jumpPos).getChildren().isEmpty()) {
-                Image img = ((ImageView)game.getPlayground().get(jumpPos).getChildren().get(0)).getImage();
+            if (!playground.get(jumpPos).getChildren().isEmpty()) {
+                Image img = ((ImageView)playground.get(jumpPos).getChildren().get(0)).getImage();
                 //Enemy
                 if (!(img == this.getImage() || img == king)) {
                     int newPos = jumpPos + y * dimension + x;
                     //Field free (double jump not allowed)
-                    if (game.getPlayground().get(newPos).getChildren().isEmpty()) {
+                    if (playground.get(newPos).getChildren().isEmpty()) {
                         //Already jumped over current Enemy
                         boolean already = false;
                         if (start.size() > 1) {
@@ -78,7 +66,7 @@ public class Checker extends ImageView {
                             oneMore = true;
                             ArrayList<Integer> pos = new ArrayList<>(start);
                             pos.add(newPos);
-                            options.add(pos);
+                            super.getOptions().add(pos);
                         }
                     }
                 }
@@ -88,10 +76,10 @@ public class Checker extends ImageView {
         if (oneMore) {
             //Keep only the biggest ArrayList
             int biggest = 0;
-            for (int j = 0; j < options.size(); j++) {
-                if (biggest < options.get(j).size()) { biggest = options.get(j).size(); }
+            for (int j = 0; j < super.getOptions().size(); j++) {
+                if (biggest < super.getOptions().get(j).size()) { biggest = super.getOptions().get(j).size(); }
             }
-            for (Iterator<ArrayList> it = options.iterator(); it.hasNext();) {
+            for (Iterator<ArrayList> it = super.getOptions().iterator(); it.hasNext();) {
                 if (it.next().size() < biggest) { it.remove(); }
             }
         }

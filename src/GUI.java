@@ -10,8 +10,9 @@ public class GUI extends Application {
         stage.setTitle("Checkers 100");
         stage.show();
 
-        //wip: Create Start Menu --> Insert Code from Class StartScreen here
+        //wip: Insert Code from Class StartScreen here
 
+        //Create new Game
         Game game = new Game(stage);
         ArrayList<Integer> black = new ArrayList<>();
         ArrayList<Integer> white = new ArrayList<>();
