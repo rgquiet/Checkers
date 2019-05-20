@@ -101,13 +101,13 @@ public class Player {
             n.getOptions().clear();
             if(n instanceof Checker) {
                 //Fills the ArrayList options for each piece
-                if (n.jump(start, kingImg)) {
+                if (n.jump(start)) {
                     boolean repeat = true;
                     while (repeat) {
                         repeat = false;
                         ArrayList<ArrayList> pos = new ArrayList<>(n.getOptions());
                         for (ArrayList p : pos) {
-                            if (n.jump(p, kingImg)) {
+                            if (n.jump(p)) {
                                 repeat = true;
                             }
                         }
@@ -119,7 +119,7 @@ public class Player {
                 }
             }
             else if(n instanceof King){
-                n.jump(start, kingImg);
+                n.jump(start);
                 if(n.getOptions().size() > biggest && n.getOptions().get(0).size() != 1){
                     for(ArrayList a : n.getOptions()){
                         if (biggest < a.size()){

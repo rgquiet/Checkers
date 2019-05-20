@@ -107,16 +107,20 @@ public class GameTest extends Application {
         ArrayList<Integer> black = new ArrayList<>();
         //black.add(0);
         black.add(15);
-        black.add(86);
+        //black.add(86);
 
         ArrayList<Integer> white = new ArrayList<>();
+        white.add(18);
         white.add(11);
         white.add(13);
+        white.add(31);
+        white.add(71);
         white.add(24);
         white.add(44);
         white.add(64);
         white.add(84);
-        //white.add(75);
+        white.add(77);
+        white.add(75);
         //white.add(29);
 
         Game testGame = new Game(stage);

@@ -61,9 +61,10 @@ public class King extends Piece {
     }
 
     @Override
-    boolean jump(ArrayList<Integer> start, Image king) {
+    boolean jump(ArrayList<Integer> start) {
 
         Path path = new Path(start, this);
+        ArrayList<ArrayList> toRemove = new ArrayList<>();
         paths.add(path);
         boolean more = true;
         getOptions().clear();
@@ -77,6 +78,20 @@ public class King extends Piece {
                 getOptions().add(p.getPath());
             }
         }
+
+        //Removes all duplicate Arraylists
+        for(int i = 0; i < getOptions().size(); i++){
+            for(int j = i + 1; j < getOptions().size(); j++){
+                if(getOptions().get(i) != getOptions().get(j) && getOptions().get(i).equals(getOptions().get(j))){
+                    toRemove.add(getOptions().get(j));
+                }
+            }
+        }
+
+        for(ArrayList list : toRemove){
+            getOptions().remove(list);
+        }
+
         return false;
     }
 

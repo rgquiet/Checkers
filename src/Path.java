@@ -38,16 +38,22 @@ public class Path {
         int start = path.get(path.size() - 1);
         boolean possible = false;
         for(int d : directions) {
-            for (int i = 1; start + (i + 1) * d <= 100 && start + (i + 1) * d >= 0; i++) {
+            for (int i = 1; start + (i + 1) * d <= 99 && start + (i + 1) * d >= 0; i++) {
+
+                //Überprüft ob die Richtung mit dem Startpunkt kompatibel ist
+                if((start % 10 == 9 && (d == 11 || d == -9) || (start % 10 == 0 && (d == -11 || d == 9)))){
+                    break;
+                }
+
                 if (!playground.get(start + i * d).getChildren().isEmpty() && //Ist ein potenzielles Ziel in der Reihe vorhanden
-                        playground.get(start + (i + 1) * d).getChildren().isEmpty() && //Ist das Feld hinter dem Ziel frei?
-                        getKilledCheckers().indexOf(start + i * d) == -1) //Ist das Ziel bereits übersprungen worden?
+                        playground.get(start + (i + 1) * d).getChildren().isEmpty()) //Ist das Feld hinter dem Ziel frei?
                     {
 
                         Piece target = (Piece) playground.get(start + i * d).getChildren().get(0);
                         if (target.getPlayer() != king.getPlayer() &&
                             (start + i * d) % 10 != 0 && //Und Ziel nicht am linken Rand
-                            (start + i * d) % 10 != 9) //Und Ziel nicht am rechten Rand
+                            (start + i * d) % 10 != 9 && //Und Ziel nicht am rechten Rand
+                            getKilledCheckers().indexOf(start + i * d) == -1) //Ist das Ziel bereits übersprungen worden?
                         {
 
                             // Neuen Path erstellen
@@ -77,7 +83,7 @@ public class Path {
 
         // Sets target Checker
 
-        for (int i = 1; start + i  * direction <= 100 && start + i * direction >= 0 ; i++) {
+        for (int i = 1; start + i  * direction <= 99 && start + i * direction >= 0 ; i++) {
             if (!playground.get(start + i * direction).getChildren().isEmpty()) {
                 target = start + i * direction;
                 break;
@@ -87,11 +93,16 @@ public class Path {
         //Generates a list with every possible Field
         if(target != -1) {
 
-            for (int i = 1; target + i  * direction <= 100 && target + i * direction >= 0; i++) {
+            for (int i = 1; target + i  * direction <= 99 && target + i * direction >= 0; i++) {
 
-                if (playground.get(target + i * direction).getChildren().isEmpty() || getKilledCheckers().indexOf(start + i * direction) != -1) {
+                if(!playground.get(target + i * direction).getChildren().isEmpty()){
+                    break;
+                }
+
+                if (playground.get(target + i * direction).getChildren().isEmpty() && getKilledCheckers().indexOf(start + i * direction) == -1) {
                     possible.add(target + i * direction);
                 }
+
                 if((target + i * direction) % 10 == 9 || (target + i * direction) % 10 == 0 ){
                     break;
                 }
@@ -107,23 +118,10 @@ public class Path {
             for (int i = 0; i < path.size() - 1; i++) {
                 int start = path.get(i);
                 int target = path.get(i + 1);
-                int direction;
+                int direction = getKing().getPlayer().getGame().getDirection(start, target);
 
-                //Findet die Richtung des Sprungs
-                if (start > target) {
-                    if (start % 11 == target % 11) {
-                        direction = -11;
-                    } else {
-                        direction = -9;
-                    }
-                } else {
-                    if (start % 11 == target % 11) {
-                        direction = 11;
-                    } else
-                        direction = 9;
-                }
                 //Searches for slain Checker and add it to list
-                for (int j = 1; start + (j + 1) * direction <= 100 && start + (j + 1) * direction >= 0; j++) {
+                for (int j = 1; start + j * direction <= 99 && start + j * direction >= 0; j++) {
                     if (!playground.get(start + j * direction).getChildren().isEmpty()) {
                         killed.add(start + j * direction);
                         break;

@@ -131,12 +131,12 @@ public class Game {
                                 //Reset all Style tags
                                 clearStyleH1();
                                 clearStyleH2();
-                                clearStyleH3();
+                                clearStyleH3(n);
                             });
                         } else {
                             //Hover away
 
-                            clearStyleH3();
+                            clearStyleH3(n);
 
                         }
                     }
@@ -240,8 +240,8 @@ public class Game {
         h2.clear();
     }
 
-    public void clearStyleH3() {
-        playground.get(h3.get(h3.size() - 1)).setOnMouseClicked(null);
+    public void clearStyleH3(ArrayList<Integer> list) {
+        playground.get(list.get(list.size() - 1)).setOnMouseClicked(null);
         h3.forEach(n -> playground.get(n).getStyleClass().remove("h3"));
         h3.clear();
     }
@@ -318,21 +318,8 @@ public class Game {
                 else if(checker instanceof King){
                     int start = playground.indexOf(selected.getParent());
                     int target = playground.indexOf(pane);
-                    int direction;
+                    int direction = getDirection(start, target);
 
-                    //Findet die Richtung des Sprungs
-                    if (start > target) {
-                        if (start % 11 == target % 11) {
-                            direction = -11;
-                        } else {
-                            direction = -9;
-                        }
-                    } else {
-                        if (start % 11 == target % 11) {
-                            direction = 11;
-                        } else
-                            direction = 9;
-                    }
                     //Searches for slain Checker and add it to list
                     for (int j = 1; start + (j + 1) * direction <= 100 && start + (j + 1) * direction >= 0; j++) {
                         if (!playground.get(start + j * direction).getChildren().isEmpty()) {
@@ -431,5 +418,24 @@ public class Game {
         if(biggest == 0){
             turn.checkPulls();
         }
+    }
+
+    public int getDirection(int start, int target){
+        int direction;
+
+        if (start > target) {
+            if (start % 11 == target % 11) {
+                direction = -11;
+            } else {
+                direction = -9;
+            }
+        } else {
+            if (start % 11 == target % 11) {
+                direction = 11;
+            } else
+                direction = 9;
+        }
+
+        return direction;
     }
 }

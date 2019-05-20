@@ -68,7 +68,7 @@ public class Checker extends Piece {
     }
 
     @Override
-    public boolean jump(ArrayList<Integer> start, Image king) {
+    public boolean jump(ArrayList<Integer> start) {
         int dimension = super.getPlayer().getGame().getDimension();
         ArrayList<Pane> playground = super.getPlayer().getGame().getPlayground();
 
@@ -97,9 +97,9 @@ public class Checker extends Piece {
             int jumpPos = startPos + y * dimension + x;
             //Field not free
             if (!playground.get(jumpPos).getChildren().isEmpty()) {
-                Image img = ((ImageView)playground.get(jumpPos).getChildren().get(0)).getImage();
+                Piece target = (Piece) playground.get(jumpPos).getChildren().get(0);
                 //Enemy
-                if (!(img == this.getImage() || img == king)) {
+                if (target.getPlayer() != this.getPlayer()) {
                     int newPos = jumpPos + y * dimension + x;
                     //Field free (double jump not allowed)
                     if (playground.get(newPos).getChildren().isEmpty()) {
@@ -138,6 +138,8 @@ public class Checker extends Piece {
 
         return oneMore;
     }
+
+    // Fügt dem Spielstein einen möglichen Spielzug hinzu
 
     private void addToOptions(int start, int direction){
         ArrayList<Integer> pos = new ArrayList();
