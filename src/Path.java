@@ -41,11 +41,14 @@ public class Path {
             for (int i = 1; start + (i + 1) * d <= 100 && start + (i + 1) * d >= 0; i++) {
                 if (!playground.get(start + i * d).getChildren().isEmpty() && //Ist ein potenzielles Ziel in der Reihe vorhanden
                         playground.get(start + (i + 1) * d).getChildren().isEmpty() && //Ist das Feld hinter dem Ziel frei?
+                        start + (i + 1) * d % 10 != 0 && //Und Ziel nicht am linken Rand
+                        start + (i + 1) * d % 10 != 9 && //Und Ziel nicht am rechten Rand
+                        start + i * d % 10 != 0 && //Und Ziel nicht am linken Rand
+                        start + i * d % 10 != 9 && //Und Ziel nicht am rechten Rand
                         getKilledCheckers().indexOf(start + i * d) == -1) //Ist das Ziel bereits übersprungen worden?
                     {
 
                         Piece target = (Piece) playground.get(start + i * d).getChildren().get(0);
-
                         if (target.getPlayer() != king.getPlayer()) {
                             // Neuen Path erstellen
                             ArrayList<Integer> pos = getPossibleFields(start, d);

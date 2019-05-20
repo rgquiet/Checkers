@@ -38,15 +38,17 @@ public class King extends Piece {
                 ArrayList<Integer> pos = new ArrayList<>();
                 int target = start + (i * d);
 
-                if ((start % 10 == 0 && (d == 9 || d == -11)) || (start % 10 == 9 && (d == -9 || d == 11))){
+                if ((start % 10 == 0 && (d == 9 || d == -11)) || (start % 10 == 9 && (d == -9 || d == 11)) || !playground.get(start + i * d).getChildren().isEmpty()){
                     break;
                 }
+
                 if(target % 10 == 0 || target % 10 == 9){
                     pos.add(start);
                     pos.add(target);
                     getOptions().add(pos);
                     break;
                 }
+
                 if(playground.get(start + i * d).getChildren().isEmpty()){
                     pos.add(start);
                     pos.add(target);
