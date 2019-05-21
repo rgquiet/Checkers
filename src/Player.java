@@ -120,7 +120,7 @@ public class Player {
             }
             else if(n instanceof King){
                 n.jump(start);
-                if(n.getOptions().size() > biggest && n.getOptions().get(0).size() != 1){
+                if(n.getOptions().size() >= biggest && n.getOptions().get(0).size() != 1){
                     for(ArrayList a : n.getOptions()){
                         if (biggest < a.size()){
                             biggest = a.size();

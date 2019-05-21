@@ -45,6 +45,10 @@ public class Path {
                     break;
                 }
 
+                if((start + (i * d)) % 10 == 0 || (start + (i * d)) % 10 == 9){
+                    break;
+                }
+
                 if (!playground.get(start + i * d).getChildren().isEmpty() && //Ist ein potenzielles Ziel in der Reihe vorhanden
                         playground.get(start + (i + 1) * d).getChildren().isEmpty()) //Ist das Feld hinter dem Ziel frei?
                     {
