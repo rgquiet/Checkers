@@ -26,7 +26,7 @@ public class Game {
     private Player blackPlayer, whitePlayer, turn;
     private ArrayList<Integer> h1, h2, h3;
     private ArrayList<Pane> playground;
-
+    private Qlearn qlearn;
 
 
     public Game(Stage stage) {
@@ -39,6 +39,7 @@ public class Game {
         h2 = new ArrayList<>();
         h3 = new ArrayList<>();
         playground = new ArrayList<>();
+        qlearn = new Qlearn(this);
 
         GridPane grid = new GridPane();
         grid.getStyleClass().add("game-grid");
@@ -266,6 +267,8 @@ public class Game {
 
 
     void animateMove(ImageView checker, Pane pane, ArrayList steps, int i) {
+
+        qlearn.generateState();
 
         //Gets X and Y Values of the pane and Checker
 
