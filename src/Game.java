@@ -268,7 +268,7 @@ public class Game {
 
     void animateMove(ImageView checker, Pane pane, ArrayList steps, int i) {
 
-        qlearn.generateState();
+        qlearn.setQ();
 
         //Gets X and Y Values of the pane and Checker
 
