@@ -2,7 +2,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 
 public class Player {
 
@@ -70,9 +69,6 @@ public class Player {
     public Game getGame() { return game; }
     public ArrayList<Piece> getPieces() { return pieces; }
     public HashMap<Piece, Integer> getPossiblePieces() { return possiblePieces; }
-    public Image getCheckerImg() {
-        return checkerImg;
-    }
 
     //Setter-Methods
     public void setKing(int i) {
@@ -84,51 +80,25 @@ public class Player {
         game.getPlayground().get(j).getChildren().remove(pieces.get(i));
         game.getPlayground().get(j).getChildren().add(king);
         pieces.set(i, king);
-        game.setSelected(king);
-    }
-    public void removePiece(ImageView checker){
-        pieces.remove(checker);
-    }
-    public void addPiece(ImageView checker){
-        pieces.add((Piece) checker);
     }
 
-    public int checkOptions() {
-        biggest = 0;
+    public void checkOptions() {
         for (Piece n: pieces) {
             ArrayList<Integer> start = new ArrayList<>();
             start.add(game.getPlayground().indexOf(n.getParent()));
-            n.getOptions().clear();
-            if(n instanceof Checker) {
-                //Fills the ArrayList options for each piece
-                if (n.jump(start)) {
-                    boolean repeat = true;
-                    while (repeat) {
-                        repeat = false;
-                        ArrayList<ArrayList> pos = new ArrayList<>(n.getOptions());
-                        for (ArrayList p : pos) {
-                            if (n.jump(p)) {
-                                repeat = true;
-                            }
-                        }
-                    }
-                    if (n.getOptions().get(0).size() > biggest) {
-                        biggest = n.getOptions().get(0).size();
-                    }
-                    possiblePieces.put(n, n.getOptions().get(0).size());
-                }
-            }
-            else if(n instanceof King){
-                n.jump(start);
-                if(n.getOptions().size() >= biggest && n.getOptions().get(0).size() != 1){
-                    for(ArrayList a : n.getOptions()){
-                        if (biggest < a.size()){
-                            biggest = a.size();
-                        }
-                        n.setOnMouseClick();
-                        game.setStyleH1((int)a.get(0));
+
+            //Fills the ArrayList options for each piece
+            if (n.jump(start, kingImg)) {
+                boolean repeat = true;
+                while (repeat) {
+                    repeat = false;
+                    ArrayList<ArrayList> pos = new ArrayList<>(n.getOptions());
+                    for (ArrayList p: pos) {
+                        if(n.jump(p, kingImg)) { repeat = true; }
                     }
                 }
+                if (n.getOptions().get(0).size() > biggest) { biggest = n.getOptions().get(0).size(); }
+                possiblePieces.put(n, n.getOptions().get(0).size());
             }
         }
 
@@ -143,13 +113,7 @@ public class Player {
                 return false;
             }
         });
-        return biggest;
-    }
-
-    public void checkPulls(){
-        for(Piece piece : pieces){
-            piece.pull();
-        }
+        biggest = 0;
     }
 
 }

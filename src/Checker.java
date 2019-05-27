@@ -11,64 +11,12 @@ public class Checker extends Piece {
     }
 
     @Override
-    public void pull() {
-        ArrayList<Pane> playground = super.getPlayer().getGame().getPlayground();
-        int counter = 0;
-        getOptions().clear();
-        int start = playground.indexOf(this.getParent());
-
-        if(start % 10 == 9){
-            if(getDirection() == -1 && playground.get(start - 11).getChildren().isEmpty()){
-                addToOptions(start, -11);
-                counter++;
-            }
-            else if(getDirection() == 1 && playground.get(start + 9).getChildren().isEmpty()){
-                addToOptions(start, 9);
-                counter++;
-            }
-        }
-        else if(start % 10 == 0){
-            if(getDirection() == -1 && playground.get(start - 9).getChildren().isEmpty()){
-                addToOptions(start, -9);
-                counter++;
-            }
-            else if(getDirection() == 1 && playground.get(start + 11).getChildren().isEmpty()){
-                addToOptions(start, 11);
-                counter++;
-            }
-        }
-
-        else {
-            if(getDirection() == -1) {
-                if (playground.get(start - 9).getChildren().isEmpty() && start - 9 > 0){
-                    addToOptions(start, -9);
-                    counter++;
-                }
-                if (playground.get(start - 11).getChildren().isEmpty()){
-                    addToOptions(start, -11);
-                    counter++;
-                }
-            }
-            else{
-                if (playground.get(start + 9).getChildren().isEmpty()){
-                    addToOptions(start, 9);
-                    counter++;
-                }
-                if (playground.get(start + 11).getChildren().isEmpty()){
-                    addToOptions(start, 11);
-                    counter++;
-                }
-            }
-        }
-        if(counter != 0) {
-            int field = playground.indexOf(this.getParent());
-            super.getPlayer().getGame().setStyleH1(field);
-            super.setOnMouseClick();
-        }
+    void pull() {
+        //wip...
     }
 
     @Override
-    public boolean jump(ArrayList<Integer> start) {
+    public boolean jump(ArrayList<Integer> start, Image king) {
         int dimension = super.getPlayer().getGame().getDimension();
         ArrayList<Pane> playground = super.getPlayer().getGame().getPlayground();
 
@@ -97,9 +45,9 @@ public class Checker extends Piece {
             int jumpPos = startPos + y * dimension + x;
             //Field not free
             if (!playground.get(jumpPos).getChildren().isEmpty()) {
-                Piece target = (Piece) playground.get(jumpPos).getChildren().get(0);
+                Image img = ((ImageView)playground.get(jumpPos).getChildren().get(0)).getImage();
                 //Enemy
-                if (target.getPlayer() != this.getPlayer()) {
+                if (!(img == this.getImage() || img == king)) {
                     int newPos = jumpPos + y * dimension + x;
                     //Field free (double jump not allowed)
                     if (playground.get(newPos).getChildren().isEmpty()) {
@@ -137,15 +85,6 @@ public class Checker extends Piece {
         }
 
         return oneMore;
-    }
-
-    // Fügt dem Spielstein einen möglichen Spielzug hinzu
-
-    private void addToOptions(int start, int direction){
-        ArrayList<Integer> pos = new ArrayList();
-        pos.add(start);
-        pos.add(start + direction);
-        super.getOptions().add(pos);
     }
 
 }

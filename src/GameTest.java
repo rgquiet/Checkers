@@ -105,27 +105,22 @@ public class GameTest extends Application {
     public void testJumpChecker4() {
         //Set pieces in special order to test checkers jump-logic
         ArrayList<Integer> black = new ArrayList<>();
-        //black.add(0);
-        black.add(15);
-        black.add(84);
+        black.add(10);
+        black.add(19);
 
         ArrayList<Integer> white = new ArrayList<>();
-        white.add(18);
-        white.add(37);
-        white.add(77);
+        white.add(21);
+        white.add(23);
+        white.add(26);
+        white.add(28);
+        white.add(41);
+        white.add(48);
 
         Game testGame = new Game(stage);
         testGame.createPlayers(black, white);
 
         //Testing black Player
-        //testGame.getBlackPlayer().checkOptions();
-        int options = testGame.getBlackPlayer().checkOptions();
-        if(options == 0){
-            testGame.getBlackPlayer().checkPulls();
-        }
-            //testGame.getBlackPlayer().checkPulls();
-
-
+        testGame.getBlackPlayer().checkOptions();
     }
 
 }

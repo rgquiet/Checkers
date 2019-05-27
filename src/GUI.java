@@ -11,7 +11,6 @@ public class GUI extends Application {
         stage.show();
 
         //wip: Insert Code from Class StartScreen here
-        System.out.println("Refactor Pablo's Shit");
 
         //Create new Game
         Game game = new Game(stage);

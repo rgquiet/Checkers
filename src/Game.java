@@ -1,40 +1,37 @@
 import java.util.ArrayList;
-import javafx.animation.PathTransition;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
+import javafx.util.Duration;
 import javafx.geometry.Bounds;
-import javafx.scene.image.ImageView;
-import javafx.scene.shape.Line;
+import javafx.animation.PathTransition;
 import javafx.stage.Stage;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.shape.Line;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.RowConstraints;
+import javafx.beans.value.ObservableValue;
+import javafx.beans.value.ChangeListener;
 import javafx.scene.input.MouseEvent;
-import javafx.util.Duration;
 
 public class Game {
 
     private final int dimension, sizeWindow;
+    private boolean white;
+    private int counter;
     private Scene scene;
     private ChangeListener onHover;
-    private Piece selected, newChecker;
-    private Player blackPlayer, whitePlayer, turn;
-    private ArrayList<Integer> h1, h2, h3;
+    private Piece selected;
+    private Player blackPlayer, whitePlayer;
+    private ArrayList<Integer> h1, h2, h3, steps;
     private ArrayList<Pane> playground;
 
-
-
     public Game(Stage stage) {
+        white = true;
         dimension = 10;
         sizeWindow = 500;
         selected = null;
-        newChecker = null;
-        turn = null;
         h1 = new ArrayList<>();
         h2 = new ArrayList<>();
         h3 = new ArrayList<>();
@@ -48,8 +45,8 @@ public class Game {
             ColumnConstraints column = new ColumnConstraints();
             RowConstraints row = new RowConstraints();
 
-            column.setPercentWidth(100 / dimension);
-            row.setPercentHeight(100 / dimension);
+            column.setPercentWidth(100/dimension);
+            row.setPercentHeight(100/dimension);
 
             grid.getColumnConstraints().add(column);
             grid.getRowConstraints().add(row);
@@ -63,24 +60,14 @@ public class Game {
 
                 //Set tags for Styling-Sheet
                 if ((i & 1) == 0) {
-                    if ((j & 1) == 0) {
-                        pane.getStyleClass().add("white");
-                    } else {
-                        pane.getStyleClass().add("black");
-                    }
+                    if ((j & 1) == 0) { pane.getStyleClass().add("white"); }
+                    else { pane.getStyleClass().add("black"); }
                 } else {
-                    if ((j & 1) == 0) {
-                        pane.getStyleClass().add("black");
-                    } else {
-                        pane.getStyleClass().add("white");
-                    }
+                    if ((j & 1) == 0) { pane.getStyleClass().add("black"); }
+                    else { pane.getStyleClass().add("white"); }
                 }
-                if (i == 0) {
-                    pane.getStyleClass().add("first-row");
-                }
-                if (j == 0) {
-                    pane.getStyleClass().add("first-column");
-                }
+                if (i == 0) { pane.getStyleClass().add("first-row"); }
+                if (j == 0) { pane.getStyleClass().add("first-column"); }
 
                 //Save all Pane in the Playground List
                 playground.add(pane);
@@ -93,51 +80,36 @@ public class Game {
         scene.getStylesheets().add(getClass().getResource("playground.css").toExternalForm());
         stage.setScene(scene);
 
-
         //Initialize Change Listener
         onHover = new ChangeListener() {
             @Override
             public void changed(ObservableValue ov, Object oldValue, Object newValue) {
                 //Check if mouse hover over the marked field
                 String selectedName = ov.toString().split("bean: ")[1].split("style")[0];
-                selectedName = selectedName.substring(0, selectedName.length() - 1);
-                for (ArrayList<Integer> n : selected.getOptions()) {
-                    String fieldName = playground.get(n.get(n.size() - 1)).toString().split("style")[0];
-                    fieldName = fieldName.substring(0, fieldName.length() - 1);
-                    if (fieldName.equals(selectedName)) {
-                        if ((boolean) ov.getValue()) {
+                selectedName = selectedName.substring(0, selectedName.length()-1);
+                for (ArrayList<Integer> n: selected.getOptions()) {
+                    String fieldName = playground.get(n.get(n.size()-1)).toString().split("style")[0];
+                    fieldName = fieldName.substring(0, fieldName.length()-1);
+                    if(fieldName.equals(selectedName)) {
+                        if ((boolean)ov.getValue()) {
                             //Hover over
-                            for (int i = 0; i < n.size(); i++) {
-                                if (i != 0) {
-                                    setStyleH3(n.get(i - 1), n.get(i));
-                                }
+                            for(int i = 0; i < n.size(); i++) {
+                                if(i != 0) { setStyleH3(n.get(i-1), n.get(i)); }
                             }
-                            playground.get(n.get(n.size() - 1)).setOnMouseClicked((MouseEvent e) -> {
-
-                                ArrayList<Integer> steps = new ArrayList<>();
-
-                                //Überprüft welche Liste das Ziel enthaltet
-                                for (int i = 0; i < selected.getOptions().size(); i++) {
-                                    if (playground.get(n.get(n.size() - 1)) == playground.get((int) selected.getOptions().get(i).get(selected.getOptions().get(i).size() - 1))) {
-                                        for (int j = 1; j < selected.getOptions().get(i).size(); j++) {
-                                            steps.add((Integer)selected.getOptions().get(i).get(j));
-                                        }
-                                    }
-                                }
-
-                                animateMove(selected, playground.get((int) steps.get(0)), steps, 0);
-
+                            playground.get(n.get(n.size()-1)).setOnMouseClicked((MouseEvent e) -> {
+                                //Execute move animation to the target field
+                                h3.add(0, playground.indexOf(selected.getParent()));
+                                steps = new ArrayList<>(h3);
+                                moveAnimation(selected);
 
                                 //Reset all Style tags
                                 clearStyleH1();
                                 clearStyleH2();
-                                clearStyleH3(n);
+                                clearStyleH3();
                             });
                         } else {
                             //Hover away
-
-                            clearStyleH3(n);
-
+                            clearStyleH3();
                         }
                     }
                 }
@@ -146,72 +118,34 @@ public class Game {
     }
 
     //Getter-Methods
-    public int getDimension() {
-        return dimension;
-    }
-
-    public int getSizeWindow() {
-        return sizeWindow;
-    }
-
-    public Player getBlackPlayer() {
-        return blackPlayer;
-    }
-
-    public Player getWhitePlayer() {
-        return whitePlayer;
-    }
-
-    public ArrayList<Pane> getPlayground() {
-        return playground;
-    }
-
-    public Piece getSelected() {
-        return selected;
-    }
-
-    public boolean getFieldContent(Pane pane) {
-        boolean empty = false;
-        if (pane.getChildren().isEmpty()) {
-            empty = true;
-        }
-
-        return empty;
-    }
+    public int getDimension() { return dimension; }
+    public int getSizeWindow() { return sizeWindow; }
+    public Player getBlackPlayer() { return blackPlayer; }
+    public Player getWhitePlayer() { return whitePlayer; }
+    public ArrayList<Pane> getPlayground() { return playground; }
 
     //Setter-Methods
-    public void setSelected(Piece piece) {
-        selected = piece;
-    }
-
+    public void setSelected(Piece piece) { selected = piece; }
     public void setStyleH1(Integer field) {
         //Set style tag h1
         playground.get(field).getStyleClass().add("h1");
         h1.add(field);
     }
-
     public void setStyleH2(Integer field) {
         //Set style tag h2
         playground.get(field).getStyleClass().add("h2");
         playground.get(field).hoverProperty().addListener(onHover);
         h2.add(field);
     }
-
     public void setStyleH3(Integer from, Integer to) {
         //Save direction between int "from" -> "to"
         Integer i = 0;
-        if (from < to) {
-            if ((to - from) % (dimension - 1) == 0) {
-                i = dimension - 1;
-            } else if ((to - from) % (dimension + 1) == 0) {
-                i = dimension + 1;
-            }
+        if(from < to) {
+            if ((to - from) % (dimension - 1) == 0) { i = dimension - 1; }
+            else if ((to - from) % (dimension + 1) == 0) { i = dimension + 1; }
         } else {
-            if ((from - to) % (dimension - 1) == 0) {
-                i = -dimension + 1;
-            } else if ((from - to) % (dimension + 1) == 0) {
-                i = -dimension - 1;
-            }
+            if ((from - to) % (dimension - 1) == 0) { i = -dimension + 1; }
+            else if ((from - to) % (dimension + 1) == 0) { i = -dimension - 1; }
         }
 
         //Set style tag h3
@@ -240,8 +174,8 @@ public class Game {
         h2.clear();
     }
 
-    public void clearStyleH3(ArrayList<Integer> list) {
-        playground.get(list.get(list.size() - 1)).setOnMouseClicked(null);
+    public void clearStyleH3() {
+        playground.get(h3.get(h3.size()-1)).setOnMouseClicked(null);
         h3.forEach(n -> playground.get(n).getStyleClass().remove("h3"));
         h3.clear();
     }
@@ -264,178 +198,55 @@ public class Game {
         }
     }
 
+    public void nextTurn(){
+        if (white) {
+            whitePlayer.checkOptions();
+        } else {
+            blackPlayer.checkOptions();
+        }
+        white = !white;
+    }
 
-    void animateMove(ImageView checker, Pane pane, ArrayList steps, int i) {
-
-        //Gets X and Y Values of the pane and Checker
-
-        Bounds boundsInScene = checker.getParent().localToParent(checker.getBoundsInLocal());
-        Bounds targetInScene = pane.getBoundsInParent();
-
-
-        //Defines the Path for the Animation and Executes it
-
-        Line line = new Line(
-                (boundsInScene.getMaxX() - boundsInScene.getMinX()) / 2,
-                (targetInScene.getMaxY() - targetInScene.getMinY()) / 2,
-                (targetInScene.getMaxX() - ((targetInScene.getMaxX() - targetInScene.getMinX()) / 2)) - (boundsInScene.getMaxX() - ((boundsInScene.getMaxX() - boundsInScene.getMinX()) / 2)) + ((targetInScene.getMaxX() - targetInScene.getMinX()) / 2),
-                (targetInScene.getMaxY() - ((targetInScene.getMaxY() - targetInScene.getMinY()) / 2)) - (boundsInScene.getMaxY() - ((boundsInScene.getMaxY() - boundsInScene.getMinY()) / 2)) + ((targetInScene.getMaxY() - targetInScene.getMinY()) / 2));
+    private void moveAnimation(ImageView piece) {
+        piece.getParent().toFront();
         PathTransition transition = new PathTransition();
-        checker.getParent().toFront();
-        transition.setNode(checker);
-        transition.setDuration(Duration.seconds(1));
-        transition.setPath(line);
+        transition.setDuration(Duration.seconds(0.5));
+        transition.setNode(piece);
 
-        // Starts once Animation is done
-        transition.setOnFinished(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                //Entfernt übersprunge feindliche Steine
-
-                int removeChecker = 999;
-                if (checker instanceof Checker) {
-                    //Überprüft ob Start kleiner als Ziel ist und entfernt ihn anschliessend
-                    if (playground.indexOf(selected.getParent()) < playground.indexOf(pane)) {
-                        for (int i = 1; i <= 9; i++) {
-                            if ((playground.indexOf(selected.getParent()) + (11 * i) == playground.indexOf(pane))) {
-                                removeChecker = playground.indexOf(pane) - 11;
-                            }
-                        }
-                        if (removeChecker == 999) {
-                            removeChecker = playground.indexOf(pane) - 9;
-                        }
-                    } else {
-                        for (int i = 1; i <= 9; i++) {
-                            if ((playground.indexOf(selected.getParent()) - (11 * i) == playground.indexOf(pane))) {
-                                removeChecker = playground.indexOf(pane) + 11;
-                            }
-                        }
-                        if (removeChecker == 999) {
-                            removeChecker = playground.indexOf(pane) + 9;
-                        }
-                    }
-                }
-                else if(checker instanceof King){
-                    int start = playground.indexOf(selected.getParent());
-                    int target = playground.indexOf(pane);
-                    int direction = getDirection(start, target);
-
-                    //Searches for slain Checker and add it to list
-                    for (int j = 1; start + (j + 1) * direction <= 100 && start + (j + 1) * direction >= 0; j++) {
-                        if (!playground.get(start + j * direction).getChildren().isEmpty()) {
-                            removeChecker = start + j * direction;
-                            break;
-                        }
-                    }
-                }
-
-                if(removeChecker != 999){
-                    if (selected.getPlayer() == blackPlayer) {
-                        whitePlayer.removePiece((ImageView) playground.get(removeChecker).getChildren().get(0));
-                    } else {
-                        blackPlayer.removePiece((ImageView) playground.get(removeChecker).getChildren().get(0));
-                    }
-                }
-
-
-                if (selected.getPlayer().checkOptions() != 0){
-                    playground.get(removeChecker).getChildren().removeAll(playground.get(removeChecker).getChildren());
-                    clearStyleH1();
-                }
-
-                playground.get(playground.indexOf(selected.getParent())).getChildren().clear();
-
-                //Fügt neuen Stein ein
-
-                if (selected instanceof Checker) {
-                    if (selected.getPlayer() == blackPlayer) {
-                        Image blackChecker = new Image(getClass().getResourceAsStream("blackChecker.png"));
-                        Checker checker = new Checker(blackChecker, 1, blackPlayer);
-                        newChecker = checker;
-
-                    } else {
-                        Image whiteChecker = new Image(getClass().getResourceAsStream("whiteChecker.png"));
-                        Checker checker = new Checker(whiteChecker, -1, whitePlayer);
-                        newChecker = checker;
-                    }
-
-                } else if (selected instanceof King) {
-                    if (selected.getPlayer() == blackPlayer) {
-                        Image blackKing = new Image(getClass().getResourceAsStream("blackKing.png"));
-                        King checker = new King(blackKing, 1, blackPlayer);
-                        newChecker = checker;
-                    } else {
-                        Image whiteKing = new Image(getClass().getResourceAsStream("whiteKing.png"));
-                        King checker = new King(whiteKing, -1, whitePlayer);
-                        newChecker = checker;
-                    }
-                }
-
-                newChecker.setFitHeight(scene.getHeight() / getDimension() - 2);
-                newChecker.setFitWidth(scene.getWidth() / getDimension() - 2);
-                //playground.get((int) steps.get(i)).getChildren().removeAll(selected);
-                selected.setVisible(false);
-                selected.getPlayer().removePiece(selected);
-                selected.getPlayer().addPiece(newChecker);
-                pane.getChildren().addAll(newChecker);
-                selected = newChecker;
-
-                if (selected instanceof Checker && (selected.getDirection() == -1 && playground.indexOf(playground.get((int) steps.get(i))) <= 9) || (selected.getDirection() == 1 && playground.indexOf(playground.get((int) steps.get(i))) >= 90)) {
-                    selected.getPlayer().setKing((selected.getPlayer().getPieces().indexOf(selected)));
-                    selected.setFitHeight(scene.getHeight() / getDimension() - 2);
-                    selected.setFitWidth(scene.getWidth() / getDimension() - 2);
-                }
-
-                checkForNextStep(selected, steps, i);
+        counter = 0;
+        transition.setOnFinished(actionEvent -> {
+            counter++;
+            if (counter < steps.size()) {
+                transition.setPath(getNewLine(piece,
+                        playground.get(steps.get(counter-1)),
+                        playground.get(steps.get(counter))));
+                transition.play();
+            } else {
+                playground.get(steps.get(0)).getChildren().clear();
+                piece.setTranslateX(0);
+                piece.setTranslateY(0);
+                playground.get(steps.get(steps.size()-1)).getChildren().add(piece);
+                nextTurn();
             }
         });
-
         transition.play();
     }
 
-    public void checkForNextStep(ImageView checker, ArrayList steps, int i) {
-        if (steps.get(i) != steps.get(steps.size() - 1)) {
-            i++;
-            animateMove(checker, playground.get((int) steps.get(i)), steps, i);
-        }
-        else{
-            nextTurn();
-        }
+    public Line getNewLine(ImageView piece, Pane from, Pane to) {
+        Bounds start = piece.getParent().localToParent(piece.getBoundsInLocal());
+        Bounds source = from.getBoundsInParent();
+        Bounds target = to.getBoundsInParent();
+
+        double width = start.getWidth();
+        double height = start.getHeight();
+
+        Line line = new Line();
+        line.setStartX(source.getMinX() - start.getMinX() + width / 2);
+        line.setStartY(source.getMinY() - start.getMinY() + height / 2);
+        line.setEndX(target.getMinX() - start.getMinX() + width / 2);
+        line.setEndY(target.getMinY() - start.getMinY() + height / 2);
+
+        return line;
     }
 
-    public void nextTurn(){
-        if (turn == null){
-            turn = whitePlayer;
-        }
-        else if(turn == blackPlayer){
-            turn = whitePlayer;
-        }
-        else{
-            turn = blackPlayer;
-        }
-
-        int biggest = turn.checkOptions();
-        if(biggest == 0){
-            turn.checkPulls();
-        }
-    }
-
-    public int getDirection(int start, int target){
-        int direction;
-
-        if (start > target) {
-            if (start % 11 == target % 11) {
-                direction = -11;
-            } else {
-                direction = -9;
-            }
-        } else {
-            if (start % 11 == target % 11) {
-                direction = 11;
-            } else
-                direction = 9;
-        }
-
-        return direction;
-    }
 }

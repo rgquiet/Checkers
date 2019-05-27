@@ -18,7 +18,7 @@ abstract class Piece extends ImageView {
 
     //Abstract-Methods
     abstract void pull();
-    abstract boolean jump(ArrayList<Integer> start);
+    abstract boolean jump(ArrayList<Integer> start, Image king);
 
     //Getter-Methods
     public int getDirection() { return direction; }
@@ -30,10 +30,7 @@ abstract class Piece extends ImageView {
         setOnMouseClicked((MouseEvent e) -> {
             player.getGame().setSelected(this);
             player.getGame().clearStyleH2();
-
             options.forEach(n -> player.getGame().setStyleH2((int)n.get(n.size()-1)));
-
-
         });
     }
 
