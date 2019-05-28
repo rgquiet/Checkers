@@ -27,6 +27,7 @@ public class Game {
     private ArrayList<Integer> h1, h2, h3;
     private ArrayList<Pane> playground;
     private Qlearn qlearn;
+    private ComputerRandom cr;
 
 
     public Game(Stage stage) {
@@ -40,6 +41,7 @@ public class Game {
         h3 = new ArrayList<>();
         playground = new ArrayList<>();
         qlearn = new Qlearn(this);
+        cr = new ComputerRandom(this);
 
         GridPane grid = new GridPane();
         grid.getStyleClass().add("game-grid");
@@ -420,6 +422,16 @@ public class Game {
         int biggest = turn.checkOptions();
         if(biggest == 0){
             turn.checkPulls();
+        }
+        if (turn == blackPlayer){
+            ArrayList<ArrayList> moves = new ArrayList<>();
+            for(Piece p : blackPlayer.getPieces()){
+                if(p.getOptions().size() > 0){
+                    p.getOptions().forEach(move -> moves.add(move));
+                }
+            }
+
+            cr.generateRandomMove(moves);
         }
     }
 

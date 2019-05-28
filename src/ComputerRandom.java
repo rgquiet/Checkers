@@ -20,26 +20,22 @@ public class ComputerRandom implements Runnable{
 
     }
 
-    public void generateRandomMove(){
+    public void generateRandomMove(ArrayList<ArrayList> moves){
         ArrayList<Piece> posPieces = new ArrayList<>();
 
         if(game.getBlackPlayer().checkOptions() > 0){
             game.getBlackPlayer().checkPulls();
         }
-        for(Piece p: game.getBlackPlayer().getPieces()){
-            if(p.getOptions().size() > 0){
-                posPieces.add(p);
-            }
-        }
+
         Random randomPiece = new Random();
         Random randomMove = new Random();
 
-        int rp = randomPiece.nextInt(posPieces.size());
-        int rm = randomMove.nextInt(posPieces.get(rp).getOptions().size());
-        ImageView checker = posPieces.get(rp);
+        int rp = randomPiece.nextInt(moves.size());
+        ImageView checker = (ImageView) playground.get((int)moves.get(rp).get(0)).getChildren();
         Pane pane = playground.get(playground.indexOf(checker));
 
-        game.animateMove(checker, pane, posPieces.get(rp).getOptions().get(rm), 0 );
+        game.animateMove(checker, pane, moves.get(rp), 0 );
     }
 
 }
+
