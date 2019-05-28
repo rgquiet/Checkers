@@ -17,8 +17,8 @@ abstract class Piece extends ImageView {
     }
 
     //Abstract-Methods
-    abstract void pull();
-    abstract boolean jump(ArrayList<Integer> start, Image king);
+    abstract void pull(int startPos);
+    abstract boolean jump(ArrayList<Integer> start, Image piece);
 
     //Getter-Methods
     public int getDirection() { return direction; }

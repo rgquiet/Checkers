@@ -71,15 +71,16 @@ public class Player {
     public HashMap<Piece, Integer> getPossiblePieces() { return possiblePieces; }
 
     //Setter-Methods
-    public void setKing(int i) {
-        King king = new King(kingImg, pieces.get(i).getDirection(), this);
+    public void setKing(Checker checker) {
+        King king = new King(kingImg, checker.getDirection(), this);
         king.setFitHeight(game.getSizeWindow()/game.getDimension()-2);
         king.setFitWidth(game.getSizeWindow()/game.getDimension()-2);
 
-        int j = game.getPlayground().indexOf(pieces.get(i).getParent());
-        game.getPlayground().get(j).getChildren().remove(pieces.get(i));
-        game.getPlayground().get(j).getChildren().add(king);
-        pieces.set(i, king);
+        int i = game.getPlayground().indexOf(checker.getParent());
+        game.getPlayground().get(i).getChildren().remove(checker);
+        game.getPlayground().get(i).getChildren().add(king);
+        pieces.remove(checker);
+        pieces.add(king);
     }
 
     public void checkOptions() {
@@ -103,16 +104,29 @@ public class Player {
         }
 
         //Holds only the pieces, which do the most kills in this turn
-        possiblePieces.entrySet().removeIf(e -> {
-            if (e.getValue() < biggest) {
-                e.getKey().getOptions().clear();
-                return true;
-            } else {
-                e.getKey().setOnMouseClick();
-                game.setStyleH1((int)e.getKey().getOptions().get(0).get(0));
-                return false;
+        if (possiblePieces.size() > 0) {
+            possiblePieces.entrySet().removeIf(e -> {
+                if (e.getValue() < biggest) {
+                    e.getKey().getOptions().clear();
+                    return true;
+                } else {
+                    game.setStyleH1((int)e.getKey().getOptions().get(0).get(0));
+                    e.getKey().setOnMouseClick();
+                    return false;
+                }
+            });
+        } else {
+            //Nobody can make a kill
+            for (Piece n: pieces) {
+                n.pull(game.getPlayground().indexOf(n.getParent()));
+                if (!n.getOptions().isEmpty()) {
+                    possiblePieces.put(n, n.getOptions().get(0).size());
+                    game.setStyleH1((int)n.getOptions().get(0).get(0));
+                    n.setOnMouseClick();
+                }
             }
-        });
+        }
+
         biggest = 0;
     }
 

@@ -11,22 +11,45 @@ public class Checker extends Piece {
     }
 
     @Override
-    void pull() {
-        //wip...
+    void pull(int startPos) {
+        int dimension = super.getPlayer().getGame().getDimension();
+
+        //Not on the edge
+        if (startPos % dimension != 0) {
+            //Pull left
+            int left = (startPos-1) + dimension * super.getDirection();
+            setPull(startPos, left);
+        }
+        if ((startPos+1) % dimension != 0) {
+            //Pull right
+            int right = (startPos+1) + dimension * super.getDirection();
+            setPull(startPos, right);
+        }
+    }
+
+    public void setPull(int startPos, int x) {
+        ArrayList<Pane> playground = super.getPlayer().getGame().getPlayground();
+        //wip: Convert to king not yet implemented
+        try {
+            if (playground.get(x).getChildren().isEmpty()) {
+                ArrayList<Integer> pos = new ArrayList<>();
+                pos.add(startPos);
+                pos.add(x);
+                super.getOptions().add(pos);
+            }
+        } catch (ArrayIndexOutOfBoundsException e) {
+            System.out.println("startPos: " + startPos + "\nx: " + x + "\nPiece: " + this + "\nError: " + e);
+        }
     }
 
     @Override
-    public boolean jump(ArrayList<Integer> start, Image king) {
+    boolean jump(ArrayList<Integer> start, Image king) {
         int dimension = super.getPlayer().getGame().getDimension();
         ArrayList<Pane> playground = super.getPlayer().getGame().getPlayground();
 
         //Stop if checker lands in the last row (convert to King)
         int startPos = start.get(start.size()-1);
-        if (super.getDirection() == -1) {
-            if (startPos >= 0 && startPos <= dimension + super.getDirection()) { return false; }
-        } else if (super.getDirection() == 1) {
-            if (startPos >= dimension*dimension - dimension && startPos <= dimension*dimension - super.getDirection()) { return false; }
-        }
+        if (otherside(startPos, dimension)) { return false; }
 
         //For each diagonal
         boolean oneMore = false;
@@ -85,6 +108,15 @@ public class Checker extends Piece {
         }
 
         return oneMore;
+    }
+
+    public boolean otherside(int pos, int dimension) {
+        if (super.getDirection() == -1) {
+            if (pos >= 0 && pos <= dimension + super.getDirection()) { return true; }
+        } else if (super.getDirection() == 1) {
+            if (pos >= dimension*dimension - dimension && pos <= dimension*dimension - super.getDirection()) { return true; }
+        }
+        return false;
     }
 
 }

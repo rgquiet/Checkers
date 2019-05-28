@@ -84,6 +84,7 @@ public class Game {
         onHover = new ChangeListener() {
             @Override
             public void changed(ObservableValue ov, Object oldValue, Object newValue) {
+                //wip: Refactoring
                 //Check if mouse hover over the marked field
                 String selectedName = ov.toString().split("bean: ")[1].split("style")[0];
                 selectedName = selectedName.substring(0, selectedName.length()-1);
@@ -98,8 +99,8 @@ public class Game {
                             }
                             playground.get(n.get(n.size()-1)).setOnMouseClicked((MouseEvent e) -> {
                                 //Execute move animation to the target field
-                                h3.add(0, playground.indexOf(selected.getParent()));
                                 steps = new ArrayList<>(h3);
+                                steps.add(0, playground.indexOf(selected.getParent()));
                                 moveAnimation(selected);
 
                                 //Reset all Style tags
@@ -215,17 +216,41 @@ public class Game {
 
         counter = 0;
         transition.setOnFinished(actionEvent -> {
+            if (counter > 0) {
+                //Kill the enemy's piece at the current position
+                Pane field = playground.get(steps.get(counter));
+                if (!field.getChildren().isEmpty()) {
+                    Player enemy;
+                    if (white) { enemy = whitePlayer; }
+                    else { enemy = blackPlayer; }
+                    enemy.getPieces().remove(enemy.getPieces().indexOf(field.getChildren().get(0)));
+                    field.getChildren().clear();
+                }
+            }
             counter++;
             if (counter < steps.size()) {
+                //Sets next animation step and execute
                 transition.setPath(getNewLine(piece,
                         playground.get(steps.get(counter-1)),
                         playground.get(steps.get(counter))));
                 transition.play();
             } else {
+                //Animation done: Add piece to new pane
                 playground.get(steps.get(0)).getChildren().clear();
                 piece.setTranslateX(0);
                 piece.setTranslateY(0);
-                playground.get(steps.get(steps.size()-1)).getChildren().add(piece);
+                int endPos = steps.get(steps.size()-1);
+                playground.get(endPos).getChildren().add(piece);
+
+                if (selected instanceof Checker) {
+                    Checker checker = (Checker)selected;
+                    if (checker.otherside(endPos, dimension)) {
+                        //Checker becomes King
+                        selected.getPlayer().setKing(checker);
+                    }
+                }
+
+                selected = null;
                 nextTurn();
             }
         });

@@ -8,12 +8,12 @@ public class King extends Piece {
     }
 
     @Override
-    void pull() {
-        //wip..
+    void pull(int startPos) {
+        //wip...
     }
 
     @Override
-    boolean jump(ArrayList<Integer> start, Image king) {
+    boolean jump(ArrayList<Integer> start, Image checker) {
         //wip...
         return false;
     }
