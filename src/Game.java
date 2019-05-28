@@ -84,7 +84,7 @@ public class Game {
         onHover = new ChangeListener() {
             @Override
             public void changed(ObservableValue ov, Object oldValue, Object newValue) {
-                //wip: Refactoring
+                //wip: Refactoring (looks like shit)
                 //Check if mouse hover over the marked field
                 String selectedName = ov.toString().split("bean: ")[1].split("style")[0];
                 selectedName = selectedName.substring(0, selectedName.length()-1);

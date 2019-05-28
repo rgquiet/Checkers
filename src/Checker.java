@@ -29,16 +29,11 @@ public class Checker extends Piece {
 
     public void setPull(int startPos, int x) {
         ArrayList<Pane> playground = super.getPlayer().getGame().getPlayground();
-        //wip: Convert to king not yet implemented
-        try {
-            if (playground.get(x).getChildren().isEmpty()) {
-                ArrayList<Integer> pos = new ArrayList<>();
-                pos.add(startPos);
-                pos.add(x);
-                super.getOptions().add(pos);
-            }
-        } catch (ArrayIndexOutOfBoundsException e) {
-            System.out.println("startPos: " + startPos + "\nx: " + x + "\nPiece: " + this + "\nError: " + e);
+        if (playground.get(x).getChildren().isEmpty()) {
+            ArrayList<Integer> pos = new ArrayList<>();
+            pos.add(startPos);
+            pos.add(x);
+            super.getOptions().add(pos);
         }
     }
 
@@ -54,6 +49,7 @@ public class Checker extends Piece {
         //For each diagonal
         boolean oneMore = false;
         int x, y;
+        //wip: Refactoring (no absolute value -> 1, 8)
         for (int i = 0; i < 4; i++) {
             //Front left
             if (i == 0 && startPos / dimension < 8 && startPos % dimension > 1) { y = 1; x = -1; }
