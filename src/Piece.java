@@ -38,4 +38,21 @@ abstract class Piece extends ImageView {
         setOnMouseClicked(null);
     }
 
+    public boolean up(int pos) {
+        return pos < getPlayer().getGame().getDimension();
+    }
+
+    public boolean down(int pos) {
+        int dimension = getPlayer().getGame().getDimension();
+        return pos >= dimension*dimension - dimension;
+    }
+
+    public boolean left(int pos) {
+        return pos % getPlayer().getGame().getDimension() == 0;
+    }
+
+    public boolean right(int pos) {
+        return (pos+1) % getPlayer().getGame().getDimension() == 0;
+    }
+
 }

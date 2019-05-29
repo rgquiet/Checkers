@@ -21,16 +21,14 @@ public class GameTest extends Application {
         this.stage = stage;
 
         //Execute all Tests
+        /*
         System.out.println("testJumpChecker1");
         testJumpChecker1();
-
         System.out.println("testJumpChecker2");
         testJumpChecker2();
-
-        /*
+        */
         System.out.println("testJumpChecker3");
         testJumpChecker3();
-        */
     }
 
     public void testJumpChecker1() {
@@ -86,7 +84,8 @@ public class GameTest extends Application {
         black.add(21);
 
         ArrayList<Integer> white = new ArrayList<>();
-        white.add(10);
+        white.add(12);
+        white.add(14);
 
         Game testGame = new Game(stage);
         testGame.createPlayers(black, white);

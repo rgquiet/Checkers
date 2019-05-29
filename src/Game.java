@@ -244,7 +244,7 @@ public class Game {
 
                 if (selected instanceof Checker) {
                     Checker checker = (Checker)selected;
-                    if (checker.otherside(endPos, dimension)) {
+                    if (checker.otherside(endPos)) {
                         //Checker becomes King
                         selected.getPlayer().setKing(checker);
                     }
