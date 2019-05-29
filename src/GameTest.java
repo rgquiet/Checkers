@@ -24,11 +24,13 @@ public class GameTest extends Application {
         /*
         System.out.println("testJumpChecker1");
         testJumpChecker1();
+        */
         System.out.println("testJumpChecker2");
         testJumpChecker2();
-        */
+        /*
         System.out.println("testJumpChecker3");
         testJumpChecker3();
+        */
     }
 
     public void testJumpChecker1() {

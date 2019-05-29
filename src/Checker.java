@@ -6,8 +6,11 @@ import javafx.scene.image.ImageView;
 
 public class Checker extends Piece {
 
-    public Checker(Image img, int direction, Player player) {
-        super(img, direction, player);
+    private final int direction;
+
+    public Checker(Image img, Player player, int direction) {
+        super(img, player);
+        this.direction = direction;
     }
 
     @Override
@@ -15,12 +18,12 @@ public class Checker extends Piece {
         //Not on the edge
         if (!left(startPos)) {
             //Pull left
-            int left = (startPos-1) + getPlayer().getGame().getDimension() * getDirection();
+            int left = (startPos-1) + getPlayer().getGame().getDimension() * direction;
             setPull(startPos, left);
         }
         if (!right(startPos)) {
             //Pull right
-            int right = (startPos+1) + getPlayer().getGame().getDimension() * getDirection();
+            int right = (startPos+1) + getPlayer().getGame().getDimension() * direction;
             setPull(startPos, right);
         }
     }
@@ -42,7 +45,7 @@ public class Checker extends Piece {
         if (otherside(startPos)) { return false; }
 
         int x, y;
-        boolean oneMore = false;
+        boolean more = false;
         //For each diagonal
         for (int i = 0; i < 4; i++) {
             ArrayList<Pane> playground = getPlayer().getGame().getPlayground();
@@ -79,7 +82,7 @@ public class Checker extends Piece {
                         }
                         //Save newPos in a new ArrayList
                         if (!already) {
-                            oneMore = true;
+                            more = true;
                             ArrayList<Integer> pos = new ArrayList<>(start);
                             pos.add(newPos);
                             getOptions().add(pos);
@@ -89,7 +92,7 @@ public class Checker extends Piece {
             }
         }
 
-        if (oneMore) {
+        if (more) {
             //Keep only the biggest ArrayList
             int biggest = 0;
             for (int j = 0; j < getOptions().size(); j++) {
@@ -100,11 +103,11 @@ public class Checker extends Piece {
             }
         }
 
-        return oneMore;
+        return more;
     }
 
     public boolean otherside(int pos) {
-        if (getDirection() == -1) {
+        if (direction == -1) {
             return up(pos);
         } else {
             return down(pos);

@@ -3,33 +3,35 @@ import javafx.scene.image.Image;
 
 public class King extends Piece {
 
-    public King(Image img, int direction, Player player) {
-        super(img, direction, player);
+    public King(Image img, Player player) {
+        super(img, player);
     }
 
     @Override
     void pull(int startPos) {
-        int dimension = super.getPlayer().getGame().getDimension();
+        int dimension = getPlayer().getGame().getDimension();
 
-        int x, y;
-        for (int i = 0; i < 4; i++) {
-            //Front left
-            if (i == 0) { y = 1; x = -1; }
-            //Front right
-            else if (i == 1) { y = 1; x = 1; }
-            //Rear left
-            else if (i == 2) { y = -1; x = -1; }
-            //Rear right
-            else if (i == 3) { y = -1; x = 1; }
+        //Down left, Down right, Up left, Up right
+        int[] diagonal = {dimension-1, dimension+1, -dimension-1, -dimension+1};
+        for (int d: diagonal) {
+            int jumpPos = startPos;
 
-            /*
-            1. Für jede Richtung bis stop
-            2. Neue ArrayList<Integer> mit
-                2.1 Erster Durchgang: startPos
-                2.2 Sonst: getOptions.get(getOptions.size()-1)
-            2. Feld frei -> false = stop
-            3. Feld am Rand -> letzter Durchgang
-            */
+            boolean more;
+            if (d < 0) { more = !up(jumpPos); }
+            else { more = !down(jumpPos); }
+
+            while (more) {
+                jumpPos += d;
+                if (getPlayer().getGame().getPlayground().get(jumpPos).getChildren().isEmpty()) {
+                    more = !up(jumpPos) && !down(jumpPos) && !left(jumpPos) && !right(jumpPos);
+                    ArrayList<Integer> pos = new ArrayList<>();
+                    pos.add(startPos);
+                    pos.add(jumpPos);
+                    getOptions().add(pos);
+                } else {
+                    more = false;
+                }
+            }
         }
     }
 

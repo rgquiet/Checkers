@@ -5,13 +5,11 @@ import javafx.scene.image.ImageView;
 
 abstract class Piece extends ImageView {
 
-    private final int direction;
     private Player player;
     private ArrayList<ArrayList> options;
 
-    public Piece(Image img, int direction, Player player) {
+    public Piece(Image img, Player player) {
         super(img);
-        this.direction = direction;
         this.player = player;
         options = new ArrayList<>();
     }
@@ -21,7 +19,6 @@ abstract class Piece extends ImageView {
     abstract boolean jump(ArrayList<Integer> start, Image piece);
 
     //Getter-Methods
-    public int getDirection() { return direction; }
     public Player getPlayer() { return player; }
     public ArrayList<ArrayList> getOptions () { return options; }
 

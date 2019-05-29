@@ -28,7 +28,7 @@ public class Player {
                 //Odd
                 else { start -= 1; }
             }
-            Checker checker = new Checker(checkerImg, direction, this);
+            Checker checker = new Checker(checkerImg, this, direction);
             checker.setFitHeight(game.getSizeWindow()/game.getDimension()-2);
             checker.setFitWidth(game.getSizeWindow()/game.getDimension()-2);
 
@@ -52,7 +52,7 @@ public class Player {
         //Create pieces for current Player (just for testing)
         pieces = new ArrayList<>();
         testing.forEach(n -> {
-            Checker checker = new Checker(checkerImg, direction, this);
+            Checker checker = new Checker(checkerImg, this, direction);
             checker.setFitHeight(game.getSizeWindow()/game.getDimension()-2);
             checker.setFitWidth(game.getSizeWindow()/game.getDimension()-2);
 
@@ -72,7 +72,7 @@ public class Player {
 
     //Setter-Methods
     public void setKing(Checker checker) {
-        King king = new King(kingImg, checker.getDirection(), this);
+        King king = new King(kingImg, this);
         king.setFitHeight(game.getSizeWindow()/game.getDimension()-2);
         king.setFitWidth(game.getSizeWindow()/game.getDimension()-2);
 
@@ -89,6 +89,7 @@ public class Player {
             start.add(game.getPlayground().indexOf(n.getParent()));
 
             //Fills the ArrayList options for each piece
+            //wip: Refactoring (checkerImg by King!)
             if (n.jump(start, kingImg)) {
                 boolean repeat = true;
                 while (repeat) {
