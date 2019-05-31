@@ -28,7 +28,7 @@ public class Player {
                 //Odd
                 else { start -= 1; }
             }
-            Checker checker = new Checker(checkerImg, this, direction);
+            Checker checker = new Checker(checkerImg, kingImg, this, direction);
             checker.setFitHeight(game.getSizeWindow()/game.getDimension()-2);
             checker.setFitWidth(game.getSizeWindow()/game.getDimension()-2);
 
@@ -52,7 +52,7 @@ public class Player {
         //Create pieces for current Player (just for testing)
         pieces = new ArrayList<>();
         testing.forEach(n -> {
-            Checker checker = new Checker(checkerImg, this, direction);
+            Checker checker = new Checker(checkerImg, kingImg, this, direction);
             checker.setFitHeight(game.getSizeWindow()/game.getDimension()-2);
             checker.setFitWidth(game.getSizeWindow()/game.getDimension()-2);
 
@@ -72,7 +72,7 @@ public class Player {
 
     //Setter-Methods
     public void setKing(Checker checker) {
-        King king = new King(kingImg, this);
+        King king = new King(kingImg, checkerImg, this);
         king.setFitHeight(game.getSizeWindow()/game.getDimension()-2);
         king.setFitWidth(game.getSizeWindow()/game.getDimension()-2);
 
@@ -89,14 +89,13 @@ public class Player {
             start.add(game.getPlayground().indexOf(n.getParent()));
 
             //Fills the ArrayList options for each piece
-            //wip: Refactoring (checkerImg by King!)
-            if (n.jump(start, kingImg)) {
+            if (n.jump(start)) {
                 boolean repeat = true;
                 while (repeat) {
                     repeat = false;
                     ArrayList<ArrayList> pos = new ArrayList<>(n.getOptions());
                     for (ArrayList p: pos) {
-                        if(n.jump(p, kingImg)) { repeat = true; }
+                        if(n.jump(p)) { repeat = true; }
                     }
                 }
                 if (n.getOptions().get(0).size() > biggest) { biggest = n.getOptions().get(0).size(); }

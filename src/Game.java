@@ -127,34 +127,39 @@ public class Game {
 
     //Setter-Methods
     public void setSelected(Piece piece) { selected = piece; }
-    public void setStyleH1(Integer field) {
+    public void setStyleH1(int field) {
         //Set style tag h1
         playground.get(field).getStyleClass().add("h1");
         h1.add(field);
     }
-    public void setStyleH2(Integer field) {
+    public void setStyleH2(int field) {
         //Set style tag h2
         playground.get(field).getStyleClass().add("h2");
         playground.get(field).hoverProperty().addListener(onHover);
         h2.add(field);
     }
-    public void setStyleH3(Integer from, Integer to) {
-        //Save direction between int "from" -> "to"
-        Integer i = 0;
-        if(from < to) {
-            if ((to - from) % (dimension - 1) == 0) { i = dimension - 1; }
-            else if ((to - from) % (dimension + 1) == 0) { i = dimension + 1; }
-        } else {
-            if ((from - to) % (dimension - 1) == 0) { i = -dimension + 1; }
-            else if ((from - to) % (dimension + 1) == 0) { i = -dimension - 1; }
-        }
+    public void setStyleH3(int from, int to) {
+        int diagonal = setDiagonal(from, to);
 
         //Set style tag h3
-        while (from != to && i != 0) {
-            from = from + i;
+        while (from != to && diagonal != 0) {
+            from = from + diagonal;
             playground.get(from).getStyleClass().add("h3");
             h3.add(from);
         }
+    }
+
+    public int setDiagonal(int from, int to) {
+        //Save direction between int "from" -> "to"
+        int i = 0;
+        if(from < to) {
+            if ((to - from) % (dimension + 1) == 0) { i = dimension + 1; }
+            else if ((to - from) % (dimension - 1) == 0) { i = dimension - 1; }
+        } else {
+            if ((from - to) % (dimension + 1) == 0) { i = -dimension - 1; }
+            else if ((from - to) % (dimension - 1) == 0) { i = -dimension + 1; }
+        }
+        return i;
     }
 
     public void clearStyleH1() {

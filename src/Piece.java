@@ -1,24 +1,28 @@
 import java.util.ArrayList;
-import javafx.scene.input.MouseEvent;
+import java.util.Iterator;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 
 abstract class Piece extends ImageView {
 
+    private Image buddy;
     private Player player;
     private ArrayList<ArrayList> options;
 
-    public Piece(Image img, Player player) {
+    public Piece(Image img, Image buddy, Player player) {
         super(img);
+        this.buddy = buddy;
         this.player = player;
         options = new ArrayList<>();
     }
 
     //Abstract-Methods
     abstract void pull(int startPos);
-    abstract boolean jump(ArrayList<Integer> start, Image piece);
+    abstract boolean jump(ArrayList<Integer> start);
 
     //Getter-Methods
+    public Image getBuddy() { return buddy; }
     public Player getPlayer() { return player; }
     public ArrayList<ArrayList> getOptions () { return options; }
 
@@ -33,6 +37,17 @@ abstract class Piece extends ImageView {
 
     public void removeOnMouseClick() {
         setOnMouseClicked(null);
+    }
+
+    public void removeSmallerOptions() {
+        //Keep only the biggest ArrayList
+        int biggest = 0;
+        for (int i = 0; i < getOptions().size(); i++) {
+            if (biggest < getOptions().get(i).size()) { biggest = getOptions().get(i).size(); }
+        }
+        for (Iterator<ArrayList> it = getOptions().iterator(); it.hasNext();) {
+            if (it.next().size() < biggest) { it.remove(); }
+        }
     }
 
     public boolean up(int pos) {

@@ -22,18 +22,18 @@ public class GameTest extends Application {
 
         //Execute all Tests
         /*
-        System.out.println("testJumpChecker1");
-        testJumpChecker1();
+        System.out.println("testCheckOptions");
+        testCheckOptions();
+
+        System.out.println("testJumpChecker");
+        testJumpChecker();
         */
-        System.out.println("testJumpChecker2");
-        testJumpChecker2();
-        /*
-        System.out.println("testJumpChecker3");
-        testJumpChecker3();
-        */
+
+        System.out.println("testJumpKing");
+        testJumpKing();
     }
 
-    public void testJumpChecker1() {
+    public void testCheckOptions() {
         //Set pieces in special order to test checkers jump-logic
         ArrayList<Integer> black = new ArrayList<>();
         black.add(22);
@@ -59,14 +59,14 @@ public class GameTest extends Application {
         assertEquals(testGame.getWhitePlayer().getPieces().get(0).getOptions().get(0).get(1), 13);
     }
 
-    public void testJumpChecker2() {
+    public void testJumpChecker() {
         //Set pieces in special order to test checkers jump-logic
         ArrayList<Integer> black = new ArrayList<>();
         black.add(10);
         black.add(19);
 
         ArrayList<Integer> white = new ArrayList<>();
-        white.add(21);
+        white.add(20);
         white.add(23);
         white.add(26);
         white.add(28);
@@ -80,14 +80,15 @@ public class GameTest extends Application {
         testGame.getBlackPlayer().checkOptions();
     }
 
-    public void testJumpChecker3() {
-        //Set pieces in special order to test checkers jump-logic
+    public void testJumpKing() {
+        //Set pieces in special order to test kings jump-logic
         ArrayList<Integer> black = new ArrayList<>();
-        black.add(21);
+        black.add(44);
+        black.add(86);
+        black.add(73);
 
         ArrayList<Integer> white = new ArrayList<>();
-        white.add(12);
-        white.add(14);
+        white.add(11);
 
         Game testGame = new Game(stage);
         testGame.createPlayers(black, white);

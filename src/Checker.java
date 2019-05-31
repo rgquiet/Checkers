@@ -1,15 +1,14 @@
 import java.util.ArrayList;
-import java.util.Iterator;
-import javafx.scene.layout.Pane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Pane;
 
 public class Checker extends Piece {
 
     private final int direction;
 
-    public Checker(Image img, Player player, int direction) {
-        super(img, player);
+    public Checker(Image img, Image buddy, Player player, int direction) {
+        super(img, buddy, player);
         this.direction = direction;
     }
 
@@ -28,7 +27,7 @@ public class Checker extends Piece {
         }
     }
 
-    public void setPull(int startPos, int x) {
+    private void setPull(int startPos, int x) {
         ArrayList<Pane> playground = getPlayer().getGame().getPlayground();
         if (playground.get(x).getChildren().isEmpty()) {
             ArrayList<Integer> pos = new ArrayList<>();
@@ -39,7 +38,7 @@ public class Checker extends Piece {
     }
 
     @Override
-    boolean jump(ArrayList<Integer> start, Image king) {
+    boolean jump(ArrayList<Integer> start) {
         //Stop if checker lands in the last row (convert to King)
         int startPos = start.get(start.size()-1);
         if (otherside(startPos)) { return false; }
@@ -64,9 +63,9 @@ public class Checker extends Piece {
             int jumpPos = startPos + y * dimension + x;
             //Field not free
             if (!playground.get(jumpPos).getChildren().isEmpty()) {
-                Image img = ((ImageView)playground.get(jumpPos).getChildren().get(0)).getImage();
                 //Enemy
-                if (!(img == this.getImage() || img == king)) {
+                Image img = ((ImageView)playground.get(jumpPos).getChildren().get(0)).getImage();
+                if (!(img == getImage() || img == getBuddy())) {
                     int newPos = jumpPos + y * dimension + x;
                     //Field free (double jump not allowed)
                     if (playground.get(newPos).getChildren().isEmpty()) {
@@ -92,17 +91,7 @@ public class Checker extends Piece {
             }
         }
 
-        if (more) {
-            //Keep only the biggest ArrayList
-            int biggest = 0;
-            for (int j = 0; j < getOptions().size(); j++) {
-                if (biggest < getOptions().get(j).size()) { biggest = getOptions().get(j).size(); }
-            }
-            for (Iterator<ArrayList> it = getOptions().iterator(); it.hasNext();) {
-                if (it.next().size() < biggest) { it.remove(); }
-            }
-        }
-
+        if (more) { removeSmallerOptions(); }
         return more;
     }
 
