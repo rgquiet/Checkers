@@ -21,15 +21,9 @@ public class GameTest extends Application {
         this.stage = stage;
 
         //Execute all Tests
-        /*
-        System.out.println("testCheckOptions");
-        testCheckOptions();
-
-        System.out.println("testJumpChecker");
-        testJumpChecker();
-        */
-
-        System.out.println("testJumpKing");
+        //testCheckOptions();
+        //testJumpCircle();     //wip: possible in a real game?
+        //testJumpChecker();
         testJumpKing();
     }
 
@@ -59,6 +53,24 @@ public class GameTest extends Application {
         assertEquals(testGame.getWhitePlayer().getPieces().get(0).getOptions().get(0).get(1), 13);
     }
 
+    public void testJumpCircle() {
+        //Set pieces in special order to test checkers jump-logic
+        ArrayList<Integer> black = new ArrayList<>();
+        black.add(45);
+
+        ArrayList<Integer> white = new ArrayList<>();
+        white.add(54);
+        white.add(56);
+        white.add(74);
+        white.add(76);
+
+        Game testGame = new Game(stage);
+        testGame.createPlayers(black, white);
+
+        //Testing black Player
+        testGame.getBlackPlayer().checkOptions();
+    }
+
     public void testJumpChecker() {
         //Set pieces in special order to test checkers jump-logic
         ArrayList<Integer> black = new ArrayList<>();
@@ -83,15 +95,22 @@ public class GameTest extends Application {
     public void testJumpKing() {
         //Set pieces in special order to test kings jump-logic
         ArrayList<Integer> black = new ArrayList<>();
-        black.add(44);
-        black.add(86);
-        black.add(73);
+        black.add(55);
+        black.add(77);
 
         ArrayList<Integer> white = new ArrayList<>();
         white.add(11);
+        white.add(13);
+        white.add(33);
+        white.add(37);
+        white.add(46);
+        white.add(73);
+        white.add(80);
+        white.add(88);
 
         Game testGame = new Game(stage);
         testGame.createPlayers(black, white);
+        testGame.getBlackPlayer().setKing((Checker)testGame.getBlackPlayer().getPieces().get(0));
 
         //Testing black Player
         testGame.getBlackPlayer().checkOptions();

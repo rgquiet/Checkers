@@ -27,9 +27,7 @@ public class King extends Piece {
                     pos.add(startPos);
                     pos.add(jumpPos);
                     getOptions().add(pos);
-                } else {
-                    next = false;
-                }
+                } else { next = false; }
             }
         }
     }
@@ -63,6 +61,7 @@ public class King extends Piece {
                     //Enemy
                     Image img = ((ImageView) playground.get(jumpPos).getChildren().get(0)).getImage();
                     if (!kill && !(img == getImage() || img == getBuddy())) {
+                        next = !up(jumpPos) && !down(jumpPos) && !left(jumpPos) && !right(jumpPos);
                         //Already jumped over current Enemy
                         boolean already = false;
                         if (start.size() > 1) {
@@ -81,9 +80,7 @@ public class King extends Piece {
                             }
                         }
                         kill = !already;
-                    } else {
-                        next = false;
-                    }
+                    } else { next = false; }
                 }
             }
         }
