@@ -1,3 +1,5 @@
+package ftoop_checkers_guedel;
+
 import java.util.ArrayList;
 import javafx.application.Application;
 import javafx.stage.Stage;
@@ -22,9 +24,9 @@ public class GameTest extends Application {
 
         //Execute all Tests
         //testCheckOptions();
-        //testJumpCircle();     //wip: possible in a real game?
+        testJumpCircle();     //wip: possible in a real game?
         //testJumpChecker();
-        testJumpKing();
+        //testJumpKing();
     }
 
     public void testCheckOptions() {
@@ -56,9 +58,10 @@ public class GameTest extends Application {
     public void testJumpCircle() {
         //Set pieces in special order to test checkers jump-logic
         ArrayList<Integer> black = new ArrayList<>();
-        black.add(45);
+        black.add(27);
 
         ArrayList<Integer> white = new ArrayList<>();
+        white.add(36);
         white.add(54);
         white.add(56);
         white.add(74);

@@ -1,3 +1,6 @@
+package ftoop_checkers_guedel;
+
+import java.util.List;
 import java.util.ArrayList;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -28,7 +31,7 @@ public class Checker extends Piece {
     }
 
     private void setPull(int startPos, int x) {
-        ArrayList<Pane> playground = getPlayer().getGame().getPlayground();
+        List<Pane> playground = getPlayer().getGame().getPlayground();
         if (playground.get(x).getChildren().isEmpty()) {
             ArrayList<Integer> pos = new ArrayList<>();
             pos.add(startPos);
@@ -47,7 +50,7 @@ public class Checker extends Piece {
         boolean more = false;
         //For each diagonal
         for (int i = 0; i < 4; i++) {
-            ArrayList<Pane> playground = getPlayer().getGame().getPlayground();
+            List<Pane> playground = getPlayer().getGame().getPlayground();
             int dimension = getPlayer().getGame().getDimension();
 
             //Down left

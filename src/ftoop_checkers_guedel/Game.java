@@ -1,3 +1,6 @@
+package ftoop_checkers_guedel;
+
+import java.util.List;
 import java.util.ArrayList;
 import javafx.util.Duration;
 import javafx.geometry.Bounds;
@@ -123,7 +126,7 @@ public class Game {
     public int getSizeWindow() { return sizeWindow; }
     public Player getBlackPlayer() { return blackPlayer; }
     public Player getWhitePlayer() { return whitePlayer; }
-    public ArrayList<Pane> getPlayground() { return playground; }
+    public List<Pane> getPlayground() { return playground; }
 
     //Setter-Methods
     public void setSelected(Piece piece) { selected = piece; }
@@ -186,7 +189,7 @@ public class Game {
         h3.clear();
     }
 
-    public void createPlayers(ArrayList<Integer> blackPos, ArrayList<Integer> whitePos) {
+    public void createPlayers(List<Integer> blackPos, List<Integer> whitePos) {
         //Define all Images for the Game-Pieces
         Image blackChecker = new Image(getClass().getResourceAsStream("blackChecker.png"));
         Image blackKing = new Image(getClass().getResourceAsStream("blackKing.png"));
@@ -194,7 +197,7 @@ public class Game {
         Image whiteKing = new Image(getClass().getResourceAsStream("whiteKing.png"));
 
         //Create Players
-        if (blackPos.size() == 0 && whitePos.size() == 0) {
+        if (blackPos.isEmpty() && whitePos.isEmpty()) {
             blackPlayer = new Player(this, scene, blackChecker, blackKing, 1, 0);
             whitePlayer = new Player(this, scene, whiteChecker, whiteKing, -1, 60);
         } else {
@@ -216,7 +219,7 @@ public class Game {
     private void moveAnimation(ImageView piece) {
         piece.getParent().toFront();
         PathTransition transition = new PathTransition();
-        transition.setDuration(Duration.seconds(0.5));
+        transition.setDuration(Duration.seconds(0.3));
         transition.setNode(piece);
 
         counter = 0;

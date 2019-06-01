@@ -1,3 +1,6 @@
+package ftoop_checkers_guedel;
+
+import java.util.List;
 import java.util.ArrayList;
 import java.util.Iterator;
 import javafx.scene.image.Image;
@@ -24,7 +27,7 @@ abstract class Piece extends ImageView {
     //Getter-Methods
     public Image getBuddy() { return buddy; }
     public Player getPlayer() { return player; }
-    public ArrayList<ArrayList> getOptions () { return options; }
+    public List<ArrayList> getOptions () { return options; }
 
     //Setter-Methods
     public void setOnMouseClick() {
@@ -40,7 +43,7 @@ abstract class Piece extends ImageView {
     }
 
     public void removeSmallerOptions() {
-        //Keep only the biggest ArrayList
+        //Keep only the biggest List
         int biggest = 0;
         for (int i = 0; i < getOptions().size(); i++) {
             if (biggest < getOptions().get(i).size()) { biggest = getOptions().get(i).size(); }

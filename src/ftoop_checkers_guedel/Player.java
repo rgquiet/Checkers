@@ -1,4 +1,8 @@
+package ftoop_checkers_guedel;
+
+import java.util.List;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.HashMap;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -42,7 +46,7 @@ public class Player {
         scene.heightProperty().addListener((obs, oldVal, newVal) -> pieces.forEach(n -> n.setFitHeight((int)(double)newVal/game.getDimension()-2)));
     }
 
-    public Player(Game game, Scene scene, Image checkerImg, Image kingImg, int direction, ArrayList<Integer> testing) {
+    public Player(Game game, Scene scene, Image checkerImg, Image kingImg, int direction, List<Integer> testing) {
         biggest = 0;
         possiblePieces = new HashMap<>();
         this.checkerImg = checkerImg;
@@ -67,8 +71,8 @@ public class Player {
 
     //Getter-Methods
     public Game getGame() { return game; }
-    public ArrayList<Piece> getPieces() { return pieces; }
-    public HashMap<Piece, Integer> getPossiblePieces() { return possiblePieces; }
+    public List<Piece> getPieces() { return pieces; }
+    public Map<Piece, Integer> getPossiblePieces() { return possiblePieces; }
 
     //Setter-Methods
     public void setKing(Checker checker) {

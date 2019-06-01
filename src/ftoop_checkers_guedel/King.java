@@ -1,3 +1,6 @@
+package ftoop_checkers_guedel;
+
+import java.util.List;
 import java.util.ArrayList;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -41,7 +44,7 @@ public class King extends Piece {
         //Down left, Down right, Up left, Up right
         int[] diagonal = {dimension-1, dimension+1, -dimension-1, -dimension+1};
         for (int i = 0; i < diagonal.length; i++) {
-            ArrayList<Pane> playground = getPlayer().getGame().getPlayground();
+            List<Pane> playground = getPlayer().getGame().getPlayground();
             int jumpPos = startPos;
 
             boolean kill = false;
