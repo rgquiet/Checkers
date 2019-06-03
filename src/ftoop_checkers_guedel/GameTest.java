@@ -1,3 +1,5 @@
+package ftoop_checkers_guedel;
+
 import java.util.ArrayList;
 import javafx.application.Application;
 import javafx.stage.Stage;
@@ -21,19 +23,13 @@ public class GameTest extends Application {
         this.stage = stage;
 
         //Execute all Tests
-        System.out.println("testJumpChecker1");
-        testJumpChecker1();
-        /*
-        System.out.println("testJumpChecker2");
-        testJumpChecker2();
-        System.out.println("testJumpChecker3");
-        testJumpChecker3();
-        */
-        System.out.println("testJumpChecker4");
-        testJumpChecker4();
+        //testCheckOptions();
+        testJumpCircle();       //wip: Throws ArrayOutOfBound with multiple identical target fields
+        //testJumpChecker();
+        //testJumpKing();
     }
 
-    public void testJumpChecker1() {
+    public void testCheckOptions() {
         //Set pieces in special order to test checkers jump-logic
         ArrayList<Integer> black = new ArrayList<>();
         black.add(22);
@@ -59,73 +55,68 @@ public class GameTest extends Application {
         assertEquals(testGame.getWhitePlayer().getPieces().get(0).getOptions().get(0).get(1), 13);
     }
 
-    public void testJumpChecker2() {
+    public void testJumpCircle() {
         //Set pieces in special order to test checkers jump-logic
         ArrayList<Integer> black = new ArrayList<>();
-        black.add(11);
-        black.add(53);
-        black.add(99);
+        black.add(27);
 
         ArrayList<Integer> white = new ArrayList<>();
-        white.add(22);
-        white.add(26);
-        white.add(42);
-        white.add(44);
-        white.add(62);
-        white.add(64);
+        white.add(36);
+        white.add(54);
+        white.add(56);
+        white.add(74);
+        white.add(76);
 
         Game testGame = new Game(stage);
         testGame.createPlayers(black, white);
 
         //Testing black Player
         testGame.getBlackPlayer().checkOptions();
-        //System.out.println(testGame.getBlackPlayer().getPieces().get(0).getOptions());
-        //System.out.println(testGame.getBlackPlayer().getPieces().get(1).getOptions());
     }
 
-    public void testJumpChecker3() {
+    public void testJumpChecker() {
         //Set pieces in special order to test checkers jump-logic
         ArrayList<Integer> black = new ArrayList<>();
-        black.add(13);
-        black.add(15);
-        black.add(37);
-        black.add(39);
+        black.add(10);
+        black.add(19);
 
         ArrayList<Integer> white = new ArrayList<>();
+        white.add(20);
+        white.add(23);
+        white.add(26);
+        white.add(28);
+        white.add(41);
         white.add(48);
 
         Game testGame = new Game(stage);
         testGame.createPlayers(black, white);
 
-        //Testing white Player
-        testGame.getWhitePlayer().checkOptions();
-        System.out.println(testGame.getWhitePlayer().getPieces().get(0).getOptions());
+        //Testing black Player
+        testGame.getBlackPlayer().checkOptions();
     }
 
-    public void testJumpChecker4() {
-        //Set pieces in special order to test checkers jump-logic
+    public void testJumpKing() {
+        //Set pieces in special order to test kings jump-logic
         ArrayList<Integer> black = new ArrayList<>();
-        //black.add(0);
-        black.add(15);
-        black.add(84);
+        black.add(55);
+        black.add(77);
 
         ArrayList<Integer> white = new ArrayList<>();
-        white.add(18);
+        white.add(11);
+        white.add(13);
+        white.add(33);
         white.add(37);
-        white.add(77);
+        white.add(46);
+        white.add(73);
+        white.add(80);
+        white.add(88);
 
         Game testGame = new Game(stage);
         testGame.createPlayers(black, white);
+        testGame.getBlackPlayer().setKing((Checker)testGame.getBlackPlayer().getPieces().get(0));
 
         //Testing black Player
-        //testGame.getBlackPlayer().checkOptions();
-        int options = testGame.getBlackPlayer().checkOptions();
-        if(options == 0){
-            testGame.getBlackPlayer().checkPulls();
-        }
-            //testGame.getBlackPlayer().checkPulls();
-
-
+        testGame.getBlackPlayer().checkOptions();
     }
 
 }

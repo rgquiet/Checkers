@@ -1,3 +1,5 @@
+package ftoop_checkers_guedel;
+
 import java.util.ArrayList;
 import javafx.application.Application;
 import javafx.stage.Stage;

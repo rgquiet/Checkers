@@ -1,8 +1,11 @@
+package ftoop_checkers_guedel;
+
+import java.util.List;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.HashMap;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 
 public class Player {
 
@@ -29,7 +32,7 @@ public class Player {
                 //Odd
                 else { start -= 1; }
             }
-            Checker checker = new Checker(checkerImg, direction, this);
+            Checker checker = new Checker(checkerImg, kingImg, this, direction);
             checker.setFitHeight(game.getSizeWindow()/game.getDimension()-2);
             checker.setFitWidth(game.getSizeWindow()/game.getDimension()-2);
 
@@ -43,7 +46,7 @@ public class Player {
         scene.heightProperty().addListener((obs, oldVal, newVal) -> pieces.forEach(n -> n.setFitHeight((int)(double)newVal/game.getDimension()-2)));
     }
 
-    public Player(Game game, Scene scene, Image checkerImg, Image kingImg, int direction, ArrayList<Integer> testing) {
+    public Player(Game game, Scene scene, Image checkerImg, Image kingImg, int direction, List<Integer> testing) {
         biggest = 0;
         possiblePieces = new HashMap<>();
         this.checkerImg = checkerImg;
@@ -53,7 +56,7 @@ public class Player {
         //Create pieces for current Player (just for testing)
         pieces = new ArrayList<>();
         testing.forEach(n -> {
-            Checker checker = new Checker(checkerImg, direction, this);
+            Checker checker = new Checker(checkerImg, kingImg, this, direction);
             checker.setFitHeight(game.getSizeWindow()/game.getDimension()-2);
             checker.setFitWidth(game.getSizeWindow()/game.getDimension()-2);
 
@@ -68,88 +71,67 @@ public class Player {
 
     //Getter-Methods
     public Game getGame() { return game; }
-    public ArrayList<Piece> getPieces() { return pieces; }
-    public HashMap<Piece, Integer> getPossiblePieces() { return possiblePieces; }
-    public Image getCheckerImg() {
-        return checkerImg;
-    }
+    public List<Piece> getPieces() { return pieces; }
+    public Map<Piece, Integer> getPossiblePieces() { return possiblePieces; }
 
     //Setter-Methods
-    public void setKing(int i) {
-        King king = new King(kingImg, pieces.get(i).getDirection(), this);
+    public void setKing(Checker checker) {
+        King king = new King(kingImg, checkerImg, this);
         king.setFitHeight(game.getSizeWindow()/game.getDimension()-2);
         king.setFitWidth(game.getSizeWindow()/game.getDimension()-2);
 
-        int j = game.getPlayground().indexOf(pieces.get(i).getParent());
-        game.getPlayground().get(j).getChildren().remove(pieces.get(i));
-        game.getPlayground().get(j).getChildren().add(king);
-        pieces.set(i, king);
-        game.setSelected(king);
-    }
-    public void removePiece(ImageView checker){
+        int i = game.getPlayground().indexOf(checker.getParent());
+        game.getPlayground().get(i).getChildren().remove(checker);
+        game.getPlayground().get(i).getChildren().add(king);
         pieces.remove(checker);
-    }
-    public void addPiece(ImageView checker){
-        pieces.add((Piece) checker);
+        pieces.add(king);
     }
 
-    public int checkOptions() {
-        biggest = 0;
+    public void checkOptions() {
         for (Piece n: pieces) {
             ArrayList<Integer> start = new ArrayList<>();
             start.add(game.getPlayground().indexOf(n.getParent()));
-            n.getOptions().clear();
-            if(n instanceof Checker) {
-                //Fills the ArrayList options for each piece
-                if (n.jump(start)) {
-                    boolean repeat = true;
-                    while (repeat) {
-                        repeat = false;
-                        ArrayList<ArrayList> pos = new ArrayList<>(n.getOptions());
-                        for (ArrayList p : pos) {
-                            if (n.jump(p)) {
-                                repeat = true;
-                            }
-                        }
-                    }
-                    if (n.getOptions().get(0).size() > biggest) {
-                        biggest = n.getOptions().get(0).size();
-                    }
-                    possiblePieces.put(n, n.getOptions().get(0).size());
-                }
-            }
-            else if(n instanceof King){
-                n.jump(start);
-                if(n.getOptions().size() >= biggest && n.getOptions().get(0).size() != 1){
-                    for(ArrayList a : n.getOptions()){
-                        if (biggest < a.size()){
-                            biggest = a.size();
-                        }
-                        n.setOnMouseClick();
-                        game.setStyleH1((int)a.get(0));
+
+            //Fills the ArrayList options for each piece
+            if (n.jump(start)) {
+                boolean repeat = true;
+                while (repeat) {
+                    repeat = false;
+                    ArrayList<ArrayList> pos = new ArrayList<>(n.getOptions());
+                    for (ArrayList p: pos) {
+                        if(n.jump(p)) { repeat = true; }
                     }
                 }
+                if (n.getOptions().get(0).size() > biggest) { biggest = n.getOptions().get(0).size(); }
+                possiblePieces.put(n, n.getOptions().get(0).size());
             }
         }
 
         //Holds only the pieces, which do the most kills in this turn
-        possiblePieces.entrySet().removeIf(e -> {
-            if (e.getValue() < biggest) {
-                e.getKey().getOptions().clear();
-                return true;
-            } else {
-                e.getKey().setOnMouseClick();
-                game.setStyleH1((int)e.getKey().getOptions().get(0).get(0));
-                return false;
+        if (possiblePieces.size() > 0) {
+            possiblePieces.entrySet().removeIf(e -> {
+                if (e.getValue() < biggest) {
+                    e.getKey().getOptions().clear();
+                    return true;
+                } else {
+                    game.setStyleH1((int)e.getKey().getOptions().get(0).get(0));
+                    e.getKey().setOnMouseClick();
+                    return false;
+                }
+            });
+        } else {
+            //Nobody can make a kill
+            for (Piece n: pieces) {
+                n.pull(game.getPlayground().indexOf(n.getParent()));
+                if (!n.getOptions().isEmpty()) {
+                    possiblePieces.put(n, n.getOptions().get(0).size());
+                    game.setStyleH1((int)n.getOptions().get(0).get(0));
+                    n.setOnMouseClick();
+                }
             }
-        });
-        return biggest;
-    }
-
-    public void checkPulls(){
-        for(Piece piece : pieces){
-            piece.pull();
         }
+
+        biggest = 0;
     }
 
 }
