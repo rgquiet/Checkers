@@ -24,7 +24,7 @@ public class GameTest extends Application {
 
         //Execute all Tests
         //testCheckOptions();
-        testJumpCircle();     //wip: possible in a real game?
+        testJumpCircle();       //wip: Throws ArrayOutOfBound with multiple identical target fields
         //testJumpChecker();
         //testJumpKing();
     }

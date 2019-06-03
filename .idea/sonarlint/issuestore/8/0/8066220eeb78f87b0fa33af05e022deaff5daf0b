@@ -1,5 +1,5 @@
 
-usquid:S3776Z"RRefactor this method to reduce its Cognitive Complexity from 29 to the 15 allowed.(ל‹נ¬רÿÿÿÿ8—מקע°-
-Csquid:S1659"%Declare "kingImg" on a separate line.(ט 8—מקע°-
  squid:ForLoopCounterChangedCheck)"XRefactor the code in order to not assign to this loop counter from within the loop body.(¨…ִK8—מקע°-
 Ysquid:S1994"6Move the update of "i" into this loop's update clause.(״ל–üÿÿÿÿ8—מקע°-
+Csquid:S1659"%Declare "kingImg" on a separate line.(ט 8—מקע°-
+usquid:S3776Z"RRefactor this method to reduce its Cognitive Complexity from 29 to the 15 allowed.(ל‹נ¬רÿÿÿÿ8—מקע°-
