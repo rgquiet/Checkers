@@ -49,7 +49,6 @@ public class King extends Piece {
 
             boolean kill = false;
             boolean next = outside(i, jumpPos);
-
             while (next) {
                 jumpPos += diagonal[i];
                 if (getPlayer().getGame().getPlayground().get(jumpPos).getChildren().isEmpty()) {
@@ -77,6 +76,7 @@ public class King extends Piece {
                                     from += diag;
                                     if (jumpPos == from) {
                                         already = true;
+                                        next = false;
                                         break;
                                     }
                                 }

@@ -123,7 +123,8 @@ public class Game {
 
     //Getter-Methods
     public int getDimension() { return dimension; }
-    public int getSizeWindow() { return sizeWindow; }
+    public double getWidthWindow() { return scene.getWidth(); }
+    public double getHeightWindow() { return scene.getHeight(); }
     public Player getBlackPlayer() { return blackPlayer; }
     public Player getWhitePlayer() { return whitePlayer; }
     public List<Pane> getPlayground() { return playground; }

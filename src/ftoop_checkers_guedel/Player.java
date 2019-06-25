@@ -33,8 +33,8 @@ public class Player {
                 else { start -= 1; }
             }
             Checker checker = new Checker(checkerImg, kingImg, this, direction);
-            checker.setFitHeight(game.getSizeWindow()/game.getDimension()-2);
-            checker.setFitWidth(game.getSizeWindow()/game.getDimension()-2);
+            checker.setFitWidth(game.getWidthWindow()/game.getDimension()-2);
+            checker.setFitHeight(game.getHeightWindow()/game.getDimension()-2);
 
             game.getPlayground().get(start).getChildren().add(checker);
             pieces.add(checker);
@@ -57,8 +57,8 @@ public class Player {
         pieces = new ArrayList<>();
         testing.forEach(n -> {
             Checker checker = new Checker(checkerImg, kingImg, this, direction);
-            checker.setFitHeight(game.getSizeWindow()/game.getDimension()-2);
-            checker.setFitWidth(game.getSizeWindow()/game.getDimension()-2);
+            checker.setFitWidth(game.getWidthWindow()/game.getDimension()-2);
+            checker.setFitHeight(game.getHeightWindow()/game.getDimension()-2);
 
             game.getPlayground().get(n).getChildren().add(checker);
             pieces.add(checker);
@@ -77,8 +77,8 @@ public class Player {
     //Setter-Methods
     public void setKing(Checker checker) {
         King king = new King(kingImg, checkerImg, this);
-        king.setFitHeight(game.getSizeWindow()/game.getDimension()-2);
-        king.setFitWidth(game.getSizeWindow()/game.getDimension()-2);
+        king.setFitWidth(game.getWidthWindow()/game.getDimension()-2);
+        king.setFitHeight(game.getHeightWindow()/game.getDimension()-2);
 
         int i = game.getPlayground().indexOf(checker.getParent());
         game.getPlayground().get(i).getChildren().remove(checker);
