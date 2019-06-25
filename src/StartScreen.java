@@ -56,7 +56,7 @@ public class StartScreen extends Application {
             // Button was Clicked, Starts Game
 
             try {
-                this.scene = vsPcScene(stage);
+                this.scene = winScreen(stage, "Black Player");
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -94,6 +94,35 @@ public class StartScreen extends Application {
         stage.setScene(scene);
         stage.show();
 
+    }
+
+    public Scene winScreen(Stage stage, String winner) throws Exception {
+
+        // Stellt ein GridPane bereit, auf dem die Elemente verteilt werden können
+
+        final BorderPane borderPane = new BorderPane();
+        final Button btnnewgame = new Button("New Game");
+        final Label lblwinner = new Label("Sieger: " + winner);
+
+
+        borderPane.setStyle("-fx-background-color: rgba(255, 255, 255, 0.5);");
+        borderPane.setCenter(lblwinner);
+        borderPane.setBottom(btnnewgame);
+
+
+
+
+        btnnewgame.setOnAction((event) -> {
+
+            // Closes Window on Click
+
+            launch();
+
+        });
+
+        Scene scene = new Scene(borderPane, 240, 100);
+        this.scene = scene;
+        return scene;
     }
 
     public Scene vsPcScene(Stage stage) throws Exception {
