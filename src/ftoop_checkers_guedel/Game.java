@@ -128,6 +128,10 @@ public class Game {
     public Player getBlackPlayer() { return blackPlayer; }
     public Player getWhitePlayer() { return whitePlayer; }
     public List<Pane> getPlayground() { return playground; }
+    public Scene getScene() {
+        return scene;
+    }
+
 
     //Setter-Methods
     public void setSelected(Piece piece) { selected = piece; }
