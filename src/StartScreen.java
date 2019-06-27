@@ -2,16 +2,15 @@
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
-import javafx.scene.layout.GridPane;
 
 
 public class StartScreen extends Application {
@@ -32,12 +31,20 @@ public class StartScreen extends Application {
 
         this.stage = stage;
 
+
+        Scene scene = mainScreen();
+        this.scene = scene;
+        showWindow();
+
+    }
+
+    public Scene mainScreen(){
+
         // Stellt ein GridPane bereit, auf dem die Elemente verteilt werden können
 
-        final GridPane gridPane = new GridPane();
-        gridPane.setPadding(new Insets(5, 5, 5, 5));
-        gridPane.setHgap(5);
-        gridPane.setVgap(5);
+        final BorderPane borderPane = new BorderPane();
+        final VBox menuBox = new VBox();
+        final VBox backgroundBox = new VBox();
 
         // Bereitet Alle Elemente für den Start Bildschirm vor
 
@@ -45,11 +52,13 @@ public class StartScreen extends Application {
         final Button twoPlayerButton = new Button("Two Player Game");
         final Button exitButton = new Button("Exit Game");
 
-        // Zuordnung der Elemente zum Grid (Node oder Element, x-position, y-position)
-
-        gridPane.add(onePlayerButton, 0, 0);
-        gridPane.add(twoPlayerButton, 1, 0);
-        gridPane.add(exitButton, 1, 2);
+        menuBox.getChildren().addAll(onePlayerButton,twoPlayerButton,exitButton);
+        menuBox.setSpacing(30);
+        menuBox.setPadding(new Insets(20,20,20,20));
+        menuBox.setStyle("-fx-background-color: #12197a");
+        backgroundBox.setStyle("-fx-background-image: url(/background.png)");
+        borderPane.setLeft(menuBox);
+        borderPane.setCenter(backgroundBox);
 
         onePlayerButton.setOnAction((event) -> {
 
@@ -79,12 +88,10 @@ public class StartScreen extends Application {
             Platform.exit();
         });
 
-        Scene scene = new Scene(gridPane, 240, 100);
-        this.scene = scene;
-        showWindow();
+        Scene scene = new Scene(borderPane, 500, 500);
+        return scene;
 
     }
-
 
     public static void showWindow() {
 
@@ -101,13 +108,21 @@ public class StartScreen extends Application {
         // Stellt ein GridPane bereit, auf dem die Elemente verteilt werden können
 
         final BorderPane borderPane = new BorderPane();
+        final HBox winBox = new HBox();
+        final HBox menuBox = new HBox();
         final Button btnnewgame = new Button("New Game");
+        final Button btnexitgame = new Button("Exit Game");
         final Label lblwinner = new Label("Sieger: " + winner);
 
-
-        borderPane.setStyle("-fx-background-color: rgba(255, 255, 255, 0.5);");
-        borderPane.setCenter(lblwinner);
-        borderPane.setBottom(btnnewgame);
+        winBox.getChildren().add(lblwinner);
+        menuBox.getChildren().addAll(btnnewgame, btnexitgame);
+        winBox.setPadding(new Insets(50,5,5,5));
+        menuBox.setPadding(new Insets(5,5,50,5));
+        winBox.setAlignment(Pos.CENTER);
+        menuBox.setAlignment(Pos.CENTER);
+        borderPane.setStyle("-fx-background-color: rgba(255, 255, 255);");
+        borderPane.setCenter(winBox);
+        borderPane.setBottom(menuBox);
 
 
 
@@ -115,89 +130,22 @@ public class StartScreen extends Application {
         btnnewgame.setOnAction((event) -> {
 
             // Closes Window on Click
-
-            launch();
-
+            Platform.runLater(() -> {
+                scene = mainScreen();
+                showWindow();
+            });
         });
 
-        Scene scene = new Scene(borderPane, 240, 100);
+        btnexitgame.setOnAction((event) -> {
+
+            // Closes Window on Click
+
+            Platform.exit();
+        });
+
+        Scene scene = new Scene(borderPane, 500, 500);
         this.scene = scene;
         return scene;
-    }
-
-    public Scene vsPcScene(Stage stage) throws Exception {
-
-        // Stellt ein BorderPane bereit, auf dem die Elemente verteilt werden können
-
-        final BorderPane borderPane = new BorderPane();
-        final HBox hboxLeft = new HBox();
-        final HBox hboxTop = difficultyText();
-        final VBox vboxCenter = difficultyRadios();
-        final HBox hboxBot = new HBox();
-
-
-
-
-        // Bereitet Alle Elemente für den Start Bildschirm vor
-
-        final Button startButton = new Button("Start Game");
-        final Button exitButton = new Button("Exit Game");
-
-
-        // Zuordnung der Elemente zum Grid (Node oder Element)
-
-        hboxBot.getChildren().addAll(startButton, exitButton);
-        borderPane.setTop(hboxTop);
-        borderPane.setCenter(vboxCenter);
-        borderPane.setBottom(hboxBot);
-
-        startButton.setOnAction((event) -> {
-
-            // Closes Window on Click
-            Platform.exit();
-        });
-
-        exitButton.setOnAction((event) -> {
-
-            // Closes Window on Click
-            Platform.exit();
-        });
-
-        Scene scene = new Scene(borderPane, 240, 100);
-        return scene;
-
-    }
-
-    private HBox difficultyText() {
-        HBox hbox = new HBox();
-
-        final Label descriptionLabel = new Label("Choose your difficulty: ");
-
-        descriptionLabel.setStyle("-fx-padding: 10 10 10 10;");
-
-        hbox.getChildren().add(descriptionLabel);
-
-        return hbox;
-
-    }
-
-    private VBox difficultyRadios() {
-
-        VBox vbox = new VBox();
-
-        final ToggleGroup group = new ToggleGroup();
-
-        RadioButton rb1 = new RadioButton("Simple Algorithm");
-        rb1.setToggleGroup(group);
-        rb1.setSelected(true);
-        RadioButton rb2 = new RadioButton("Genetic Algorithm");
-        rb2.setToggleGroup(group);
-        RadioButton rb3 = new RadioButton("QLearning");
-        rb3.setToggleGroup(group);
-
-        vbox.getChildren().addAll(rb1, rb2, rb3);
-
-        return vbox;
     }
 
 

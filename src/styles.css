@@ -30,3 +30,16 @@
 .game-grid-cell.highlighted {
 	-fx-border-color: red;
 }
+
+.backgroundbox {
+	-fx-background-image: url("/background.png");
+	-fx-background-repeat: none;
+	-fx-background-position: center center;
+}
+
+.wintext {
+	-fx-font: 100px Tahoma;
+	-fx-fill: linear-gradient(from 0% 0% to 100% 200%, repeat, aqua 0%, red 50%);
+	-fx-stroke: black;
+	-fx-stroke-width: 1;
+}
