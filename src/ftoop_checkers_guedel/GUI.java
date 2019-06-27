@@ -3,6 +3,8 @@ package ftoop_checkers_guedel;
 import java.util.ArrayList;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -17,6 +19,8 @@ public class GUI extends Application {
 
     static Scene scene;
     static Stage stage;
+    static Game activegame;
+    static private boolean tomenu;
 
     @Override
     public void start(Stage stage) {
@@ -25,7 +29,7 @@ public class GUI extends Application {
         stage.show();
 
         this.stage = stage;
-
+        stage.setResizable(false);
 
         Scene scene = mainScreen();
         this.scene = scene;
@@ -39,25 +43,32 @@ public class GUI extends Application {
         launch();
     }
 
+    public static Scene getScene(){
+        return scene;
+    }
 
-
-    public static void buildWindow() {
-        launch();
+    public static void goToMenu(){
+        scene = mainScreen();
+        showWindow();
     }
 
     public static void showWindow() {
 
         // Shows Scene on Stage
-
+        if(activegame != null && !tomenu){
+            scene = activegame.getScene();
+        }
         stage.setTitle("Checkers 100");
         stage.setScene(scene);
         stage.show();
 
     }
 
-    public void startGame(){
+    public static void startGame(){
         //Create new Game
+        tomenu = false;
         Game game = new Game(stage);
+        activegame = game;
         ArrayList<Integer> black = new ArrayList<>();
         ArrayList<Integer> white = new ArrayList<>();
         game.createPlayers(black, white);
@@ -66,19 +77,22 @@ public class GUI extends Application {
         showWindow();
     }
 
-    public Scene mainScreen(){
+    public static Scene mainScreen(){
+
 
         // Stellt ein GridPane bereit, auf dem die Elemente verteilt werden können
 
         final BorderPane borderPane = new BorderPane();
-        final VBox menuBox = new VBox();
-        final VBox backgroundBox = new VBox();
 
         // Bereitet Alle Elemente für den Start Bildschirm vor
 
+        final VBox menuBox = new VBox();
+        final VBox backgroundBox = new VBox();
         final Button onePlayerButton = new Button("One Player Game");
         final Button twoPlayerButton = new Button("Two Player Game");
         final Button exitButton = new Button("Exit Game");
+
+        // Platziert die Nodes in den entsprechenden Parents
 
         menuBox.getChildren().addAll(onePlayerButton,twoPlayerButton,exitButton);
         menuBox.setSpacing(30);
@@ -93,7 +107,7 @@ public class GUI extends Application {
             // Button was Clicked, Starts Game
 
             try {
-                this.scene = winScreen(stage, "Black Player");
+                scene = winScreen("Black Player");
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -121,8 +135,7 @@ public class GUI extends Application {
     }
 
 
-
-    public Scene winScreen(Stage stage, String winner) throws Exception {
+    public static Scene winScreen(String winner) throws Exception {
 
         // Stellt ein GridPane bereit, auf dem die Elemente verteilt werden können
 
@@ -143,16 +156,11 @@ public class GUI extends Application {
         borderPane.setCenter(winBox);
         borderPane.setBottom(menuBox);
 
-
-
-
-        btnnewgame.setOnAction((event) -> {
-
-            // Closes Window on Click
-            Platform.runLater(() -> {
-                scene = mainScreen();
-                showWindow();
-            });
+        btnnewgame.setOnAction(new EventHandler<ActionEvent>() {
+            @Override public void handle(ActionEvent e) {
+                tomenu = true;
+                goToMenu();
+            }
         });
 
         btnexitgame.setOnAction((event) -> {

@@ -213,12 +213,40 @@ public class Game {
     }
 
     public void nextTurn(){
+
+        if (white){
+            if (whitePlayer.getPieces().size() == 0){
+                try {
+                    scene = GUI.winScreen("Black");
+                    GUI.showWindow();
+                }
+
+                catch (Exception e){
+                    System.out.println(e);
+                }
+            }
+        }
+        else {
+            if (blackPlayer.getPieces().size() == 0){
+                try {
+                    scene = GUI.winScreen("White");
+                    GUI.showWindow();
+                }
+
+                catch (Exception e){
+                    System.out.println(e);
+                }
+            }
+        }
+
         if (white) {
             whitePlayer.checkOptions();
         } else {
             blackPlayer.checkOptions();
         }
         white = !white;
+
+
     }
 
     private void moveAnimation(ImageView piece) {
