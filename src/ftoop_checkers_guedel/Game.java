@@ -22,6 +22,7 @@ public class Game {
 
     private final int dimension, sizeWindow;
     private boolean white;
+    private boolean bot;
     private int counter;
     private Scene scene;
     private ChangeListener onHover;
@@ -30,7 +31,8 @@ public class Game {
     private ArrayList<Integer> h1, h2, h3, steps;
     private ArrayList<Pane> playground;
 
-    public Game(Stage stage) {
+    public Game(Stage stage, Boolean bot) {
+        this.bot = bot;
         white = true;
         dimension = 10;
         sizeWindow = 500;
@@ -127,6 +129,9 @@ public class Game {
     public double getHeightWindow() { return scene.getHeight(); }
     public Player getBlackPlayer() { return blackPlayer; }
     public Player getWhitePlayer() { return whitePlayer; }
+    public ArrayList<Integer> getH1(){
+        return h1;
+    }
     public List<Pane> getPlayground() { return playground; }
     public Scene getScene() {
         return scene;
@@ -246,10 +251,9 @@ public class Game {
         }
         white = !white;
 
-
     }
 
-    private void moveAnimation(ImageView piece) {
+    public void moveAnimation(ImageView piece) {
         piece.getParent().toFront();
         PathTransition transition = new PathTransition();
         transition.setDuration(Duration.seconds(0.3));

@@ -43,9 +43,6 @@ public class GUI extends Application {
         launch();
     }
 
-    public static Scene getScene(){
-        return scene;
-    }
 
     public static void goToMenu(){
         scene = mainScreen();
@@ -64,10 +61,11 @@ public class GUI extends Application {
 
     }
 
-    public static void startGame(){
+    public static void startGame(boolean bot){
+
         //Create new Game
         tomenu = false;
-        Game game = new Game(stage);
+        Game game = new Game(stage, bot);
         activegame = game;
         ArrayList<Integer> black = new ArrayList<>();
         ArrayList<Integer> white = new ArrayList<>();
@@ -98,7 +96,7 @@ public class GUI extends Application {
         menuBox.setSpacing(30);
         menuBox.setPadding(new Insets(20,20,20,20));
         menuBox.setStyle("-fx-background-color: #12197a");
-        backgroundBox.setStyle("-fx-background-image: url(/background.png)");
+        backgroundBox.setStyle("-fx-background-image: url(/ftoop_checkers_guedel/background.png)");
         borderPane.setLeft(menuBox);
         borderPane.setCenter(backgroundBox);
 
@@ -106,11 +104,7 @@ public class GUI extends Application {
 
             // Button was Clicked, Starts Game
 
-            try {
-                scene = winScreen("Black Player");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            startGame(true);
             showWindow();
         });
 
@@ -118,7 +112,7 @@ public class GUI extends Application {
 
             // Button was Clicked, Starts Game
 
-            startGame();
+            startGame(false);
             showWindow();
         });
 

@@ -38,7 +38,7 @@ public class GameTest extends Application {
         ArrayList<Integer> white = new ArrayList<>();
         white.add(31);
 
-        Game testGame = new Game(stage);
+        Game testGame = new Game(stage,false);
         testGame.createPlayers(black, white);
 
         //Testing black Player
@@ -68,7 +68,7 @@ public class GameTest extends Application {
         white.add(74);
         white.add(76);
 
-        Game testGame = new Game(stage);
+        Game testGame = new Game(stage, false);
         testGame.createPlayers(black, white);
 
         //Testing black Player
@@ -89,7 +89,7 @@ public class GameTest extends Application {
         white.add(41);
         white.add(48);
 
-        Game testGame = new Game(stage);
+        Game testGame = new Game(stage, false);
         testGame.createPlayers(black, white);
 
         //Testing black Player
@@ -112,7 +112,7 @@ public class GameTest extends Application {
         white.add(80);
         white.add(88);
 
-        Game testGame = new Game(stage);
+        Game testGame = new Game(stage, false);
         testGame.createPlayers(black, white);
         testGame.getBlackPlayer().setKing((Checker)testGame.getBlackPlayer().getPieces().get(0));
 
@@ -130,7 +130,7 @@ public class GameTest extends Application {
         white.add(31);
         white.add(33);
 
-        Game testGame = new Game(stage);
+        Game testGame = new Game(stage,false);
         testGame.createPlayers(black, white);
         testGame.getBlackPlayer().setKing((Checker)testGame.getBlackPlayer().getPieces().get(0));
 
