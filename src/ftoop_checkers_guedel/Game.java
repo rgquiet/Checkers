@@ -2,6 +2,9 @@ package ftoop_checkers_guedel;
 
 import java.util.List;
 import java.util.ArrayList;
+
+import com.sun.deploy.util.BlackList;
+import javafx.application.Platform;
 import javafx.util.Duration;
 import javafx.geometry.Bounds;
 import javafx.animation.PathTransition;
@@ -21,8 +24,7 @@ import javafx.scene.input.MouseEvent;
 public class Game {
 
     private final int dimension, sizeWindow;
-    private boolean white;
-    private boolean bot;
+    private boolean white, bot, gameover;
     private int counter;
     private Scene scene;
     private ChangeListener onHover;
@@ -33,6 +35,7 @@ public class Game {
 
     public Game(Stage stage, Boolean bot) {
         this.bot = bot;
+        gameover = false;
         white = true;
         dimension = 10;
         sizeWindow = 500;
@@ -41,6 +44,10 @@ public class Game {
         h2 = new ArrayList<>();
         h3 = new ArrayList<>();
         playground = new ArrayList<>();
+
+        // Lässt zu, dass das Spielfeld vergrössert/verkleinert werden kann
+
+        stage.setResizable(true);
 
         GridPane grid = new GridPane();
         grid.getStyleClass().add("game-grid");
@@ -136,6 +143,9 @@ public class Game {
     public Scene getScene() {
         return scene;
     }
+    public Boolean getWhite(){
+        return white;
+    }
 
 
     //Setter-Methods
@@ -160,6 +170,11 @@ public class Game {
             playground.get(from).getStyleClass().add("h3");
             h3.add(from);
         }
+    }
+    public void setSteps(int start){
+        steps.clear();
+        steps = new ArrayList<>(h3);
+        steps.add(0, start);
     }
 
     public int setDiagonal(int from, int to) {
@@ -217,37 +232,34 @@ public class Game {
         }
     }
 
+    public void showWinner(String winner){
+        try {
+            gameover = true;
+            scene = GUI.winScreen(winner);
+            GUI.showWindow();
+        }
+        catch (Exception e){
+            System.out.println(e);
+        }
+    }
+
+
     public void nextTurn(){
 
-        if (white){
-            if (whitePlayer.getPieces().size() == 0){
-                try {
-                    scene = GUI.winScreen("Black");
-                    GUI.showWindow();
-                }
-
-                catch (Exception e){
-                    System.out.println(e);
-                }
-            }
-        }
-        else {
-            if (blackPlayer.getPieces().size() == 0){
-                try {
-                    scene = GUI.winScreen("White");
-                    GUI.showWindow();
-                }
-
-                catch (Exception e){
-                    System.out.println(e);
-                }
-            }
-        }
-
         if (white) {
+            if(blackPlayer.getPieces().size() == 0){
+                showWinner("Weiss");
+            }
             whitePlayer.checkOptions();
         } else {
+            if(whitePlayer.getPieces().size() == 0){
+                showWinner("Schwarz");
+            }
             blackPlayer.checkOptions();
+            if(bot && !gameover) {
+                Runnable cr = new ComputerRandom(this);
+                Platform.runLater(cr);
+            }
         }
         white = !white;
 
@@ -318,5 +330,5 @@ public class Game {
 
         return line;
     }
-//
+
 }

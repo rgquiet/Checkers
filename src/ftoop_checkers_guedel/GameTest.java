@@ -24,10 +24,10 @@ public class GameTest extends Application {
 
         //Execute all Tests
         //testCheckOptions();
-        testJumpCircle();       //wip: Throws ArrayOutOfBound with multiple identical target fields
+        //testJumpCircle();       //wip: Throws ArrayOutOfBound with multiple identical target fields
         //testJumpChecker();
         //testJumpKing();
-        //testDoubleJumpKing();
+        testDoubleJumpKing();
     }
 
     public void testCheckOptions() {
@@ -123,19 +123,18 @@ public class GameTest extends Application {
     public void testDoubleJumpKing() {
         //Set pieces in special order to test kings jump-logic
         ArrayList<Integer> black = new ArrayList<>();
-        black.add(55);
+        black.add(88);
+        black.add(77);
 
         ArrayList<Integer> white = new ArrayList<>();
-        white.add(13);
-        white.add(31);
-        white.add(33);
+        white.add(99);
 
         Game testGame = new Game(stage,false);
         testGame.createPlayers(black, white);
         testGame.getBlackPlayer().setKing((Checker)testGame.getBlackPlayer().getPieces().get(0));
 
         //Testing black Player
-        testGame.getBlackPlayer().checkOptions();
+        testGame.getWhitePlayer().checkOptions();
     }
 
 }

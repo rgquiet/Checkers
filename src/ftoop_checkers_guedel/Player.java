@@ -131,6 +131,15 @@ public class Player {
             }
         }
 
+        if(possiblePieces.size() == 0){
+            if (game.getWhite()){
+                game.showWinner("Schwarz");
+            }
+            else{
+                game.showWinner("Weiss");
+            }
+        }
+
         biggest = 0;
     }
 

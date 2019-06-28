@@ -29,7 +29,6 @@ public class GUI extends Application {
         stage.show();
 
         this.stage = stage;
-        stage.setResizable(false);
 
         Scene scene = mainScreen();
         this.scene = scene;
@@ -90,6 +89,10 @@ public class GUI extends Application {
         final Button twoPlayerButton = new Button("Two Player Game");
         final Button exitButton = new Button("Exit Game");
 
+        // Stellt sicher das die grösse des Startbildschirms nicht verändert werden kann
+
+        stage.setResizable(false);
+
         // Platziert die Nodes in den entsprechenden Parents
 
         menuBox.getChildren().addAll(onePlayerButton,twoPlayerButton,exitButton);
@@ -136,9 +139,13 @@ public class GUI extends Application {
         final BorderPane borderPane = new BorderPane();
         final HBox winBox = new HBox();
         final HBox menuBox = new HBox();
-        final Button btnnewgame = new Button("New Game");
-        final Button btnexitgame = new Button("Exit Game");
+        final Button btnnewgame = new Button("Neues Spiel");
+        final Button btnexitgame = new Button("Spiel Verlassen");
         final Label lblwinner = new Label("Sieger: " + winner);
+
+        // Stellt sicher das die grösse des Gewinnbildschirms nicht verändert werden kann
+
+        stage.setResizable(true);
 
         winBox.getChildren().add(lblwinner);
         menuBox.getChildren().addAll(btnnewgame, btnexitgame);
