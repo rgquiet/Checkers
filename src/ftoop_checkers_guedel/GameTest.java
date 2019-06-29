@@ -123,15 +123,15 @@ public class GameTest extends Application {
     public void testDoubleJumpKing() {
         //Set pieces in special order to test kings jump-logic
         ArrayList<Integer> black = new ArrayList<>();
-        black.add(88);
-        black.add(77);
+        black.add(6);
+        black.add(28);
 
         ArrayList<Integer> white = new ArrayList<>();
-        white.add(99);
+        white.add(57);
 
         Game testGame = new Game(stage,false);
         testGame.createPlayers(black, white);
-        testGame.getBlackPlayer().setKing((Checker)testGame.getBlackPlayer().getPieces().get(0));
+        //testGame.getBlackPlayer().setKing((Checker)testGame.getBlackPlayer().getPieces().get(0));
 
         //Testing black Player
         testGame.getWhitePlayer().checkOptions();

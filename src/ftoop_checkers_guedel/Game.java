@@ -139,6 +139,9 @@ public class Game {
     public ArrayList<Integer> getH1(){
         return h1;
     }
+    public ArrayList<Integer> getH3(){
+        return h3;
+    }
     public List<Pane> getPlayground() { return playground; }
     public Scene getScene() {
         return scene;

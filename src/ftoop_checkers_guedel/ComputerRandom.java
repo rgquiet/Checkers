@@ -40,20 +40,19 @@ public class ComputerRandom implements Runnable{
 
         int rm = randomMove.nextInt(piece.getOptions().size());
 
-        game.setStyleH3((int) piece.getOptions().get(rm).get(0), (int) piece.getOptions().get(rm).get(piece.getOptions().get(rm).size() - 1));
+        System.out.println(rm);
+
+        for(int i = 0; i < piece.getOptions().get(rm).size() - 1; i++){
+            game.setStyleH3((int) piece.getOptions().get(rm).get(i), (int) piece.getOptions().get(rm).get(i + 1));
+        }
+
+        //game.setStyleH3((int) piece.getOptions().get(rm).get(0), (int) piece.getOptions().get(rm).get(piece.getOptions().get(rm).size() - 1));
         game.setSteps((int)piece.getOptions().get(rm).get(0));
         game.setSelected(piece);
 
-        try {
-            game.clearStyleH1();
-            game.clearStyleH3();
-        }
-        catch (ArrayIndexOutOfBoundsException e) {
-            System.out.println("Ein Fehler ist aufgetreten");
-        }
-        catch (Exception e){
-            System.out.println(e);
-        }
+        game.clearStyleH1();
+        game.clearStyleH3();
+
         game.moveAnimation(checker);
 
     }
